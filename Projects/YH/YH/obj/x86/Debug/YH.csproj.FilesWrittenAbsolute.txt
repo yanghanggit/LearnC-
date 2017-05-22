@@ -1,0 +1,6 @@
+/Users/yh/Projects/YH/YH/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/yh/Projects/YH/YH/bin/Debug/YH.pdb
+/Users/yh/Projects/YH/YH/bin/Debug/YH.exe
+/Users/yh/Projects/YH/YH/obj/x86/Debug/YH.exe
+/Users/yh/Projects/YH/YH/obj/x86/Debug/YH.pdb
+/Users/yh/Projects/YH/YH/bin/Debug/OpenTK.dll

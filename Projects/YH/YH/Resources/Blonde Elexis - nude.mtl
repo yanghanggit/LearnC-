@@ -1,0 +1,96 @@
+# 
+# 
+newmtl body
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.629294 0.627706 0.716326
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Texture\\Body.tga
+map_Bump Texture\\Body_normal.tga
+
+
+newmtl boots
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.377940 0.606339 0.643965
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Texture\\Boots.tga
+map_Bump Texture\\Boots_n.tga
+
+
+newmtl eyeball_l
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.573309 0.575461 0.455548
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Texture\\eyeball_l.tga
+
+
+newmtl eyeball_r
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.702319 0.546908 0.472636
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd Texture\\eyeball_r.tga
+
+
+newmtl eyes_eyes.tga
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Texture\eyes.tga
+
+
+newmtl face
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.373020 0.403409 0.752682
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 0.000000
+illum 2
+map_d Texture\\Face.tga
+map_Kd Texture\\Face.tga
+map_Bump Texture\\Face_normal.tga
+
+
+newmtl hair
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.712532 0.636880 0.600445
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 0.000000
+illum 2
+map_d Texture\\Hair.tga
+map_Kd Texture\\Hair.tga
+map_Bump Texture\\Hair_normal.tga
+
+
+newmtl mouth
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.794185 0.647238 0.680349
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Texture\\mouth.tga
+
+

@@ -1,0 +1,18 @@
+﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
+  <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/MyWindow.cs">
+    <Files>
+      <File FileName="YH/MyWindow.cs" Line="11" Column="34" />
+      <File FileName="YH/Resources/testshader.vert" Line="7" Column="2" />
+      <File FileName="YH/Resources/sprite.vert" Line="1" Column="1" />
+      <File FileName="YH/Resources/testshader.frag" Line="8" Column="2" />
+      <File FileName="YH/Program.cs" Line="12" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
