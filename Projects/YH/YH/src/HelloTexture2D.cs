@@ -14,9 +14,9 @@ namespace YH
 
 		public override void Start()
 		{
-			base.Start();
-			mProgram = new GLProgram(@"Resources/testshader.vert", @"Resources/testshader.frag");
-			mSimpleRectangle = new SimpleRectangle();
+			base.Start(); //texture
+			mProgram = new GLProgram(@"Resources/texture.vert", @"Resources/texture.frag");
+			mSimpleRectangle = new SimpleTextureRectangle();
 		}
 
 		public override void Update()
@@ -27,7 +27,7 @@ namespace YH
 		public override void Draw(int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
-			GL.ClearColor(Color.Yellow);
+			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			mProgram.Use();
@@ -35,6 +35,6 @@ namespace YH
 		}
 
 		private GLProgram mProgram = null;
-		private SimpleRectangle mSimpleRectangle = null;	
+		private SimpleTextureRectangle mSimpleRectangle = null;	
 	}
 }
