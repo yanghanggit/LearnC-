@@ -1,13 +1,13 @@
-﻿
+﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 
 namespace YH
 {
 	//=============================================================================================
-	public class HelloTriangle : Application
+	public class HelloTexture2D : Application
 	{
-		public HelloTriangle() : base("HelloTriangle")
+		public HelloTexture2D() : base("HelloTexture2D")
 		{
 
 		}
@@ -27,7 +27,7 @@ namespace YH
 		public override void Draw(int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
-			GL.ClearColor(Color.Gray);
+			GL.ClearColor(Color.Yellow);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			mProgram.Use();

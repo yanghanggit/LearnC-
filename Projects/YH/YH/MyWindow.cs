@@ -19,7 +19,7 @@ namespace YH
 		0, // OpenGL minor version
 		GraphicsContextFlags.ForwardCompatible)
 		{
-			mCurrentApplication = new HelloTriangle();
+			mCurrentApplication = new HelloTexture2D();//new HelloTriangle();
 			Title = mCurrentApplication.mAppName;
 		}
 
