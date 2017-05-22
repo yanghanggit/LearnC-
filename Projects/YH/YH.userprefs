@@ -2,10 +2,7 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/HelloTexture2D.cs">
     <Files>
-      <File FileName="YH/src/HelloTexture2D.cs" Line="18" Column="1" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="122" Column="31" />
-      <File FileName="YH/src/GLShader.cs" Line="11" Column="1" />
-      <File FileName="YH/src/GLProgram.cs" Line="10" Column="1" />
+      <File FileName="YH/src/HelloTexture2D.cs" Line="45" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

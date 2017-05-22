@@ -8,14 +8,9 @@ using System.IO;
 
 namespace YH
 {
-	public class Texture
+	public class GLTexture2D
 	{
-		public Texture()
-		{
-
-		}
-
-		public Texture(string texPath)
+		public GLTexture2D(string texPath)
 		{
 			LoadFromPath(texPath);
 		}
@@ -40,7 +35,7 @@ namespace YH
 						  PixelType.UnsignedByte,
 						  image.Data);
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
@@ -48,9 +43,14 @@ namespace YH
 			}
 		}
 
-		public void Bind()
+		//public void Bind()
+		//{
+		//	GL.BindTexture(TextureTarget.Texture2D, mTextureId);
+		//}
+
+		public int getTextureId()
 		{
-			GL.BindTexture(TextureTarget.Texture2D, mTextureId);
+			return mTextureId;
 		}
 
 		private int mTextureId = 0;

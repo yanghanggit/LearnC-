@@ -15,8 +15,11 @@ namespace YH
 		public override void Start()
 		{
 			base.Start(); //texture
+
 			mProgram = new GLProgram(@"Resources/texture.vert", @"Resources/texture.frag");
 			mSimpleRectangle = new SimpleTextureRectangle();
+			mTexture1 = new GLTexture2D(@"Resources/Texture/wood.png");
+			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 		}
 
 		public override void Update()
@@ -30,11 +33,21 @@ namespace YH
 			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, mTexture1.getTextureId());
+			GL.Uniform1(mProgram.GetUniformLocation("ourTexture1"), 0);
+
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, mTexture2.getTextureId());
+			GL.Uniform1(mProgram.GetUniformLocation("ourTexture2"), 1);
+
 			mProgram.Use();
 			mSimpleRectangle.Draw();
 		}
 
 		private GLProgram mProgram = null;
-		private SimpleTextureRectangle mSimpleRectangle = null;	
+		private SimpleTextureRectangle mSimpleRectangle = null;
+		private GLTexture2D mTexture1 = null;
+		private GLTexture2D mTexture2 = null;
 	}
 }
