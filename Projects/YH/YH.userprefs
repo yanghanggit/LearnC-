@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/MyWindow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTexture2D.cs">
     <Files>
-      <File FileName="YH/src/SimpleGeometry.cs" Line="89" Column="3" />
-      <File FileName="YH/MyWindow.cs" Line="22" Column="45" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="153" Column="25" />
+      <File FileName="YH/MyWindow.cs" Line="27" Column="4" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="46" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
