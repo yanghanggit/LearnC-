@@ -39,10 +39,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyWindow.cs" />
+    <Compile Include="src\SimpleGeometry.cs" />
+    <Compile Include="src\GLShader.cs" />
+    <Compile Include="src\GLProgram.cs" />
+    <Compile Include="src\Application.cs" />
+    <Compile Include="src\HelloTriangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
