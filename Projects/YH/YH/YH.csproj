@@ -52,6 +52,7 @@
     <Compile Include="src\GLTexture2D.cs" />
     <Compile Include="demo\HelloTexture2D.cs" />
     <Compile Include="demo\HelloTriangle.cs" />
+    <Compile Include="demo\HelloTransform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
