@@ -78,7 +78,6 @@ namespace YH
 		private int mVBO = 0;
 		private int mEBO = 0;	
 	}
-
 	//=============================================================================================
 	public class SimpleTextureRectangle : SimpleGeometry
 	{
