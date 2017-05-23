@@ -1,6 +1,8 @@
-﻿using System;
+﻿
+using System;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Graphics;
+using OpenTK;
+
 
 namespace YH
 {
@@ -13,7 +15,7 @@ namespace YH
 
 		public virtual void Draw()
 		{
-
+			
 		}
 
 		public string mName = "SimpleGeometry";	
