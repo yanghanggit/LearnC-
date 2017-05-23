@@ -14,7 +14,7 @@ namespace YH
 
 		public override void Start()
 		{
-			base.Start(); //texture
+			base.Start(); 
 
 			mProgram = new GLProgram(@"Resources/texture.vert", @"Resources/texture.frag");
 			mSimpleRectangle = new SimpleTextureRectangle();

@@ -43,11 +43,6 @@ namespace YH
 			}
 		}
 
-		//public void Bind()
-		//{
-		//	GL.BindTexture(TextureTarget.Texture2D, mTextureId);
-		//}
-
 		public int getTextureId()
 		{
 			return mTextureId;
