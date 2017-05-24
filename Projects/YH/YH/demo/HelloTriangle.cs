@@ -19,12 +19,12 @@ namespace YH
 			mSimpleRectangle = new SimpleRectangle();
 		}
 
-		public override void Update()
+		public override void Update(double dt)
 		{
-
+			base.Update(dt);
 		}
 
-		public override void Draw(int w, int h)
+		public override void Draw(double dt, int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
 			GL.ClearColor(Color.Gray);

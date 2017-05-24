@@ -25,14 +25,23 @@ namespace YH
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 		}
 
-		public override void Update()
+		public override void Update(double dt)
 		{
-			//Vector3 pos = new Vector3(0.0f,0.0f,0.0f);
-			//Matrix4 m4x4 = Matrix4.CreateTranslation(pos);
-			//Matrix4.Translation(pos);
+			base.Update(dt);
+
+			mRotation = (float)(-3.14 * base.mTotalRuningTime * 2.0f);
+
+			mPosition += (mMoveDirection * (float)dt * 2.0f);
+
+			bool cond1 = mMoveDirection.X > 0 && mPosition.X > 1.0;
+			bool cond2 = mMoveDirection.X < 0 && mPosition.X < -1.0;
+			if (cond1 || cond2)
+			{
+				mMoveDirection.X *= -1;
+			}
 		}
 
-		public override void Draw(int w, int h)
+		public override void Draw(double dt, int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
 			GL.ClearColor(Color.Gray);
@@ -49,6 +58,7 @@ namespace YH
 			mProgram.Use();
 
 			Matrix4 transForm = Matrix4.CreateTranslation(mPosition);
+			transForm = Matrix4.CreateRotationZ(mRotation) * transForm;
 			GL.UniformMatrix4(mLocationOfTransform, false, ref transForm);
 
 			mSimpleRectangle.Draw();
@@ -60,7 +70,9 @@ namespace YH
 		private GLTexture2D mTexture2 = null;
 		private int mLocation1 = -1;
 		private int mLocation2 = -1;
-		private Vector3 mPosition = new Vector3(0.0f, 0.5f, 0.0f);
+		private Vector3 mPosition = new Vector3(0.5f, -0.5f, 0.0f);
 		private int mLocationOfTransform = -1;
+		private float mRotation = 0.0f;
+		private Vector3 mMoveDirection = new Vector3(1.1f, 0.0f, 0.0f);
 	}
 }

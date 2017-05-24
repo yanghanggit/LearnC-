@@ -18,17 +18,18 @@ namespace YH
 			return mStarted;
 		}
 
-		public virtual void Update()
+		public virtual void Update(double dt)
 		{
-
+			mTotalRuningTime += dt;
 		}
 
-		public virtual void Draw(int w, int h)
+		public virtual void Draw(double dt, int w, int h)
 		{
 
 		}
 
 		private bool mStarted = false;
-		public readonly string mAppName = "Application";	
+		public readonly string mAppName = "Application";
+		protected double mTotalRuningTime = 0;
 	}
 }

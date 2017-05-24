@@ -25,13 +25,14 @@ namespace YH
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
+			//e.Time;
 			if (!mCurrentApplication.isStarted())
 			{
 				mCurrentApplication.Start();
 			}
 
-			mCurrentApplication.Update();
-			mCurrentApplication.Draw(base.Width, base.Height);
+			mCurrentApplication.Update(e.Time);
+			mCurrentApplication.Draw(e.Time, base.Width, base.Height);
 
             SwapBuffers();
 		}
