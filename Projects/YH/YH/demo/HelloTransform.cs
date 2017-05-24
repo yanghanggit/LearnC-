@@ -1,6 +1,7 @@
-﻿//using System;
+﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using OpenTK;
 
 namespace YH
 {
@@ -14,9 +15,10 @@ namespace YH
 		{
 			base.Start();
 
-			mProgram = new GLProgram(@"Resources/texture.vert", @"Resources/texture.frag");
+			mProgram = new GLProgram(@"Resources/transform.vs", @"Resources/transform.fs");
 			mLocation1 = mProgram.GetUniformLocation("ourTexture1");
 			mLocation2 = mProgram.GetUniformLocation("ourTexture2");
+			mLocationOfTransform = mProgram.GetUniformLocation("transform");
 
 			mSimpleRectangle = new SimpleTextureRectangle();
 			mTexture1 = new GLTexture2D(@"Resources/Texture/wood.png");
@@ -25,7 +27,9 @@ namespace YH
 
 		public override void Update()
 		{
-
+			//Vector3 pos = new Vector3(0.0f,0.0f,0.0f);
+			//Matrix4 m4x4 = Matrix4.CreateTranslation(pos);
+			//Matrix4.Translation(pos);
 		}
 
 		public override void Draw(int w, int h)
@@ -43,6 +47,10 @@ namespace YH
 			GL.Uniform1(mLocation2, 1);
 
 			mProgram.Use();
+
+			Matrix4 transForm = Matrix4.CreateTranslation(mPosition);
+			GL.UniformMatrix4(mLocationOfTransform, false, ref transForm);
+
 			mSimpleRectangle.Draw();
 		}
 
@@ -52,5 +60,7 @@ namespace YH
 		private GLTexture2D mTexture2 = null;
 		private int mLocation1 = -1;
 		private int mLocation2 = -1;
+		private Vector3 mPosition = new Vector3(0.0f, 0.5f, 0.0f);
+		private int mLocationOfTransform = -1;
 	}
 }
