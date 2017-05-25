@@ -236,8 +236,8 @@ namespace YH
 			GL.EnableVertexAttribArray(0);
 
 			// Color attribute
-			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
-			GL.EnableVertexAttribArray(2);
+			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
+			GL.EnableVertexAttribArray(1);
 
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 			GL.BindVertexArray(0); // Unbind VAO

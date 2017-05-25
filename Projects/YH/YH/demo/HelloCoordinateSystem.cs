@@ -27,6 +27,8 @@ namespace YH
 
 			mTexture1 = new GLTexture2D(@"Resources/Texture/wood.png");
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
+
+			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
 		}
 
 		public override void Update(double dt)
@@ -50,7 +52,6 @@ namespace YH
 
 			mProgram.Use();
 
-			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
 			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
 
 			GL.UniformMatrix4(mViewLoc, false, ref mView);
