@@ -180,47 +180,47 @@ namespace YH
 		{
 			float[] vertices = 
 			{
-				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-				 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 0.0f,
+				1.0f, -1.0f, -1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+				1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+				-1.0f,  1.0f, -1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 0.0f,
 
-				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-				-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+				-1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+				1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
+				-1.0f,  1.0f,  1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
 
-				-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-				-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-				-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				-1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+				-1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+				-1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
 
-				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-				 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-				 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-				 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+				1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+				1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+				1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
 
-				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-				 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
+				1.0f, -1.0f, -1.0f,  1.0f, 1.0f,
+				1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
+				1.0f, -1.0f,  1.0f,  1.0f, 0.0f,
+				-1.0f, -1.0f,  1.0f,  0.0f, 0.0f,
+				-1.0f, -1.0f, -1.0f,  0.0f, 1.0f,
 
-				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-				-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f    
+				-1.0f,  1.0f, -1.0f,  0.0f, 1.0f,
+				1.0f,  1.0f, -1.0f,  1.0f, 1.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+				1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+				-1.0f,  1.0f,  1.0f,  0.0f, 0.0f,
+				-1.0f,  1.0f, -1.0f,  0.0f, 1.0f   
 			};
 
 			mVAO = GL.GenVertexArray();
@@ -232,13 +232,14 @@ namespace YH
 			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
 
 			// Position attribute
-			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
 			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
 
 			// Color attribute
-			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
 			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
 
+			//
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 			GL.BindVertexArray(0); // Unbind VAO
 		}

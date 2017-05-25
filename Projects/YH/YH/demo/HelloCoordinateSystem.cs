@@ -50,6 +50,8 @@ namespace YH
 			GL.BindTexture(TextureTarget.Texture2D, mTexture2.getTextureId());
 			GL.Uniform1(mLocation2, 1);
 
+			GL.Enable(EnableCap.DepthTest);
+
 			mProgram.Use();
 
 			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
@@ -60,13 +62,15 @@ namespace YH
 			Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 			for (int i = 0; i < mPositions.Length; ++i)
 			{
-				Matrix4 model = new Matrix4();
-				model = Matrix4.CreateTranslation(mPositions[i]);
+				//Matrix4 model = new Matrix4();
+				Matrix4 model = Matrix4.CreateTranslation(mPositions[i]);
 
 				float angle = (i + 1) * (float)mTotalRuningTime;
 				model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
 
+				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mModelLoc, false, ref model);
+
 				mCube.Draw();
 			}
 		}
