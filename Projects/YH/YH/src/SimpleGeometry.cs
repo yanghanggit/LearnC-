@@ -153,4 +153,97 @@ namespace YH
 		private int mVBO = 0;
 		private int mEBO = 0;	
 	}
+	//=============================================================================================
+	public class Cube : SimpleGeometry
+	{
+		public Cube() : base("Cube")
+		{
+
+		}
+
+		public override void Draw()
+		{
+			if (mVAO <= 0)
+			{
+				build();
+			}
+
+			if (mVAO > 0)
+			{
+				GL.BindVertexArray(mVAO);
+				GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+				GL.BindVertexArray(0);
+			}
+		}
+
+		private void build()
+		{
+			float[] vertices = 
+			{
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+				 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+				 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+				-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+				-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+				-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+				 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+				 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+				 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+				-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+				-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+				 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+				-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+				-0.5f,  0.5f, -0.5f,  0.0f, 1.0f    
+			};
+
+			mVAO = GL.GenVertexArray();
+			mVBO = GL.GenBuffer();
+
+			//
+			GL.BindVertexArray(mVAO);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, mVBO);
+			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
+			// Position attribute
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+			GL.EnableVertexAttribArray(0);
+
+			// Color attribute
+			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
+			GL.EnableVertexAttribArray(2);
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindVertexArray(0); // Unbind VAO
+		}
+
+		private int mVAO = 0;
+		private int mVBO = 0;
+	}
 }

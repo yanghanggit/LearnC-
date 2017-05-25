@@ -1,23 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloTransform.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloCoordinateSystem.cs">
     <Files>
-      <File FileName="YH/demo/HelloTexture2D.cs" Line="30" Column="20" />
-      <File FileName="YH/demo/HelloTriangle.cs" Line="24" Column="20" />
-      <File FileName="YH/src/Application.cs" Line="33" Column="12" />
-      <File FileName="YH/src/GLProgram.cs" Line="35" Column="14" />
-      <File FileName="YH/src/GLShader.cs" Line="11" Column="1" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="45" Column="3" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="149" Column="40" />
-      <File FileName="YH/MyWindow.cs" Line="32" Column="5" />
-      <File FileName="YH/demo/HelloTransform.cs" Line="68" Column="49" />
+      <File FileName="YH/demo/HelloCoordinateSystem.cs" Line="53" Column="52" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloTransform.cs" relfile="YH/demo/HelloTransform.cs" line="37" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

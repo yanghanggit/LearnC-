@@ -53,6 +53,7 @@
     <Compile Include="demo\HelloTexture2D.cs" />
     <Compile Include="demo\HelloTriangle.cs" />
     <Compile Include="demo\HelloTransform.cs" />
+    <Compile Include="demo\HelloCoordinateSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
