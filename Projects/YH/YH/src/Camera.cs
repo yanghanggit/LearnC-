@@ -67,15 +67,15 @@ namespace YH
 		static public readonly float SENSITIVTY = 0.25f;
 		static public readonly float ZOOM = 45.0f;
 
-		private Vector3 mPosition;
-		private Vector3 mFront;
-		private Vector3 mUp;
-		private Vector3 mRight;
-		private readonly Vector3 mWorldUp = new Vector3(0.0f, 1.0f, 0.0f);
-		private float mYaw;
-		private float mPitch;
-		private float mMovementSpeed;
-		private float mMouseSensitivity;
-		private float mZoom;
+		public Vector3 mPosition;
+		public Vector3 mFront;
+		public Vector3 mUp;
+		public Vector3 mRight;
+		public readonly Vector3 mWorldUp = new Vector3(0.0f, 1.0f, 0.0f);
+		public float mYaw;
+		public float mPitch;
+		public float mMovementSpeed;
+		public float mMouseSensitivity;
+		public float mZoom;
 	}
 }

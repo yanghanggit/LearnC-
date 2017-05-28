@@ -11,17 +11,7 @@ namespace YH
 		public Keyboard(string name)
 		{
 			mName = name;
-
-			//RegisterKeyEvent(Key.W, this.test, this.test);
-			//RegisterKeyEvent(Key.S, this.test, this.test);
-			//RegisterKeyEvent(Key.A, this.test, this.test);
-			//RegisterKeyEvent(Key.D, this.test, this.test);
 		}
-
-		//void test(Key k)
-		//{ 
-		//	Console.WriteLine("test: " + k.ToString());	
-		//}
 
 		public void RegisterKeyEvent(Key k, ProcessDelegate down, ProcessDelegate up)
 		{
