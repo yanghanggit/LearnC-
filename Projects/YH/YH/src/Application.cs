@@ -21,6 +21,11 @@ namespace YH
 		public virtual void Update(double dt)
 		{
 			mTotalRuningTime += dt;
+
+			if (mKeyboard != null)
+			{
+				mKeyboard.Capture();
+			}
 		}
 
 		public virtual void Draw(double dt, int w, int h)
@@ -31,5 +36,6 @@ namespace YH
 		private bool mStarted = false;
 		public readonly string mAppName = "Application";
 		protected double mTotalRuningTime = 0;
+		protected Keyboard mKeyboard = null;
 	}
 }

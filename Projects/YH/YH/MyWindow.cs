@@ -25,7 +25,7 @@ namespace YH
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			mInputSystem.Update();
+			//mInputSystem.Capture();
 
 			//e.Time;
 			if (!mCurrentApplication.isStarted())
@@ -40,7 +40,7 @@ namespace YH
 		}
 
 		private Application mCurrentApplication;
-		private InputSystem mInputSystem = new InputSystem();
+		//private Keyboard mInputSystem = new Keyboard();
 	}
 
 	 

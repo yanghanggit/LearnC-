@@ -29,6 +29,8 @@ namespace YH
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 
 			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
+
+			mKeyboard = new Keyboard(mAppName);
 		}
 
 		public override void Update(double dt)
