@@ -49,6 +49,11 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 			return mKeyboard;
 		}
 
+		public Camera GetCamera()
+		{
+			return mCamera;
+		}
+
 		private void MoveForward(OpenTK.Input.Key k)
 		{
 			Console.WriteLine("MoveForward");

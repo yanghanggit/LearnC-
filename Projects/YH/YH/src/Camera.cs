@@ -31,6 +31,7 @@ namespace YH
 
 		public void UpdateCamera()
 		{
+			//return;
 			/*
 			// Calculate the new Front vector
 			glm::vec3 front;

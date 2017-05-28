@@ -33,6 +33,8 @@ namespace YH
 			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
 
 			mCameraController = new CameraController(mAppName, mCamera);
+			mCameraController.GetCamera().mPosition = new Vector3(0.0f, 0.0f, -5.0f);
+			mCameraController.GetCamera().UpdateCamera();
 		}
 
 		public override void Update(double dt)
@@ -60,6 +62,7 @@ namespace YH
 
 			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
 
+			mView = mCameraController.GetCamera().GetViewMatrix();
 			GL.UniformMatrix4(mViewLoc, false, ref mView);
 			GL.UniformMatrix4(mProjectionlLoc, false, ref mProjection);
 
