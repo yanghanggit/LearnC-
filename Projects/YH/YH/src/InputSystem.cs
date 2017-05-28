@@ -10,40 +10,32 @@ namespace YH
 		}
 
 		public void Update()
-		{ 
-			if (OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.W))
+		{
+			KeyboardState state = OpenTK.Input.Keyboard.GetState();
+			if (!state.IsAnyKeyDown)
 			{
-				Console.WriteLine("W");
-				//transform.position += 0.1f * transform.right;
+				return;
 			}
 
-			if(OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.S))
+			if (state.IsKeyDown(Key.W))
 			{
-				Console.WriteLine("S");
-				//transform.position -= 0.1f * transform.right;
+				Console.WriteLine("Key.W");
 			}
 
-			if (OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.A))
+			if(state.IsKeyDown(Key.S))
 			{
-				Console.WriteLine("A");
-				//transform.position += 0.1f * transform.up;
+				Console.WriteLine("Key.S");
 			}
 
-			if(OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.D))
+			if (state.IsKeyDown(Key.A))
 			{
-				Console.WriteLine("D");
-				//transform.position -= 0.1f * transform.up;			
+				Console.WriteLine("Key.A");
 			}
 
-			//if (OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.J))
-			//{
-			//	transform.rotation = (Matrix4.CreateRotationX(10.0f * Time.DeltaTime) * Matrix4.CreateFromQuaternion(transform.rotation)).ExtractRotation();
-			//}
-
-			//if (OpenTK.Input.Keyboard.GetState().IsKeyDown(Key.K))
-			//{
-			//	transform.rotation = (Matrix4.CreateRotationY(10.0f * Time.DeltaTime) * Matrix4.CreateFromQuaternion(transform.rotation)).ExtractRotation();
-			//}
+			if(state.IsKeyDown(Key.D))
+			{
+				Console.WriteLine("Key.D");
+			}
 		}
 	}
 }
