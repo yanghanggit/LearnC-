@@ -12,10 +12,31 @@ namespace YH
 		{
 			mName = name;
 
-			mRegisterKeys.Add(Key.W);
-			mRegisterKeys.Add(Key.S);
-			mRegisterKeys.Add(Key.A);
-			mRegisterKeys.Add(Key.D);
+			//RegisterKeyEvent(Key.W, this.test, this.test);
+			//RegisterKeyEvent(Key.S, this.test, this.test);
+			//RegisterKeyEvent(Key.A, this.test, this.test);
+			//RegisterKeyEvent(Key.D, this.test, this.test);
+		}
+
+		//void test(Key k)
+		//{ 
+		//	Console.WriteLine("test: " + k.ToString());	
+		//}
+
+		public void RegisterKeyEvent(Key k, ProcessDelegate down, ProcessDelegate up)
+		{
+			RegisterKeyDown(k, down);
+            RegisterKeyUp(k, up);
+		}
+
+		public void RegisterKeyDown(Key k, ProcessDelegate del)
+		{
+			mKeyDownEvents[k] = del;
+		}
+
+		public void RegisterKeyUp(Key k, ProcessDelegate del)
+		{
+			mKeyUpEvents[k] = del;
 		}
 
 		public void Capture()
@@ -23,12 +44,13 @@ namespace YH
 			KeyboardState state = OpenTK.Input.Keyboard.GetState();
 			if (state.IsAnyKeyDown)
 			{
-				foreach (var item in mRegisterKeys)
+				foreach (var item in mKeyDownEvents)
 				{
-					if (state.IsKeyDown(item))
+					if (state.IsKeyDown(item.Key))
 					{
-						KeyDownEvent(item);
-						mKeyDown.Add(item);
+						//Console.WriteLine("KeyDownEvent: " + item.Key.ToString());
+						item.Value(item.Key);
+						mKeyDown.Add(item.Key);
 					}
 				}
 			}
@@ -37,40 +59,19 @@ namespace YH
 			{
 				if (state.IsKeyUp(k))
 				{
-					KeyUpEvent(k);
-					return true;
+					//Console.WriteLine("KeyUpEvent: " + k.ToString());
+					if (mKeyUpEvents.ContainsKey(k))
+					{
+						mKeyUpEvents[k](k);
+						return true;
+					}
 				}
 				return false;
 			});
 		}
 
-		private void KeyDownEvent(Key k)
-		{
-			Console.WriteLine("KeyDownEvent: " + k.ToString());
-
-			if (!mKeyDownEvents.ContainsKey(k))
-			{
-				return;
-			}
-
-			mKeyDownEvents[k](k);
-		}
-
-		private void KeyUpEvent(Key k)
-		{ 
-			Console.WriteLine("KeyUpEvent: " + k.ToString());
-
-			if (!mKeyUpEvents.ContainsKey(k))
-			{
-				return;
-			}
-
-			mKeyUpEvents[k](k);
-		}
-
 		private Dictionary<Key, ProcessDelegate> mKeyDownEvents = new Dictionary<Key, ProcessDelegate>();
 		private Dictionary<Key, ProcessDelegate> mKeyUpEvents = new Dictionary<Key, ProcessDelegate>();
-		private List<Key> mRegisterKeys = new List<Key>();
 		private HashSet<Key> mKeyDown = new HashSet<Key>();
 		public readonly string mName;
 	}
