@@ -2,6 +2,8 @@
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
+using OpenTK.Input;
+using System.Collections.Generic;
 
 
 namespace YH
@@ -30,7 +32,7 @@ namespace YH
 
 			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
 
-			mKeyboard = new Keyboard(mAppName);
+			mCameraController = new CameraController(mAppName, mCamera);
 		}
 
 		public override void Update(double dt)
@@ -101,5 +103,6 @@ namespace YH
 			new Vector3(-1.3f,  1.0f, -1.5f)
 		};
 
+		Camera mCamera = new Camera();
 	}
 }

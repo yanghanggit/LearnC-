@@ -26,10 +26,10 @@ namespace YH
 			mMouseSensitivity = SENSITIVTY;
 			mZoom = ZOOM;
 
-            updateCamera();
+            UpdateCamera();
 		}
 
-		private void updateCamera()
+		public void UpdateCamera()
 		{
 			/*
 			// Calculate the new Front vector
@@ -56,7 +56,7 @@ namespace YH
 			mUp = Vector3.Normalize(Vector3.Cross(mRight, mFront));
 		}
 
-		Matrix4 GetViewMatrix() 
+		public Matrix4 GetViewMatrix() 
 		{
 			return Matrix4.LookAt(mPosition, mPosition + mFront, mUp);
 		}

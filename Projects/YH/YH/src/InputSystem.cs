@@ -21,12 +21,18 @@ namespace YH
 
 		public void RegisterKeyDown(Key k, ProcessDelegate del)
 		{
-			mKeyDownEvents[k] = del;
+			if (del != null)
+			{
+				mKeyDownEvents[k] = del;
+			}
 		}
 
 		public void RegisterKeyUp(Key k, ProcessDelegate del)
 		{
-			mKeyUpEvents[k] = del;
+			if (del != null)
+			{
+				mKeyUpEvents[k] = del;
+			}
 		}
 
 		public void Capture()
