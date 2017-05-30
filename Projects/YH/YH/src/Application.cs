@@ -30,21 +30,6 @@ namespace YH
 			}
 		}
 
-		/*
-void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
-{
-	GLfloat velocity = this->MovementSpeed * deltaTime;
-	if (direction == FORWARD)
-		this->Position += this->Front * velocity;
-	if (direction == BACKWARD)
-		this->Position -= this->Front * velocity;
-	if (direction == LEFT)
-		this->Position -= this->Right * velocity;
-	if (direction == RIGHT)
-		this->Position += this->Right * velocity;
-    }
-		 */
-
 		public Keyboard GetKeyboard()
 		{
 			return mKeyboard;
@@ -92,7 +77,6 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		private Keyboard mKeyboard = null;
 		private float mDeltaTime = 0.0f;
 		private bool mCameraChanged = false;
-
 	};
 
 	public class Application

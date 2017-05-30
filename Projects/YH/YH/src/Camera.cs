@@ -25,22 +25,22 @@ namespace YH
 		public void updateCameraVectors()
 		{
 			// Calculate the new Front vector
-			//Vector3 front = new (0.0, 0.0, 0.0);
-			//double a = Math.Cos(MathHelper.DegreesToRadians(Yaw)) * Math.Cos(MathHelper.DegreesToRadians(Pitch));
-			var x = Math.Cos(MathHelper.DegreesToRadians(Yaw)) * Math.Cos(MathHelper.DegreesToRadians(Pitch));
-			var y = Math.Sin(MathHelper.DegreesToRadians(Pitch));
-			var z = Math.Sin(MathHelper.DegreesToRadians(Yaw)) * Math.Cos(MathHelper.DegreesToRadians(Pitch));
+			double x = Math.Cos(MathHelper.DegreesToRadians(Yaw)) * Math.Cos(MathHelper.DegreesToRadians(Pitch));
+			double y = Math.Sin(MathHelper.DegreesToRadians(Pitch));
+			double z = Math.Sin(MathHelper.DegreesToRadians(Yaw)) * Math.Cos(MathHelper.DegreesToRadians(Pitch));
 			Vector3 front = new Vector3((float)x, (float)y, (float)z);
 
 			Front = Vector3.Normalize(front);
 			// Also re-calculate the Right and Up vector
 			Right = Vector3.Normalize(Vector3.Cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 			Up    = Vector3.Normalize(Vector3.Cross(Right, Front));
+
+			mViewMatrix = Matrix4.LookAt(Position, Position + Front, Up);
 		}
 
 		public Matrix4 GetViewMatrix() 
 		{
-			return Matrix4.LookAt(Position, Position + Front, Up);
+			return mViewMatrix;
 		}
 
 		static public readonly float YAW = -90.0f;
@@ -62,5 +62,7 @@ namespace YH
 		public float MovementSpeed = 0.0f;
 		public float MouseSensitivity = 0.0f;
 		public float Zoom = 0.0f;
+
+		private Matrix4 mViewMatrix = new Matrix4();
 	}
 }
