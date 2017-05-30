@@ -1,6 +1,4 @@
-﻿
-using System;
-
+﻿using System;
 namespace YH
 {
 	public class CameraController
@@ -19,7 +17,7 @@ namespace YH
 		}
 
 		public void Capture(double dt)
-		{ 
+		{
 			mDeltaTime = (float)dt;
 			mKeyboard.Capture();
 
@@ -78,41 +76,4 @@ namespace YH
 		private float mDeltaTime = 0.0f;
 		private bool mCameraChanged = false;
 	};
-
-	public class Application
-	{
-		public Application(string appName)
-		{
-			mAppName = appName;
-		}
-
-		public virtual void Start()
-		{
-			mStarted = true;
-		}
-
-		public bool isStarted()
-		{
-			return mStarted;
-		}
-
-		public virtual void Update(double dt)
-		{
-			mTotalRuningTime += dt;
-			if (mCameraController != null)
-			{
-				mCameraController.Capture(dt);
-			}
-		}
-
-		public virtual void Draw(double dt, int w, int h)
-		{
-
-		}
-
-		private bool mStarted = false;
-		public readonly string mAppName = "Application";
-		protected double mTotalRuningTime = 0;
-		protected CameraController mCameraController = null;
-	}
 }

@@ -48,7 +48,6 @@
     <Compile Include="src\SimpleGeometry.cs" />
     <Compile Include="src\GLShader.cs" />
     <Compile Include="src\GLProgram.cs" />
-    <Compile Include="src\Application.cs" />
     <Compile Include="src\GLTexture2D.cs" />
     <Compile Include="demo\HelloTexture2D.cs" />
     <Compile Include="demo\HelloTriangle.cs" />
@@ -57,6 +56,8 @@
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\InputSystem.cs" />
     <Compile Include="demo\HelloCamera.cs" />
+    <Compile Include="demo\CameraController.cs" />
+    <Compile Include="demo\Application.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
