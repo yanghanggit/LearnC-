@@ -56,6 +56,7 @@
     <Compile Include="demo\HelloCoordinateSystem.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\InputSystem.cs" />
+    <Compile Include="demo\HelloCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

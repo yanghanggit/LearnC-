@@ -19,13 +19,13 @@ namespace YH
 
 		public void Capture(double dt)
 		{ 
-			mVelocity = mCamera.mMovementSpeed * (float)dt;
+			//mVelocity = mCamera.mMovementSpeed * (float)dt;
 			mKeyboard.Capture();
 
 			if (mCameraChanged)
 			{
 				mCameraChanged = false;
-				mCamera.UpdateCamera();
+				//mCamera.UpdateCamera();
 			}
 		}
 
@@ -58,7 +58,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveForward");
 
-			mCamera.mPosition += mCamera.mFront * mVelocity;
+			//mCamera.mPosition += mCamera.mFront * mVelocity;
 			mCameraChanged = true;
 		}
 
@@ -66,7 +66,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveBack");
 
-			mCamera.mPosition -= mCamera.mFront * mVelocity;
+			//mCamera.mPosition -= mCamera.mFront * mVelocity;
 			mCameraChanged = true;
 		}
 
@@ -74,7 +74,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveLeft");
 
-			mCamera.mPosition -= mCamera.mRight * mVelocity;
+			//mCamera.mPosition -= mCamera.mRight * mVelocity;
 			mCameraChanged = true;
 		}
 
@@ -82,7 +82,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveRight");
 
-			mCamera.mPosition += mCamera.mRight* mVelocity;
+			//mCamera.mPosition += mCamera.mRight* mVelocity;
 			mCameraChanged = true;
 		}
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace YH
 {
-	public class HelloCoordinateSystem : Application
+	public class HelloCamera : Application
 	{
-		public HelloCoordinateSystem() : base("HelloCoordinateSystem")
+		public HelloCamera() : base("HelloCamera")
 		{
 		}
 
@@ -31,7 +31,13 @@ namespace YH
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 
 			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
+			var mt = Matrix4.LookAt(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
+			if (!mView.Equals(mt))
+			{
+				int a = 0;
+			}
 
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			//mCameraController = new CameraController(mAppName, mCamera);
 			//mCameraController.GetCamera().mPosition = new Vector3(0.0f, 0.0f, -5.0f);
 			//mCameraController.GetCamera().UpdateCamera();
@@ -65,16 +71,16 @@ namespace YH
 			GL.UniformMatrix4(mViewLoc, false, ref mView);
 			GL.UniformMatrix4(mProjectionlLoc, false, ref mProjection);
 
-			Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
+			//Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 			for (int i = 0; i < mPositions.Length; ++i)
 			{
 				//Matrix4 model = new Matrix4();
 				Matrix4 model = Matrix4.CreateTranslation(mPositions[i]);
 
-				float angle = (i + 1) * (float)mTotalRuningTime;
-				model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
+				//float angle = (i + 1) * (float)mTotalRuningTime;
+				//model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
 
-				model = Matrix4.CreateScale(0.5f) * model;
+				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mModelLoc, false, ref model);
 
 				mCube.Draw();
@@ -93,18 +99,12 @@ namespace YH
 		private int mViewLoc = -1;
 		private int mProjectionlLoc = -1;
 		private Vector3[] mPositions = {
-			new Vector3( 0.0f,  0.0f,  0.0f),
-			new Vector3( 2.0f,  5.0f, -15.0f),
-			new Vector3(-1.5f, -2.2f, -2.5f),
-			new Vector3(-3.8f, -2.0f, -12.3f),
-			new Vector3( 2.4f, -0.4f, -3.5f),
-			new Vector3(-1.7f,  3.0f, -7.5f),
-			new Vector3( 1.3f, -2.0f, -2.5f),
-			new Vector3( 1.5f,  2.0f, -2.5f),
-			new Vector3( 1.5f,  0.2f, -1.5f),
-			new Vector3(-1.3f,  1.0f, -1.5f)
+			new Vector3( 0.0f, 0.0f, 0.0f),
+			new Vector3( 1.0f, 0.0f, 0.0f),
+			new Vector3( 0.0f, 1.0f, 0.0f),
+			//new Vector3( 0.0f, 0.0f, 1.0f),
 		};
 
-		//Camera mCamera = new Camera();
+		Camera mCamera = null;
 	}
 }

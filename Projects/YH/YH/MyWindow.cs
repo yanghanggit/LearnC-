@@ -19,15 +19,13 @@ namespace YH
 		0, // OpenGL minor version
 		GraphicsContextFlags.ForwardCompatible)
 		{
-			mCurrentApplication = new HelloCoordinateSystem();//new HelloTransform();//new HelloTexture2D();//new HelloTriangle();
+// new HelloCamera()
+			mCurrentApplication = new HelloCamera();//new HelloCoordinateSystem();//new HelloTransform();//new HelloTexture2D();//new HelloTriangle();
 			Title = mCurrentApplication.mAppName;
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
-			//mInputSystem.Capture();
-
-			//e.Time;
 			if (!mCurrentApplication.isStarted())
 			{
 				mCurrentApplication.Start();
@@ -40,7 +38,6 @@ namespace YH
 		}
 
 		private Application mCurrentApplication;
-		//private Keyboard mInputSystem = new Keyboard();
 	}
 
 	 
