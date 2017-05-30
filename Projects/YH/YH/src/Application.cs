@@ -8,6 +8,7 @@ namespace YH
 		public CameraController(string name, Camera cam)
 		{
 			mName = name;
+
 			mCamera = cam;
 
 			mKeyboard = new Keyboard(name + "'s keyboard");
@@ -19,13 +20,13 @@ namespace YH
 
 		public void Capture(double dt)
 		{ 
-			//mVelocity = mCamera.mMovementSpeed * (float)dt;
+			mDeltaTime = (float)dt;
 			mKeyboard.Capture();
 
 			if (mCameraChanged)
 			{
 				mCameraChanged = false;
-				//mCamera.UpdateCamera();
+				mCamera.updateCameraVectors();
 			}
 		}
 
@@ -58,7 +59,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveForward");
 
-			//mCamera.mPosition += mCamera.mFront * mVelocity;
+			mCamera.Position += mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
 			mCameraChanged = true;
 		}
 
@@ -66,7 +67,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveBack");
 
-			//mCamera.mPosition -= mCamera.mFront * mVelocity;
+			mCamera.Position -= mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
 			mCameraChanged = true;
 		}
 
@@ -74,7 +75,7 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveLeft");
 
-			//mCamera.mPosition -= mCamera.mRight * mVelocity;
+			mCamera.Position -= mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
 			mCameraChanged = true;
 		}
 
@@ -82,14 +83,14 @@ void ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		{
 			Console.WriteLine("MoveRight");
 
-			//mCamera.mPosition += mCamera.mRight* mVelocity;
+			mCamera.Position += mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
 			mCameraChanged = true;
 		}
 
 		public readonly string mName;
 		private Camera mCamera = null;
 		private Keyboard mKeyboard = null;
-		private float mVelocity = 0.0f;
+		private float mDeltaTime = 0.0f;
 		private bool mCameraChanged = false;
 
 	};

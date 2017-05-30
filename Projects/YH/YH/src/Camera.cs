@@ -22,7 +22,7 @@ namespace YH
 			updateCameraVectors();
 		}
 
-		private void updateCameraVectors()
+		public void updateCameraVectors()
 		{
 			// Calculate the new Front vector
 			//Vector3 front = new (0.0, 0.0, 0.0);
@@ -50,17 +50,17 @@ namespace YH
 		static public readonly float ZOOM = 45.0f;
 
 		// Camera Attributes
-		Vector3 Position = new Vector3();
-		Vector3 Front = new Vector3();
-		Vector3 Up = new Vector3();
-		Vector3 Right = new Vector3();
-		Vector3 WorldUp = new Vector3();
+		public Vector3 Position = new Vector3();
+		public Vector3 Front = new Vector3();
+		public Vector3 Up = new Vector3();
+		public Vector3 Right = new Vector3();
+		public Vector3 WorldUp = new Vector3();
 		// Eular Angles
-		float Yaw = 0.0f;
-		float Pitch = 0.0f;
+		public float Yaw = 0.0f;
+		public float Pitch = 0.0f;
 		// Camera options
-		float MovementSpeed = 0.0f;
-		float MouseSensitivity = 0.0f;
-		float Zoom = 0.0f;
+		public float MovementSpeed = 0.0f;
+		public float MouseSensitivity = 0.0f;
+		public float Zoom = 0.0f;
 	}
 }

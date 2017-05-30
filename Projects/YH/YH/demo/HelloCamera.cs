@@ -30,17 +30,10 @@ namespace YH
 			mTexture1 = new GLTexture2D(@"Resources/Texture/wood.png");
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 
-			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
-			var mt = Matrix4.LookAt(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
-			if (!mView.Equals(mt))
-			{
-				int a = 0;
-			}
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+			mCameraController = new CameraController(mAppName, mCamera);
 
-			mCamera = new Camera(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
-			//mCameraController = new CameraController(mAppName, mCamera);
-			//mCameraController.GetCamera().mPosition = new Vector3(0.0f, 0.0f, -5.0f);
-			//mCameraController.GetCamera().UpdateCamera();
+			mView = mCamera.GetViewMatrix();
 		}
 
 		public override void Update(double dt)
@@ -68,18 +61,15 @@ namespace YH
 
 			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
 
+			mView = mCamera.GetViewMatrix();
 			GL.UniformMatrix4(mViewLoc, false, ref mView);
+
+
 			GL.UniformMatrix4(mProjectionlLoc, false, ref mProjection);
 
-			//Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 			for (int i = 0; i < mPositions.Length; ++i)
 			{
-				//Matrix4 model = new Matrix4();
 				Matrix4 model = Matrix4.CreateTranslation(mPositions[i]);
-
-				//float angle = (i + 1) * (float)mTotalRuningTime;
-				//model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
-
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mModelLoc, false, ref model);
 
