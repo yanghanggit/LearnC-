@@ -14,12 +14,17 @@ namespace YH
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.S, this.MoveBack, null);
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.A, this.MoveLeft, null);
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.D, this.MoveRight, null);
+
+			mMouse = new Mouse(name + "'s mouse");
+			mMouse.RegisterMouseMoveEvent("CameraMouseMove", this.MouseMove);
 		}
 
 		public void Capture(double dt)
 		{
 			mDeltaTime = (float)dt;
+
 			mKeyboard.Capture();
+			mMouse.Capture();
 
 			if (mCameraChanged)
 			{
@@ -70,10 +75,16 @@ namespace YH
 			mCameraChanged = true;
 		}
 
+		private void MouseMove(int offsetX, int offsetY, int curX, int curY)
+		{
+			
+		}
+
 		public readonly string mName;
 		private Camera mCamera = null;
 		private Keyboard mKeyboard = null;
 		private float mDeltaTime = 0.0f;
 		private bool mCameraChanged = false;
+		private Mouse mMouse = null;
 	};
 }
