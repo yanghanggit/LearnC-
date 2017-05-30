@@ -7,18 +7,11 @@ namespace YH
 {
 	public class Camera
 	{
-		public enum MOVEMENT
-		{
-			FORWARD,
-			BACKWARD,
-			LEFT,
-			RIGH		
-		};
-		
 		public Camera()
 		{
 			mPosition = new Vector3(0.0f, 0.0f, 0.0f);
 			mWorldUp = new Vector3(0.0f, 1.0f, 0.0f);
+			mUp = new Vector3(0.0f, 1.0f, 0.0f);
 			mYaw = YAW;
 			mPitch = PITCH;
 			mFront = new Vector3(0.0f, 0.0f, -1.0f);
@@ -60,6 +53,8 @@ namespace YH
 		public Matrix4 GetViewMatrix() 
 		{
 			return Matrix4.LookAt(mPosition, mPosition + mFront, mUp);
+
+			//return Matrix4.LookAt(mPosition, mPosition + mFront, mUp);
 		}
 
 		static public readonly float YAW = -90.0f;
