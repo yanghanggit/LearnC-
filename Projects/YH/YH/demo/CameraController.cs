@@ -77,7 +77,29 @@ namespace YH
 
 		private void MouseMove(int offsetX, int offsetY, int curX, int curY)
 		{
-			
+			float ox = (float)offsetX * mCamera.MouseSensitivity;
+			float oy = (float)offsetY * mCamera.MouseSensitivity;
+
+			//xoffset *= this->MouseSensitivity;
+			//yoffset *= this->MouseSensitivity;
+
+			mCamera.Yaw   += ox;
+			mCamera.Pitch += oy;
+
+			// Make sure that when pitch is out of bounds, screen doesn't get flipped
+			if (mCamera.Pitch > 89.0f)
+			{ 
+                mCamera.Pitch = 89.0f;
+			}
+
+			if (mCamera.Pitch < -89.0f)
+			{ 
+                mCamera.Pitch = -89.0f;
+			}
+
+			mCameraChanged = true;
+			// Update Front, Right and Up Vectors using the updated Eular angles
+			//this->updateCameraVectors();
 		}
 
 		public readonly string mName;

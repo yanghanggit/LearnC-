@@ -114,7 +114,7 @@ namespace YH
 			{
 				if (!state.IsAnyButtonDown)
 				{
-					continue;
+					//continue;
 				}
 				evt.Value(offsetX, offsetY, mCurrentMouseX, mCurrentMouseY);
 			}
