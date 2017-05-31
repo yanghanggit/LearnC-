@@ -31,10 +31,6 @@ namespace YH
 			mTexture2 = new GLTexture2D(@"Resources/Texture/awesomeface.png");
 
 			mView = Matrix4.CreateTranslation(0.0f, 0.0f, -5.0f);
-
-			//mCameraController = new CameraController(mAppName, mCamera);
-			//mCameraController.GetCamera().mPosition = new Vector3(0.0f, 0.0f, -5.0f);
-			//mCameraController.GetCamera().UpdateCamera();
 		}
 
 		public override void Update(double dt)
@@ -104,7 +100,5 @@ namespace YH
 			new Vector3( 1.5f,  0.2f, -1.5f),
 			new Vector3(-1.3f,  1.0f, -1.5f)
 		};
-
-		//Camera mCamera = new Camera();
 	}
 }

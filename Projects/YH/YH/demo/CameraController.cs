@@ -14,6 +14,8 @@ namespace YH
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.S, this.MoveBack, null);
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.A, this.MoveLeft, null);
 			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.D, this.MoveRight, null);
+			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.Q, this.MoveUp, null);
+			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.E, this.MoveDown, null);
 
 			mMouse = new Mouse(name + "'s mouse");
 			mMouse.RegisterMouseMoveEvent("CameraMouseMove", this.MouseMove);
@@ -25,12 +27,7 @@ namespace YH
 
 			mKeyboard.Capture();
 			mMouse.Capture();
-
-			if (mCameraChanged)
-			{
-				mCameraChanged = false;
-				mCamera.updateCameraVectors();
-			}
+			mCamera.updateCameraVectors();
 		}
 
 		public Keyboard GetKeyboard()
@@ -46,17 +43,15 @@ namespace YH
 		private void MoveForward(OpenTK.Input.Key k)
 		{
 			Console.WriteLine("MoveForward");
-
 			mCamera.Position += mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
-			mCameraChanged = true;
+			mCamera.updateCameraVectors();
 		}
 
 		private void MoveBack(OpenTK.Input.Key k)
 		{
 			Console.WriteLine("MoveBack");
-
 			mCamera.Position -= mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
-			mCameraChanged = true;
+			mCamera.updateCameraVectors();
 		}
 
 		private void MoveLeft(OpenTK.Input.Key k)
@@ -64,15 +59,28 @@ namespace YH
 			Console.WriteLine("MoveLeft");
 
 			mCamera.Position -= mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
-			mCameraChanged = true;
+			mCamera.updateCameraVectors();
 		}
 
 		private void MoveRight(OpenTK.Input.Key k)
 		{
 			Console.WriteLine("MoveRight");
-
 			mCamera.Position += mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
-			mCameraChanged = true;
+			mCamera.updateCameraVectors();
+		}
+
+		private void MoveUp(OpenTK.Input.Key k)
+		{
+			Console.WriteLine("MoveUp");
+			mCamera.Position += mCamera.Up * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.updateCameraVectors();
+		}
+
+		private void MoveDown(OpenTK.Input.Key k)
+		{
+			Console.WriteLine("MoveDown");
+			mCamera.Position -= mCamera.Up * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.updateCameraVectors();
 		}
 
 		private void MouseMove(int offsetX, int offsetY, int curX, int curY)
@@ -80,33 +88,31 @@ namespace YH
 			float ox = (float)offsetX * mCamera.MouseSensitivity;
 			float oy = (float)offsetY * mCamera.MouseSensitivity;
 
-			//xoffset *= this->MouseSensitivity;
-			//yoffset *= this->MouseSensitivity;
-
 			mCamera.Yaw   += ox;
 			mCamera.Pitch += oy;
 
-			// Make sure that when pitch is out of bounds, screen doesn't get flipped
-			if (mCamera.Pitch > 89.0f)
+			if (mConstrainPitch)
 			{ 
-                mCamera.Pitch = 89.0f;
+				// Make sure that when pitch is out of bounds, screen doesn't get flipped
+				if (mCamera.Pitch > 89.0f)
+				{ 
+	                mCamera.Pitch = 89.0f;
+				}
+
+				if (mCamera.Pitch < -89.0f)
+				{ 
+	                mCamera.Pitch = -89.0f;
+				}
 			}
 
-			if (mCamera.Pitch < -89.0f)
-			{ 
-                mCamera.Pitch = -89.0f;
-			}
-
-			mCameraChanged = true;
-			// Update Front, Right and Up Vectors using the updated Eular angles
-			//this->updateCameraVectors();
+			mCamera.updateCameraVectors();
 		}
 
 		public readonly string mName;
 		private Camera mCamera = null;
 		private Keyboard mKeyboard = null;
 		private float mDeltaTime = 0.0f;
-		private bool mCameraChanged = false;
 		private Mouse mMouse = null;
+		private bool mConstrainPitch = false;
 	};
 }

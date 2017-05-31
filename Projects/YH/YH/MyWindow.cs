@@ -19,8 +19,12 @@ namespace YH
 		0, // OpenGL minor version
 		GraphicsContextFlags.ForwardCompatible)
 		{
-// new HelloCamera()
-			mCurrentApplication = new HelloCamera();//new HelloCoordinateSystem();//new HelloTransform();//new HelloTexture2D();//new HelloTriangle();
+			//mCurrentApplication = new HelloTriangle();
+			//mCurrentApplication = new HelloTexture2D();
+			//mCurrentApplication = new HelloTransform();
+			//mCurrentApplication = new HelloCoordinateSystem();
+			mCurrentApplication = new HelloCamera();
+
 			Title = mCurrentApplication.mAppName;
 		}
 

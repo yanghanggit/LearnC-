@@ -40,7 +40,7 @@ namespace YH
 
 		public Matrix4 GetViewMatrix() 
 		{
-			return mViewMatrix;
+			return Matrix4.LookAt(Position, Position + Front, Up);
 		}
 
 		static public readonly float YAW = -90.0f;

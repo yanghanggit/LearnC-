@@ -10,8 +10,6 @@ namespace YH
 
 		public Keyboard(string name)
 		{
-//			var mouseStat = OpenTK.Input.Mouse.GetState();
-//mouseStat.
 			mName = name;
 		}
 
@@ -110,6 +108,8 @@ namespace YH
 			mCurrentMouseX = state.X;
 			mCurrentMouseY = state.Y;
 
+			Console.WriteLine("mouse state = " + state);
+
 			foreach (var evt in mMouseMoveEvents)
 			{
 				if (!state.IsAnyButtonDown)
@@ -121,8 +121,8 @@ namespace YH
 		}
 
 		private Dictionary<string, ProcessDelegate> mMouseMoveEvents = new Dictionary<string, ProcessDelegate>();
-		int mCurrentMouseX = -1;
-		int mCurrentMouseY = -1;
+		private int mCurrentMouseX = -1;
+		private int mCurrentMouseY = -1;
 		public readonly string mName;	
 	}
 
