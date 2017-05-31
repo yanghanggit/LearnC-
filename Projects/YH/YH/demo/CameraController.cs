@@ -25,8 +25,8 @@ namespace YH
 		{
 			float fdt = (float)dt;
 
-			mCamera.Yaw   += mMouseOffsetX;
-			mCamera.Pitch -= mMouseOffsetY;
+			mCamera.Yaw   += mMouseOffsetX * fdt;
+			mCamera.Pitch -= mMouseOffsetY * fdt;
 
 			if (mConstrainPitch)
 			{ 
@@ -107,7 +107,7 @@ namespace YH
 		{
 			if (!e.Mouse.IsAnyButtonDown)
 			{
-				return;
+				//return;
 			}
 
 			mMouseOffsetX = (float)e.XDelta * mCamera.MouseSensitivity;

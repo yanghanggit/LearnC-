@@ -46,7 +46,7 @@ namespace YH
 		static public readonly float YAW = -90.0f;
 		static public readonly float PITCH = 0.0f;
 		static public readonly float SPEED = 3.0f;
-		static public readonly float SENSITIVTY = 0.25f;
+		static public readonly float SENSITIVTY = 10.0f;
 		static public readonly float ZOOM = 45.0f;
 
 		// Camera Attributes
