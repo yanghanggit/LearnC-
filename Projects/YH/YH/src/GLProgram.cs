@@ -37,7 +37,7 @@ namespace YH
 			return GL.GetUniformLocation(mProgram, name);
 		}
 
-		public bool isValid()
+		public bool IsValid()
 		{
 			return mIsValid;
 		}
