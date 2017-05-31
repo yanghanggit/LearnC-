@@ -57,6 +57,7 @@
     <Compile Include="demo\HelloCamera.cs" />
     <Compile Include="demo\CameraController.cs" />
     <Compile Include="demo\Application.cs" />
+    <Compile Include="demo\HelloColorScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
