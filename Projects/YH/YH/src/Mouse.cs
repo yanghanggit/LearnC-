@@ -40,7 +40,7 @@ namespace YH
 			mCurrentMouseX = state.X;
 			mCurrentMouseY = state.Y;
 
-			Console.WriteLine("mouse state = " + state);
+			//Console.WriteLine("mouse state = " + state);
 
 			foreach (var evt in mMouseMoveEvents)
 			{

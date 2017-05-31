@@ -1,4 +1,4 @@
-
+using System;
 using OpenTK;
 using OpenTK.Graphics;
 
@@ -39,6 +39,46 @@ namespace YH
 			mCurrentApplication.Draw(e.Time, base.Width, base.Height);
 
             SwapBuffers();
+		}
+
+		protected override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+
+			if (mCurrentApplication != null)
+			{
+				mCurrentApplication.OnKeyDown(e);
+			}
+		}
+
+		protected override void OnKeyPress(KeyPressEventArgs e)
+		{
+			base.OnKeyPress(e);
+
+			if (mCurrentApplication != null)
+			{
+				mCurrentApplication.OnKeyPress(e);
+			}
+		}
+
+		protected override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyUp(e);
+
+			if (mCurrentApplication != null)
+			{
+				mCurrentApplication.OnKeyUp(e);
+			}
+		}
+
+		protected override void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
+		{
+			base.OnMouseMove(e);
+
+			if (mCurrentApplication != null)
+			{
+				mCurrentApplication.OnMouseMove(e);
+			}
 		}
 
 		private Application mCurrentApplication;

@@ -1,19 +1,22 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/Mouse.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/Camera.cs">
     <Files>
       <File FileName="YH/demo/HelloCoordinateSystem.cs" Line="83" Column="31" />
-      <File FileName="YH/demo/Application.cs" Line="1" Column="1" />
-      <File FileName="YH/src/Keyboard.cs" Line="2" Column="1" />
-      <File FileName="YH/src/Mouse.cs" Line="12" Column="6" />
+      <File FileName="YH/demo/Application.cs" Line="3" Column="1" />
+      <File FileName="YH/src/Keyboard.cs" Line="15" Column="3" />
+      <File FileName="YH/src/Mouse.cs" Line="43" Column="6" />
+      <File FileName="YH/demo/CameraController.cs" Line="127" Column="54" />
+      <File FileName="YH/demo/HelloCamera.cs" Line="72" Column="39" />
+      <File FileName="YH/Program.cs" Line="10" Column="12" />
+      <File FileName="YH/MyWindow.cs" Line="60" Column="31" />
+      <File FileName="YH/src/GLShader.cs" Line="1" Column="1" />
+      <File FileName="YH/src/Camera.cs" Line="48" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/CameraController.cs" relfile="YH/demo/CameraController.cs" line="99" column="1" />
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/CameraController.cs" relfile="YH/demo/CameraController.cs" line="104" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

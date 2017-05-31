@@ -1,4 +1,7 @@
 ﻿using System;
+using OpenTK;
+using System.Collections.Generic;
+
 namespace YH
 {
 	public class CameraController
@@ -9,14 +12,14 @@ namespace YH
 
 			mCamera = cam;
 
-			mKeyboard = new Keyboard(name + "'s keyboard");
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.W, this.MoveForward, null);
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.S, this.MoveBack, null);
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.A, this.MoveLeft, null);
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.D, this.MoveRight, null);
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.Q, this.MoveUp, null);
-			mKeyboard.RegisterKeyEvent(OpenTK.Input.Key.E, this.MoveDown, null);
+			mKeyState.Add(OpenTK.Input.Key.W, false);
+			mKeyState.Add(OpenTK.Input.Key.A, false);
+			mKeyState.Add(OpenTK.Input.Key.S, false);
+			mKeyState.Add(OpenTK.Input.Key.D, false);
+			mKeyState.Add(OpenTK.Input.Key.Q, false);
+			mKeyState.Add(OpenTK.Input.Key.E, false);
 
+			//
 			mMouse = new Mouse(name + "'s mouse");
 			mMouse.RegisterMouseMoveEvent("CameraMouseMove", this.MouseMove);
 		}
@@ -25,19 +28,60 @@ namespace YH
 		{
 			mDeltaTime = (float)dt;
 
-			mKeyboard.Capture();
-			mMouse.Capture();
-			mCamera.updateCameraVectors();
-		}
+			if (mKeyState[OpenTK.Input.Key.W])
+			{
+				MoveForward(OpenTK.Input.Key.W);
+			}
 
-		public Keyboard GetKeyboard()
-		{
-			return mKeyboard;
+			if (mKeyState[OpenTK.Input.Key.S])
+			{
+                MoveBack(OpenTK.Input.Key.S);
+			}
+
+			if (mKeyState[OpenTK.Input.Key.A])
+			{
+                MoveLeft(OpenTK.Input.Key.A);
+			}
+
+			if (mKeyState[OpenTK.Input.Key.D])
+			{
+                MoveRight(OpenTK.Input.Key.D);
+			}
+
+			if (mKeyState[OpenTK.Input.Key.Q])
+			{
+                MoveUp(OpenTK.Input.Key.Q);
+			}
+
+			if (mKeyState[OpenTK.Input.Key.E])
+			{
+                MoveDown(OpenTK.Input.Key.E);
+			}
 		}
 
 		public Camera GetCamera()
 		{
 			return mCamera;
+		}
+
+		public void OnKeyPress(KeyPressEventArgs e)
+		{
+			//mKeyState[e.Key] = true;
+		}
+
+		public void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			mKeyState[e.Key] = false;
+		}
+
+		public void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			mKeyState[e.Key] = true;
+		}
+
+		public void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
+		{
+			
 		}
 
 		private void MoveForward(OpenTK.Input.Key k)
@@ -110,9 +154,10 @@ namespace YH
 
 		public readonly string mName;
 		private Camera mCamera = null;
-		private Keyboard mKeyboard = null;
+		//private Keyboard mKeyboard = null;
 		private float mDeltaTime = 0.0f;
 		private Mouse mMouse = null;
 		private bool mConstrainPitch = false;
+		private Dictionary<OpenTK.Input.Key, bool> mKeyState = new Dictionary<OpenTK.Input.Key, bool>();
 	};
 }

@@ -1,5 +1,7 @@
 ﻿
 using System;
+using OpenTK;
+using OpenTK.Graphics;
 
 namespace YH
 {
@@ -32,6 +34,38 @@ namespace YH
 		public virtual void Draw(double dt, int w, int h)
 		{
 
+		}
+
+		public virtual void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			if (mCameraController != null)
+			{
+				mCameraController.OnKeyDown(e);
+			}
+		}
+
+		public virtual void OnKeyPress(KeyPressEventArgs e)
+		{
+			if (mCameraController != null)
+			{
+				mCameraController.OnKeyPress(e);
+			}
+		}
+
+		public virtual void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			if (mCameraController != null)
+			{
+				mCameraController.OnKeyUp(e);
+			}
+		}
+
+		public virtual void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
+		{
+			if (mCameraController != null)
+			{
+				mCameraController.OnMouseMove(e);
+			}
 		}
 
 		private bool mStarted = false;
