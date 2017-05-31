@@ -19,15 +19,28 @@ namespace YH
 			mKeyState.Add(OpenTK.Input.Key.D, false);
 			mKeyState.Add(OpenTK.Input.Key.Q, false);
 			mKeyState.Add(OpenTK.Input.Key.E, false);
-
-			//
-			mMouse = new Mouse(name + "'s mouse");
-			mMouse.RegisterMouseMoveEvent("CameraMouseMove", this.MouseMove);
 		}
 
 		public void Capture(double dt)
 		{
 			float fdt = (float)dt;
+
+			mCamera.Yaw   += mMouseOffsetX;
+			mCamera.Pitch -= mMouseOffsetY;
+
+			if (mConstrainPitch)
+			{ 
+				// Make sure that when pitch is out of bounds, screen doesn't get flipped
+				if (mCamera.Pitch > 89.0f)
+				{ 
+	                mCamera.Pitch = 89.0f;
+				}
+
+				if (mCamera.Pitch < -89.0f)
+				{ 
+	                mCamera.Pitch = -89.0f;
+				}
+			}
 
 			if (mKeyState[OpenTK.Input.Key.W])
 			{
@@ -58,6 +71,11 @@ namespace YH
 			{
                 MoveDown(fdt);
 			}
+
+			mMouseOffsetX = 0.0f;
+			mMouseOffsetY = 0.0f;
+
+			mCamera.updateCameraVectors();
 		}
 
 		private void HandleMove()
@@ -87,83 +105,56 @@ namespace YH
 
 		public void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
 		{
-			
+			if (!e.Mouse.IsAnyButtonDown)
+			{
+				return;
+			}
+
+			mMouseOffsetX = (float)e.XDelta * mCamera.MouseSensitivity;
+			mMouseOffsetY = (float)e.YDelta * mCamera.MouseSensitivity;
 		}
 
 		private void MoveForward(float dt)
 		{
 			Console.WriteLine("MoveForward");
 			mCamera.Position += mCamera.Front * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
 		}
 
 		private void MoveBack(float dt)
 		{
 			Console.WriteLine("MoveBack");
 			mCamera.Position -= mCamera.Front * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
 		}
 
 		private void MoveLeft(float dt)
 		{
 			Console.WriteLine("MoveLeft");
-
 			mCamera.Position -= mCamera.Right * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
 		}
 
 		private void MoveRight(float dt)
 		{
 			Console.WriteLine("MoveRight");
 			mCamera.Position += mCamera.Right * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
 		}
 
 		private void MoveUp(float dt)
 		{
 			Console.WriteLine("MoveUp");
 			mCamera.Position += mCamera.Up * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
 		}
 
 		private void MoveDown(float dt)
 		{
 			Console.WriteLine("MoveDown");
 			mCamera.Position -= mCamera.Up * mCamera.MovementSpeed * dt;
-			mCamera.updateCameraVectors();
-		}
-
-		private void MouseMove(int offsetX, int offsetY, int curX, int curY)
-		{
-			float ox = (float)offsetX * mCamera.MouseSensitivity;
-			float oy = (float)offsetY * mCamera.MouseSensitivity;
-
-			mCamera.Yaw   += ox;
-			mCamera.Pitch += oy;
-
-			if (mConstrainPitch)
-			{ 
-				// Make sure that when pitch is out of bounds, screen doesn't get flipped
-				if (mCamera.Pitch > 89.0f)
-				{ 
-	                mCamera.Pitch = 89.0f;
-				}
-
-				if (mCamera.Pitch < -89.0f)
-				{ 
-	                mCamera.Pitch = -89.0f;
-				}
-			}
-
-			mCamera.updateCameraVectors();
 		}
 
 		public readonly string mName;
 		private Camera mCamera = null;
-		//private Keyboard mKeyboard = null;
-		//private float mDeltaTime = 0.0f;
-		private Mouse mMouse = null;
-		private bool mConstrainPitch = false;
+		private bool mConstrainPitch = true;
 		private Dictionary<OpenTK.Input.Key, bool> mKeyState = new Dictionary<OpenTK.Input.Key, bool>();
+		float mMouseOffsetX = 0.0f;
+		float mMouseOffsetY = 0.0f;
 	};
 }

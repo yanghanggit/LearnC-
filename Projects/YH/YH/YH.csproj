@@ -57,8 +57,6 @@
     <Compile Include="demo\HelloCamera.cs" />
     <Compile Include="demo\CameraController.cs" />
     <Compile Include="demo\Application.cs" />
-    <Compile Include="src\Keyboard.cs" />
-    <Compile Include="src\Mouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
