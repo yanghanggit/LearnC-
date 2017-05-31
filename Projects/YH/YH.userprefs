@@ -1,10 +1,8 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLProgram.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloColorScene.cs">
     <Files>
-      <File FileName="YH/demo/HelloColorScene.cs" Line="22" Column="51" />
-      <File FileName="YH/src/GLProgram.cs" Line="36" Column="24" />
-      <File FileName="YH/demo/HelloCamera.cs" Line="44" Column="53" />
+      <File FileName="YH/demo/HelloColorScene.cs" Line="25" Column="62" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
