@@ -12,6 +12,7 @@ namespace YH
 
 			mCamera = cam;
 
+			//
 			mKeyState.Add(OpenTK.Input.Key.W, false);
 			mKeyState.Add(OpenTK.Input.Key.A, false);
 			mKeyState.Add(OpenTK.Input.Key.S, false);
@@ -26,37 +27,42 @@ namespace YH
 
 		public void Capture(double dt)
 		{
-			mDeltaTime = (float)dt;
+			float fdt = (float)dt;
 
 			if (mKeyState[OpenTK.Input.Key.W])
 			{
-				MoveForward(OpenTK.Input.Key.W);
+				MoveForward(fdt);
 			}
 
 			if (mKeyState[OpenTK.Input.Key.S])
 			{
-                MoveBack(OpenTK.Input.Key.S);
+                MoveBack(fdt);
 			}
 
 			if (mKeyState[OpenTK.Input.Key.A])
 			{
-                MoveLeft(OpenTK.Input.Key.A);
+                MoveLeft(fdt);
 			}
 
 			if (mKeyState[OpenTK.Input.Key.D])
 			{
-                MoveRight(OpenTK.Input.Key.D);
+                MoveRight(fdt);
 			}
 
 			if (mKeyState[OpenTK.Input.Key.Q])
 			{
-                MoveUp(OpenTK.Input.Key.Q);
+                MoveUp(fdt);
 			}
 
 			if (mKeyState[OpenTK.Input.Key.E])
 			{
-                MoveDown(OpenTK.Input.Key.E);
+                MoveDown(fdt);
 			}
+		}
+
+		private void HandleMove()
+		{ 
+		
 		}
 
 		public Camera GetCamera()
@@ -84,46 +90,46 @@ namespace YH
 			
 		}
 
-		private void MoveForward(OpenTK.Input.Key k)
+		private void MoveForward(float dt)
 		{
 			Console.WriteLine("MoveForward");
-			mCamera.Position += mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position += mCamera.Front * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
-		private void MoveBack(OpenTK.Input.Key k)
+		private void MoveBack(float dt)
 		{
 			Console.WriteLine("MoveBack");
-			mCamera.Position -= mCamera.Front * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position -= mCamera.Front * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
-		private void MoveLeft(OpenTK.Input.Key k)
+		private void MoveLeft(float dt)
 		{
 			Console.WriteLine("MoveLeft");
 
-			mCamera.Position -= mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position -= mCamera.Right * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
-		private void MoveRight(OpenTK.Input.Key k)
+		private void MoveRight(float dt)
 		{
 			Console.WriteLine("MoveRight");
-			mCamera.Position += mCamera.Right * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position += mCamera.Right * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
-		private void MoveUp(OpenTK.Input.Key k)
+		private void MoveUp(float dt)
 		{
 			Console.WriteLine("MoveUp");
-			mCamera.Position += mCamera.Up * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position += mCamera.Up * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
-		private void MoveDown(OpenTK.Input.Key k)
+		private void MoveDown(float dt)
 		{
 			Console.WriteLine("MoveDown");
-			mCamera.Position -= mCamera.Up * mCamera.MovementSpeed * mDeltaTime;
+			mCamera.Position -= mCamera.Up * mCamera.MovementSpeed * dt;
 			mCamera.updateCameraVectors();
 		}
 
@@ -155,7 +161,7 @@ namespace YH
 		public readonly string mName;
 		private Camera mCamera = null;
 		//private Keyboard mKeyboard = null;
-		private float mDeltaTime = 0.0f;
+		//private float mDeltaTime = 0.0f;
 		private Mouse mMouse = null;
 		private bool mConstrainPitch = false;
 		private Dictionary<OpenTK.Input.Key, bool> mKeyState = new Dictionary<OpenTK.Input.Key, bool>();
