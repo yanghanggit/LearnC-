@@ -40,13 +40,14 @@ namespace YH
 
 		public Matrix4 GetViewMatrix() 
 		{
-			return Matrix4.LookAt(Position, Position + Front, Up);
+			return mViewMatrix;
+			//return Matrix4.LookAt(Position, Position + Front, Up);
 		}
 
 		static public readonly float YAW = -90.0f;
 		static public readonly float PITCH = 0.0f;
 		static public readonly float SPEED = 3.0f;
-		static public readonly float SENSITIVTY = 10.0f;
+		static public readonly float SENSITIVTY = 0.2f;
 		static public readonly float ZOOM = 45.0f;
 
 		// Camera Attributes

@@ -2,14 +2,7 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/CameraController.cs">
     <Files>
-      <File FileName="YH/demo/HelloCoordinateSystem.cs" Line="83" Column="31" />
-      <File FileName="YH/demo/Application.cs" Line="67" Column="29" />
-      <File FileName="YH/demo/CameraController.cs" Line="22" Column="4" />
-      <File FileName="YH/demo/HelloCamera.cs" Line="72" Column="39" />
-      <File FileName="YH/Program.cs" Line="14" Column="1" />
-      <File FileName="YH/MyWindow.cs" Line="80" Column="30" />
-      <File FileName="YH/src/GLShader.cs" Line="1" Column="1" />
-      <File FileName="YH/src/Camera.cs" Line="63" Column="32" />
+      <File FileName="YH/demo/CameraController.cs" Line="106" Column="47" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
