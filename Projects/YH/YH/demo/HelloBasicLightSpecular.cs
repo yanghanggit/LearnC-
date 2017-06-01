@@ -62,7 +62,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
 				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocLightColor,  1.0f, 1.0f, 1.0f);
+				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
 				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
@@ -71,7 +71,6 @@ namespace YH
 				GL.UniformMatrix4(mLocLightModel, false, ref model);
 
 				mCube.Draw();
-
 			}
 			while (false);
 
@@ -87,7 +86,6 @@ namespace YH
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
 				mCube.Draw();
-
 			}
 			while (false);
 		}
