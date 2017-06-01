@@ -21,12 +21,14 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			//
-			mLightShader = new GLProgram(@"Resources/colors.vs", @"Resources/colors.frag");
+			mLightShader = new GLProgram(@"Resources/basic_lighting.vs", @"Resources/basic_lighting.frag");
 			mLocLightModel = mLightShader.GetUniformLocation("model");
 			mLocLightView = mLightShader.GetUniformLocation("view");
 			mLocLightProjection = mLightShader.GetUniformLocation("projection");
 			mLocLightObjectColor = mLightShader.GetUniformLocation("objectColor");
 			mLocLightColor = mLightShader.GetUniformLocation("lightColor");
+			mLocLightPos = mLightShader.GetUniformLocation("lightPos");
+			mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
 
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
@@ -50,6 +52,8 @@ namespace YH
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
+			Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+
 			do
 			{
 				mLightShader.Use();
@@ -58,7 +62,9 @@ namespace YH
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
 				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocLightColor, 1.0f, 0.5f, 1.0f);
+				GL.Uniform3(mLocLightColor,  1.0f, 1.0f, 1.0f);
+				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
+				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 				model = Matrix4.CreateScale(0.5f) * model;
@@ -76,7 +82,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
-				Matrix4 model = Matrix4.CreateTranslation(1.2f, 1.0f, 2.0f);
+				Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
@@ -97,6 +103,8 @@ namespace YH
 		private int mLocLightProjection = -1;
 		private int mLocLightObjectColor = -1;
 		private int mLocLightColor = -1;
+		private int mLocLightPos = -1;
+		private int mLocLightViewPos = -1;
 
 		//
 		private GLProgram mLampShader = null;
