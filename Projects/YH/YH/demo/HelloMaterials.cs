@@ -39,51 +39,6 @@ namespace YH
 			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
 			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
 
-
-
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "light.ambient"),  ambientColor.x, ambientColor.y, ambientColor.z);
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "light.diffuse"),  diffuseColor.x, diffuseColor.y, diffuseColor.z);
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "light.specular"), 1.0f, 1.0f, 1.0f);
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "material.ambient"),   1.0f, 0.5f, 0.31f);
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "material.diffuse"),   1.0f, 0.5f, 0.31f);
-
-			//glUniform3f(glGetUniformLocation(lightingShader.Program, "material.specular"),  0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-
-			//glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 32.0f);
-
-			// Create camera transformations
-			//glm::mat4 view;
-			//view = camera.GetViewMatrix();
-			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
-			//// Get the uniform locations
-			//GLint modelLoc = glGetUniformLocation(lightingShader.Program, "model");
-			//GLint viewLoc = glGetUniformLocation(lightingShader.Program, "view");
-			//GLint projLoc = glGetUniformLocation(lightingShader.Program, "projection");
-			//// Pass the matrices to the shader
-			//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-			//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-			//// Draw the container (using container's vertex attributes)
-			//glBindVertexArray(containerVAO);
-			//glm::mat4 model;
-
-			//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-			//glDrawArrays(GL_TRIANGLES, 0, 36);
-
-			//glBindVertexArray(0);
-
-
-
-
-
-
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 			mLocLampModel = mLampShader.GetUniformLocation("model");
@@ -114,16 +69,32 @@ namespace YH
 
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
-				/*
-				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
+
 				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+
+				Vector3 lightColor = new Vector3(0.0f, 0.0f, 0.0f);
+				lightColor.X = (float)Math.Sin(mTotalRuningTime * 2.0);
+				lightColor.Y = (float)Math.Sin(mTotalRuningTime * 0.7);
+				lightColor.Z = (float)Math.Sin(mTotalRuningTime * 1.3);
+
+				Vector3 diffuseColor = new Vector3(0.0f, 0.0f, 0.0f);
+				diffuseColor = lightColor * (new Vector3(0.5f, 0.5f, 0.5f));
+
+				Vector3 ambientColor = new Vector3(0.0f, 0.0f, 0.0f);
+				ambientColor = diffuseColor * (new Vector3(0.2f, 0.2f, 0.2f));
+
+				GL.Uniform3(mLocLightAmbient,  ambientColor.X, ambientColor.Y, ambientColor.Z);
+				GL.Uniform3(mLocLightDiffuse,  diffuseColor.X, diffuseColor.Y, diffuseColor.Z);
+				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
+				GL.Uniform3(mLocMaterialAmbient, 1.0f, 0.5f, 0.31f);
+				GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
+				GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
+				GL.Uniform1(mLocMaterialShininess, 32.0f);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLightModel, false, ref model);
-				*/
 
 				mCube.Draw();
 			}
