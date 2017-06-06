@@ -47,10 +47,10 @@ namespace YH
 			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
 
 			//
-			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
-			mLocLampModel = mLampShader.GetUniformLocation("model");
-			mLocLampView = mLampShader.GetUniformLocation("view");
-			mLocLampProjection = mLampShader.GetUniformLocation("projection");
+			//mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+			//mLocLampModel = mLampShader.GetUniformLocation("model");
+			//mLocLampView = mLampShader.GetUniformLocation("view");
+			//mLocLampProjection = mLampShader.GetUniformLocation("projection");
 
 			//
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
@@ -111,20 +111,20 @@ namespace YH
 			}
 			while (false);
 
-			do
-			{
-				mLampShader.Use();
+			//do
+			//{
+			//	mLampShader.Use();
 
-				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
-				GL.UniformMatrix4(mLocLampView, false, ref view);
+			//	GL.UniformMatrix4(mLocLampProjection, false, ref projection);
+			//	GL.UniformMatrix4(mLocLampView, false, ref view);
 
-				Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
-				model = Matrix4.CreateScale(0.2f) * model;
-				GL.UniformMatrix4(mLocLampModel, false, ref model);
+			//	Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
+			//	model = Matrix4.CreateScale(0.2f) * model;
+			//	GL.UniformMatrix4(mLocLampModel, false, ref model);
 
-				mCube.Draw();
-			}
-			while (false);
+			//	mCube.Draw();
+			//}
+			//while (false);
 		}
 
 		private Cube mCube = null;
@@ -160,10 +160,10 @@ namespace YH
 
           
 		//
-		private GLProgram mLampShader = null;
-		private int mLocLampModel = -1;
-		private int mLocLampView = -1;
-		private int mLocLampProjection = -1;	
+		//private GLProgram mLampShader = null;
+		//private int mLocLampModel = -1;
+		//private int mLocLampView = -1;
+		//private int mLocLampProjection = -1;	
 
 		//
 		Vector3[] mCubePositions = {
