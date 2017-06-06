@@ -78,29 +78,34 @@ namespace YH
 			{
 				mLightShader.Use();
 
+				GL.ActiveTexture(TextureUnit.Texture0);
+				GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
+				GL.Uniform1(mLocMaterialDiffuse, 0);
+
+				GL.ActiveTexture(TextureUnit.Texture1);
+				GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+				GL.Uniform1(mLocMaterialSpecular, 1);
+
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
 				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
-				Vector3 lightColor = new Vector3(0.0f, 0.0f, 0.0f);
-				lightColor.X = (float)Math.Sin(mTotalRuningTime * 2.0);
-				lightColor.Y = (float)Math.Sin(mTotalRuningTime * 0.7);
-				lightColor.Z = (float)Math.Sin(mTotalRuningTime * 1.3);
+               	GL.Uniform3(mLocLightSpotdirLoc, mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
+				GL.Uniform1(mLocLightSpotCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(12.5f)));
+                GL.Uniform1(mLocLightSpotOuterCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(17.5f)));
 
-				Vector3 diffuseColor = new Vector3(0.0f, 0.0f, 0.0f);
-				diffuseColor = lightColor * (new Vector3(0.5f, 0.5f, 0.5f));
-
-				Vector3 ambientColor = new Vector3(0.0f, 0.0f, 0.0f);
-				ambientColor = diffuseColor * (new Vector3(0.2f, 0.2f, 0.2f));
-
-				GL.Uniform3(mLocLightAmbient, ambientColor.X, ambientColor.Y, ambientColor.Z);
-				GL.Uniform3(mLocLightDiffuse, diffuseColor.X, diffuseColor.Y, diffuseColor.Z);
+				GL.Uniform3(mLocLightAmbient, 0.1f, 0.1f, 0.1f);
+				GL.Uniform3(mLocLightDiffuse, 0.8f, 0.8f, 0.8f);
 				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
+
 				GL.Uniform3(mLocMaterialAmbient, 1.0f, 0.5f, 0.31f);
 				GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
 				GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
+				GL.Uniform1(mLocLightConstant, 1.0f);
+				GL.Uniform1(mLocLightLinear, 0.09f);
+				GL.Uniform1(mLocLightQuadratic, 0.032f);
 				GL.Uniform1(mLocMaterialShininess, 32.0f);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
@@ -110,21 +115,6 @@ namespace YH
 				mCube.Draw();
 			}
 			while (false);
-
-			//do
-			//{
-			//	mLampShader.Use();
-
-			//	GL.UniformMatrix4(mLocLampProjection, false, ref projection);
-			//	GL.UniformMatrix4(mLocLampView, false, ref view);
-
-			//	Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
-			//	model = Matrix4.CreateScale(0.2f) * model;
-			//	GL.UniformMatrix4(mLocLampModel, false, ref model);
-
-			//	mCube.Draw();
-			//}
-			//while (false);
 		}
 
 		private Cube mCube = null;
