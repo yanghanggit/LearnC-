@@ -26,7 +26,8 @@ namespace YH
 			//mCurrentApplication = new HelloCamera();
 			//mCurrentApplication = new HelloColorScene();
 			//mCurrentApplication = new HelloBasicLightSpecular();
-			mCurrentApplication = new HelloMaterials();
+			//mCurrentApplication = new HelloMaterials();
+			mCurrentApplication = new HelloLightCasters();
 
 			Title = mCurrentApplication.mAppName;
 		}

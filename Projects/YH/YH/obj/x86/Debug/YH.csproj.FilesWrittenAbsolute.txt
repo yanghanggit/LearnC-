@@ -1,8 +1,8 @@
 /Users/yh/LearnMono/Projects/YH/YH/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/OpenTK.dll
+/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Sichem.Framework.dll
+/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/StbSharp.dll
 /Users/yh/LearnMono/Projects/YH/YH/bin/Debug/YH.pdb
 /Users/yh/LearnMono/Projects/YH/YH/bin/Debug/YH.exe
 /Users/yh/LearnMono/Projects/YH/YH/obj/x86/Debug/YH.exe
 /Users/yh/LearnMono/Projects/YH/YH/obj/x86/Debug/YH.pdb
-/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/OpenTK.dll
-/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Sichem.Framework.dll
-/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/StbSharp.dll
