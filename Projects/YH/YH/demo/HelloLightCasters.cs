@@ -108,11 +108,18 @@ namespace YH
 				GL.Uniform1(mLocLightQuadratic, 0.032f);
 				GL.Uniform1(mLocMaterialShininess, 32.0f);
 
-				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mLocLightModel, false, ref model);
+				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 
-				mCube.Draw();
+				for (int i = 0; i < mCubePositions.Length; ++i)
+				{ 
+					Matrix4 model = Matrix4.CreateTranslation(mCubePositions[i]);
+					//model = glm::translate(model, cubePositions[i]);
+					float angle = 20.0f * i;
+					model = Matrix4.CreateScale(0.5f) * model;
+					model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
+					GL.UniformMatrix4(mLocLightModel, false, ref model);
+					mCube.Draw();
+				}
 			}
 			while (false);
 		}
