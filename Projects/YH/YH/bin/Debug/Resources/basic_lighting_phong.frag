@@ -10,7 +10,7 @@ uniform vec3 viewPos;
 uniform vec3 lightColor;
 uniform vec3 objectColor;
 uniform float shininess;
-uniform bool worldspace;
+uniform bool worldspace;  
 
 
 void world_space_light()

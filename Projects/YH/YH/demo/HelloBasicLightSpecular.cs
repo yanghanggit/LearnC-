@@ -21,7 +21,7 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			//
-			mLightShader = new GLProgram(@"Resources/basic_lighting.vs", @"Resources/basic_lighting.frag");
+			mLightShader = new GLProgram(@"Resources/basic_lighting_phong.vs", @"Resources/basic_lighting_phong.frag");
 			mLocLightModel = mLightShader.GetUniformLocation("model");
 			mLocLightView = mLightShader.GetUniformLocation("view");
 			mLocLightProjection = mLightShader.GetUniformLocation("projection");

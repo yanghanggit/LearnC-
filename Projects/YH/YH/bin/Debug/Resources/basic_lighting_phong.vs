@@ -11,7 +11,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform bool worldspace;
-uniform vec3 lightPos; 
+uniform vec3 lightPos;   
 
 void world_position()
 {
