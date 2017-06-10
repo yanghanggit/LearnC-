@@ -13,14 +13,14 @@ uniform mat4 projection;
 uniform bool worldspace;
 uniform vec3 lightPos;   
 
-void world_position()
+void world_position_phong()
 {
     gl_Position = projection * view *  model * vec4(position, 1.0f);
     FragPos = vec3(model * vec4(position, 1.0f));
     Normal = mat3(transpose(inverse(model))) * normal;
 }
 
-void view_position()
+void view_position_phong()
 {
     gl_Position = projection * view * model * vec4(position, 1.0);
     FragPos = vec3(view * model * vec4(position, 1.0));
@@ -32,10 +32,10 @@ void main()
 {
     if (worldspace)
     {
-        world_position();
+        world_position_phong();
     }
     else 
     {
-        view_position();
+        view_position_phong();
     }
 } 

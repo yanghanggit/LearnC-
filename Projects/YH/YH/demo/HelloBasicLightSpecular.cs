@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;

@@ -13,7 +13,7 @@ uniform float shininess;
 uniform bool worldspace;  
 
 
-void world_space_light()
+void world_space_light_phong()
 {
     // Ambient
     float ambientStrength = 0.1f;
@@ -36,7 +36,7 @@ void world_space_light()
     color = vec4(result, 1.0f);
 }
 
-void view_space_light()
+void view_space_light_phong()
 {
     // ambient
     float ambientStrength = 0.1;
@@ -63,10 +63,10 @@ void main()
 {
     if (worldspace)
     {
-        world_space_light();
+        world_space_light_phong();
     }
     else 
     {
-        view_space_light();
+        view_space_light_phong();
     }
 } 
