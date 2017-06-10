@@ -45,14 +45,15 @@ namespace YH
 		public override void Draw(double dt, int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
-			GL.ClearColor(Color.Gray);
+            GL.ClearColor(Color.Black);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+            mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime)  * 2.0f;
+			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 
 			do
 			{
@@ -63,7 +64,7 @@ namespace YH
 
 				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
 				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
-				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
+				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
@@ -81,7 +82,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
-				Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
+				Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
@@ -109,5 +110,8 @@ namespace YH
 		private int mLocLampModel = -1;
 		private int mLocLampView = -1;
 		private int mLocLampProjection = -1;	
+
+        //
+        private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
 	}
 }

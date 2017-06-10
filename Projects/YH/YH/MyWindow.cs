@@ -24,8 +24,8 @@ namespace YH
 			//mCurrentApplication = new HelloTransform();
 			//mCurrentApplication = new HelloCoordinateSystem();
 			//mCurrentApplication = new HelloCamera();
-			mCurrentApplication = new HelloColorScene();
-			//mCurrentApplication = new HelloBasicLightSpecular();
+			//mCurrentApplication = new HelloColorScene();
+			mCurrentApplication = new HelloBasicLightSpecular();
 			//mCurrentApplication = new HelloMaterials();
 			//mCurrentApplication = new HelloLightCasters();
 
