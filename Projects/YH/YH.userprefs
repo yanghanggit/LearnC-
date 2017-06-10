@@ -1,8 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloLightCasters.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/Application.cs">
     <Files>
-      <File FileName="YH/demo/HelloLightCasters.cs" Line="92" Column="43" />
+      <File FileName="YH/demo/HelloLightCasters.cs" Line="8" Column="40" />
+      <File FileName="YH/demo/HelloBasicLightSpecular.cs" Line="88" Column="18" />
+      <File FileName="YH/demo/Application.cs" Line="8" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
