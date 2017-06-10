@@ -30,8 +30,9 @@ namespace YH
 			mLocLightPos = mLightShader.GetUniformLocation("lightPos");
 			mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
             mLocLightShininess = mLightShader.GetUniformLocation("shininess");
+			mLocUseWorldSpace = mLightShader.GetUniformLocation("worldspace");
 
-			//
+            //
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 			mLocLampModel = mLampShader.GetUniformLocation("model");
 			mLocLampView = mLampShader.GetUniformLocation("view");
@@ -106,6 +107,9 @@ namespace YH
                 mShininess /= 2.0f;
                 mShininess = mShininess <= 2.0f ? 2.0f : mShininess;
 			}
+            else if (e.Key == OpenTK.Input.Key.C)
+			{
+			}
 		}
 
 		private Cube mCube = null;
@@ -122,6 +126,8 @@ namespace YH
 		private int mLocLightPos = -1;
 		private int mLocLightViewPos = -1;
         private int mLocLightShininess = -1;
+		private int mLocUseWorldSpace = -1;
+
 
 		//
 		private GLProgram mLampShader = null;
@@ -131,6 +137,6 @@ namespace YH
 
         //
         private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
-        private float mShininess = 32.0f;
+        private float mShininess = 256.0f;
 	}
 }

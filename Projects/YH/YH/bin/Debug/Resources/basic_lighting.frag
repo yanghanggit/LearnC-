@@ -10,12 +10,12 @@ uniform vec3 lightColor;
 uniform vec3 objectColor;
 uniform float shininess;
 
-void main()
+void world_space_light()
 {
     // Ambient
     float ambientStrength = 0.1f;
     vec3 ambient = ambientStrength * lightColor;
-  	
+    
     // Diffuse 
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(lightPos - FragPos);
@@ -31,4 +31,9 @@ void main()
         
     vec3 result = (ambient + diffuse + specular) * objectColor;
     color = vec4(result, 1.0f);
+}
+
+void main()
+{
+    world_space_light();
 } 
