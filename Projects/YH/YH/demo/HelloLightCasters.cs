@@ -65,7 +65,7 @@ namespace YH
 		public override void Draw(double dt, int w, int h)
 		{
 			GL.Viewport(0, 0, w, h);
-			GL.ClearColor(Color.Gray);
+            GL.ClearColor(Color.Black);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
