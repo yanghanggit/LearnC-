@@ -5,9 +5,9 @@ using OpenTK.Graphics;
 namespace YH
 {
 	//=============================================================================================
-	public class MyWindow : OpenTK.GameWindow
+	public class Window : OpenTK.GameWindow
 	{
-		public MyWindow(int w, int h) : base
+		public Window(int w, int h) : base
 		(
 		w, // initial width
 		h, // initial height
@@ -36,11 +36,11 @@ namespace YH
 		{
 			if (!mCurrentApplication.isStarted())
 			{
-				mCurrentApplication.Start();
+				mCurrentApplication.Start(this);
 			}
 
 			mCurrentApplication.Update(e.Time);
-			mCurrentApplication.Draw(e.Time, base.Width, base.Height);
+			mCurrentApplication.Draw(e.Time, this);
 
             SwapBuffers();
 		}

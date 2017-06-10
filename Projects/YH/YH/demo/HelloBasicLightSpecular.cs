@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -11,9 +11,9 @@ namespace YH
 		{
 		}
 
-		public override void Start()
+        public override void Start(Window wnd)
 		{
-			base.Start();
+			base.Start(wnd);
 
 			mCube = new Cube();
 
@@ -44,14 +44,14 @@ namespace YH
 			base.Update(dt);
 		}
 
-		public override void Draw(double dt, int w, int h)
+        public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, w, h);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.ClearColor(Color.Black);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
             mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime)  * 2.0f;
@@ -64,11 +64,20 @@ namespace YH
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
-				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
+                if (mUseWorldSpace)
+                {
+                    GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
+                }
+                else 
+                {
+                    GL.Uniform3(mLocLightObjectColor, 0.5f, 0.31f, 1.0f);
+                }
+
 				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
 				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
                 GL.Uniform1(mLocLightShininess, mShininess);
+                GL.Uniform1(mLocUseWorldSpace, mUseWorldSpace ? 1 : 0);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 				model = Matrix4.CreateScale(0.5f) * model;
@@ -109,11 +118,12 @@ namespace YH
 			}
             else if (e.Key == OpenTK.Input.Key.C)
 			{
+                mUseWorldSpace = !mUseWorldSpace;
 			}
 		}
 
+        //
 		private Cube mCube = null;
-
 		private Camera mCamera = null;
 
 		//
@@ -138,5 +148,6 @@ namespace YH
         //
         private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
         private float mShininess = 256.0f;
+        private bool mUseWorldSpace = true;
 	}
 }

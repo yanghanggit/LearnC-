@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -11,9 +11,9 @@ namespace YH
 		{
 		}
 
-		public override void Start()
+		public override void Start(Window wnd)
 		{
-			base.Start();
+			base.Start(wnd);
 
 			mCube = new Cube();
 
@@ -40,14 +40,14 @@ namespace YH
 			base.Update(dt);
 		}
 
-		public override void Draw(double dt, int w, int h)
+        public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, w, h);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
 			do

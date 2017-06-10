@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -14,9 +14,9 @@ namespace YH
 		{
 		}
 
-		public override void Start()
+        public override void Start(Window wnd)
 		{
-			base.Start();
+			base.Start(wnd);
 
 			mProgram = new GLProgram(@"Resources/coordinate_systems.vs", @"Resources/coordinate_systems.fs");
 			mLocation1 = mProgram.GetUniformLocation("ourTexture1");
@@ -41,9 +41,9 @@ namespace YH
 			base.Update(dt);
 		}
 
-		public override void Draw(double dt, int w, int h)
+		public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, w, h);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -59,7 +59,7 @@ namespace YH
 
 			mProgram.Use();
 
-			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)w / (float)h, 0.1f, 100.0f);
+			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 
 			mView = mCamera.GetViewMatrix();
 			GL.UniformMatrix4(mViewLoc, false, ref mView);

@@ -12,7 +12,7 @@ namespace YH
 			mAppName = appName;
 		}
 
-		public virtual void Start()
+		public virtual void Start(Window wnd)
 		{
 			mStarted = true;
 		}
@@ -31,7 +31,7 @@ namespace YH
 			}
 		}
 
-		public virtual void Draw(double dt, int w, int h)
+		public virtual void Draw(double dt, Window wnd)
 		{
 
 		}

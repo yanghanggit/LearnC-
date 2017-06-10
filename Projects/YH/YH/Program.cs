@@ -7,7 +7,7 @@ namespace YH
 		public static void Main(string[] args)
 		{
 			Console.WriteLine("Hello World!");
-			new MyWindow(800, 600).Run();
+			new Window(800, 600).Run();
 		}
 	}
 }

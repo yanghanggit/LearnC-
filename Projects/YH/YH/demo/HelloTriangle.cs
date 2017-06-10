@@ -12,9 +12,9 @@ namespace YH
 
 		}
 
-		public override void Start()
+		public override void Start(Window wnd)
 		{
-			base.Start();
+			base.Start(wnd);
 			mProgram = new GLProgram(@"Resources/testshader.vert", @"Resources/testshader.frag");
 			mSimpleRectangle = new SimpleRectangle();
 		}
@@ -24,9 +24,9 @@ namespace YH
 			base.Update(dt);
 		}
 
-		public override void Draw(double dt, int w, int h)
+		public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, w, h);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
