@@ -117,6 +117,13 @@ namespace YH
 				return;
 			}
 
+            if (!mFirstShouldIgore)
+            {
+				//The first mouse movement may be very large
+				mFirstShouldIgore = true;
+                return;
+            }
+
 			float ox = (float)e.XDelta * mCamera.MouseSensitivity;
 			float oy = (float)e.YDelta * mCamera.MouseSensitivity;
 
@@ -181,10 +188,15 @@ namespace YH
 		private bool mConstrainPitch = true;
 		private Dictionary<OpenTK.Input.Key, bool> mKeyState = new Dictionary<OpenTK.Input.Key, bool>();
 
-		Vector3 mSaveFront = new Vector3();
-		Vector3 mSavePosition = new Vector3();
-		Vector3 mSaveWorldUp = new Vector3();
-		float mSaveYaw = 0.0f;
-		float mSavePitch = 0.0f;
+		private Vector3 mSaveFront = new Vector3();
+		private Vector3 mSavePosition = new Vector3();
+		private Vector3 mSaveWorldUp = new Vector3();
+		private float mSaveYaw = 0.0f;
+		private float mSavePitch = 0.0f;
+
+        private bool mFirstShouldIgore = false;
+        //private float mCurrentMousePosX = -1.0f;
+		//private float mCurrentMousePosY = -1.0f;
+
 	};
 }
