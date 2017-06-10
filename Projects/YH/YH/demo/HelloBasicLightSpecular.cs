@@ -37,6 +37,14 @@ namespace YH
 			mLocLampModel = mLampShader.GetUniformLocation("model");
 			mLocLampView = mLampShader.GetUniformLocation("view");
 			mLocLampProjection = mLampShader.GetUniformLocation("projection");
+
+			//
+			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 
+            (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+
+			//
+			mCubeModel = Matrix4.CreateTranslation(0, 0, 0);
+			mCubeModel = Matrix4.CreateScale(0.5f) * mCubeModel;
 		}
 
 		public override void Update(double dt)
@@ -51,57 +59,54 @@ namespace YH
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
-			var view = mCamera.GetViewMatrix();
+			mView = mCamera.GetViewMatrix();
 
             mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime)  * 2.0f;
 			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 
-			do
-			{
-				mLightShader.Use();
-
-				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
-				GL.UniformMatrix4(mLocLightView, false, ref view);
-
-                if (mUseWorldSpace)
-                {
-                    GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
-                }
-                else 
-                {
-                    GL.Uniform3(mLocLightObjectColor, 0.5f, 0.31f, 1.0f);
-                }
-
-				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
-				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
-				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
-                GL.Uniform1(mLocLightShininess, mShininess);
-                GL.Uniform1(mLocUseWorldSpace, mUseWorldSpace ? 1 : 0);
-
-				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mLocLightModel, false, ref model);
-
-				mCube.Draw();
-			}
-			while (false);
-
-			do
-			{
-				mLampShader.Use();
-
-				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
-				GL.UniformMatrix4(mLocLampView, false, ref view);
-
-				Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
-				model = Matrix4.CreateScale(0.2f) * model;
-				GL.UniformMatrix4(mLocLampModel, false, ref model);
-
-				mCube.Draw();
-			}
-			while (false);
+            DrawCube();
+            DrawLamp();
 		}
+
+        private void DrawCube()
+        {
+			mLightShader.Use();
+
+			GL.UniformMatrix4(mLocLightProjection, false, ref mProjection);
+			GL.UniformMatrix4(mLocLightView, false, ref mView);
+
+			if (mUseWorldSpace)
+			{
+				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
+			}
+			else
+			{
+				GL.Uniform3(mLocLightObjectColor, 0.5f, 0.31f, 1.0f);
+			}
+
+			GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
+			GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
+			GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+			GL.Uniform1(mLocLightShininess, mShininess);
+			GL.Uniform1(mLocUseWorldSpace, mUseWorldSpace ? 1 : 0);
+			GL.UniformMatrix4(mLocLightModel, false, ref mCubeModel);
+
+			mCube.Draw();
+        }
+
+        private void DrawLamp()
+        {
+			mLampShader.Use();
+
+			GL.UniformMatrix4(mLocLampProjection, false, ref mProjection);
+            GL.UniformMatrix4(mLocLampView, false, ref mView);
+
+			Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
+			model = Matrix4.CreateScale(0.2f) * model;
+			GL.UniformMatrix4(mLocLampModel, false, ref model);
+
+			mCube.Draw();
+        }
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
@@ -149,5 +154,9 @@ namespace YH
         private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
         private float mShininess = 256.0f;
         private bool mUseWorldSpace = true;
+        private Matrix4 mProjection;
+		private Matrix4 mView;
+        private Matrix4 mCubeModel; 
+
 	}
 }
