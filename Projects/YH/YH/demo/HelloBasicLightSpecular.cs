@@ -29,6 +29,7 @@ namespace YH
 			mLocLightColor = mLightShader.GetUniformLocation("lightColor");
 			mLocLightPos = mLightShader.GetUniformLocation("lightPos");
 			mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
+            mLocLightShininess = mLightShader.GetUniformLocation("shininess");
 
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
@@ -66,6 +67,7 @@ namespace YH
 				GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
 				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+                GL.Uniform1(mLocLightShininess, mShininess);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 				model = Matrix4.CreateScale(0.5f) * model;
@@ -91,6 +93,21 @@ namespace YH
 			while (false);
 		}
 
+		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyUp(e);
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+                mShininess *= 2.0f;
+				mShininess = mShininess >= 256.0f ? 256.0f : mShininess;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+                mShininess /= 2.0f;
+                mShininess = mShininess <= 2.0f ? 2.0f : mShininess;
+			}
+		}
+
 		private Cube mCube = null;
 
 		private Camera mCamera = null;
@@ -104,6 +121,7 @@ namespace YH
 		private int mLocLightColor = -1;
 		private int mLocLightPos = -1;
 		private int mLocLightViewPos = -1;
+        private int mLocLightShininess = -1;
 
 		//
 		private GLProgram mLampShader = null;
@@ -113,5 +131,6 @@ namespace YH
 
         //
         private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
+        private float mShininess = 32.0f;
 	}
 }

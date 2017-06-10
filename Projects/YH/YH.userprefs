@@ -3,10 +3,9 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloBasicLightSpecular.cs">
     <Files>
       <File FileName="YH/MyWindow.cs" Line="37" Column="41" />
-      <File FileName="YH/demo/HelloBasicLightSpecular.cs" Line="58" Column="34" />
+      <File FileName="YH/demo/HelloBasicLightSpecular.cs" Line="32" Column="68" />
       <File FileName="YH/bin/Debug/Resources/basic_lighting.vs" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/basic_lighting.frag" Line="22" Column="38" />
-      <File FileName="YH/demo/Application.cs" Line="73" Column="20" />
+      <File FileName="YH/bin/Debug/Resources/basic_lighting.frag" Line="11" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
