@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MyWindow.cs" />
+    <Compile Include="Window.cs" />
     <Compile Include="src\SimpleGeometry.cs" />
     <Compile Include="src\GLShader.cs" />
     <Compile Include="src\GLProgram.cs" />

@@ -155,6 +155,5 @@ namespace YH
 		private Matrix4 mProjection;
 		private Matrix4 mView;
 		private Matrix4 mCubeModel;
-
 	}
 }
