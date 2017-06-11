@@ -9,6 +9,7 @@ namespace YH
 	{
 		public HelloMaterials() : base("HelloMaterials")
 		{
+            
 		}
 
         public override void Start(Window wnd)
@@ -49,6 +50,9 @@ namespace YH
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
 
         public override void Draw(double dt, Window wnd)
@@ -61,8 +65,6 @@ namespace YH
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-
 			do
 			{
 				mLightShader.Use();
@@ -70,7 +72,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
-				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
+                GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
 				Vector3 lightColor = new Vector3(0.0f, 0.0f, 0.0f);
@@ -87,10 +89,11 @@ namespace YH
 				GL.Uniform3(mLocLightAmbient,  ambientColor.X, ambientColor.Y, ambientColor.Z);
 				GL.Uniform3(mLocLightDiffuse,  diffuseColor.X, diffuseColor.Y, diffuseColor.Z);
 				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
+
 				GL.Uniform3(mLocMaterialAmbient, 1.0f, 0.5f, 0.31f);
 				GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
 				GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-				GL.Uniform1(mLocMaterialShininess, 32.0f);
+				GL.Uniform1(mLocMaterialShininess, mMaterialShinness);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 				model = Matrix4.CreateScale(0.5f) * model;
@@ -107,7 +110,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
-				Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
+                Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
@@ -116,8 +119,24 @@ namespace YH
 			while (false);
 		}
 
-		private Cube mCube = null;
+		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyUp(e);
 
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+				mMaterialShinness *= 2.0f;
+				mMaterialShinness = mMaterialShinness >= 256.0f ? 256.0f : mMaterialShinness;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				mMaterialShinness /= 2.0f;
+				mMaterialShinness = mMaterialShinness <= 2.0f ? 2.0f : mMaterialShinness;
+			}
+		}
+
+        //
+		private Cube mCube = null;
 		private Camera mCamera = null;
 
 		//
@@ -143,6 +162,11 @@ namespace YH
 		private GLProgram mLampShader = null;
 		private int mLocLampModel = -1;
 		private int mLocLampView = -1;
-		private int mLocLampProjection = -1;	
+		private int mLocLampProjection = -1;
+
+		//
+		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
+
+        private float mMaterialShinness = 32.0f;
 	}
 }

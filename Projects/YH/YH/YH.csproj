@@ -61,6 +61,7 @@
     <Compile Include="demo\HelloBasicLightSpecular.cs" />
     <Compile Include="demo\HelloMaterials.cs" />
     <Compile Include="demo\HelloLightCasters.cs" />
+    <Compile Include="demo\HelloLightingMaps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

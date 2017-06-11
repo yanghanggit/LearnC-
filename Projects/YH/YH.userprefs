@@ -1,10 +1,14 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/basic_lighting_phong.vs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/MyWindow.cs">
     <Files>
-      <File FileName="YH/demo/HelloBasicLightSpecular.cs" Line="24" Column="103" />
-      <File FileName="YH/bin/Debug/Resources/basic_lighting_phong.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/basic_lighting_phong.vs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloMaterials.cs" Line="138" Column="11" />
+      <File FileName="YH/demo/HelloLightingMaps.cs" Line="4" Column="32" />
+      <File FileName="YH/demo/HelloColorScene.cs" Line="50" Column="131" />
+      <File FileName="YH/demo/HelloCoordinateSystem.cs" Line="59" Column="127" />
+      <File FileName="YH/demo/HelloLightCasters.cs" Line="72" Column="131" />
+      <File FileName="YH/demo/HelloBasicLightSpecular.cs" Line="159" Column="3" />
+      <File FileName="YH/MyWindow.cs" Line="32" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
