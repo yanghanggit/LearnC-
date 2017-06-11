@@ -159,7 +159,6 @@ namespace YH
 		}
 
 		private Cube mCube = null;
-
 		private Camera mCamera = null;
 
 		//
@@ -215,9 +214,5 @@ namespace YH
 
         private float mSpotCutOffScale = 1.0f;
 		private float mSpotOuterCutOffScale = 1.0f;
-
-		//GL.Uniform1(mLocLightSpotCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(12.5f)));
-          //      GL.Uniform1(mLocLightSpotOuterCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(17.5f)));
-
 	}
 }

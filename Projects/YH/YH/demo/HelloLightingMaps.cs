@@ -20,17 +20,22 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-			//
-			mLightShader = new GLProgram(@"Resources/basic_lighting_phong.vs", @"Resources/basic_lighting_phong.frag");
+			mLightShader = new GLProgram(@"Resources/lighting_maps.vs", @"Resources/lighting_maps.frag");
+
 			mLocLightModel = mLightShader.GetUniformLocation("model");
 			mLocLightView = mLightShader.GetUniformLocation("view");
 			mLocLightProjection = mLightShader.GetUniformLocation("projection");
-			mLocLightObjectColor = mLightShader.GetUniformLocation("objectColor");
-			mLocLightColor = mLightShader.GetUniformLocation("lightColor");
-			mLocLightPos = mLightShader.GetUniformLocation("lightPos");
-			mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
-			mLocLightShininess = mLightShader.GetUniformLocation("shininess");
-			mLocUseWorldSpace = mLightShader.GetUniformLocation("worldspace");
+
+            mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
+
+			mLocLightPos = mLightShader.GetUniformLocation("light.position");
+			mLocLightAmbient = mLightShader.GetUniformLocation("light.ambient");
+			mLocLightDiffuse = mLightShader.GetUniformLocation("light.diffuse");
+			mLocLightSpecular = mLightShader.GetUniformLocation("light.specular");
+
+			mLocMaterialDiffuse = mLightShader.GetUniformLocation("material.diffuse");
+			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
+			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
 
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
@@ -39,19 +44,14 @@ namespace YH
 			mLocLampProjection = mLampShader.GetUniformLocation("projection");
 
 			//
-			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f),
-			(float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
-
-			//
-			mCubeModel = Matrix4.CreateTranslation(0, 0, 0);
-			mCubeModel = Matrix4.CreateScale(0.5f) * mCubeModel;
+			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
+			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
 		}
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
 
-			mView = mCamera.GetViewMatrix();
 			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
 			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
@@ -62,85 +62,87 @@ namespace YH
 			GL.ClearColor(Color.Black);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
-			DrawCube();
-			DrawLamp();
-		}
 
-		private void DrawCube()
-		{
-			mLightShader.Use();
+            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
 
-			GL.UniformMatrix4(mLocLightProjection, false, ref mProjection);
-			GL.UniformMatrix4(mLocLightView, false, ref mView);
+			//Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
-			if (mUseWorldSpace)
+			do
 			{
-				GL.Uniform3(mLocLightObjectColor, 1.0f, 0.5f, 0.31f);
+				mLightShader.Use();
+
+                //
+				GL.ActiveTexture(TextureUnit.Texture0);
+				GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
+				GL.Uniform1(mLocMaterialDiffuse, 0);
+
+                //
+				GL.ActiveTexture(TextureUnit.Texture1);
+				GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+				GL.Uniform1(mLocMaterialSpecular, 1);
+
+                //
+				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
+				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+
+				GL.Uniform3(mLocLightAmbient, 0.2f, 0.2f, 0.2f);
+				GL.Uniform3(mLocLightDiffuse, 0.5f, 0.5f, 0.5f);
+				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
+
+                GL.Uniform1(mLocMaterialShininess, 32.0f);
+
+				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
+				GL.UniformMatrix4(mLocLightView, false, ref view);
+
+				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
+				model = Matrix4.CreateScale(0.5f) * model;
+				GL.UniformMatrix4(mLocLightModel, false, ref model);
+				mCube.Draw();
 			}
-			else
-			{
-				GL.Uniform3(mLocLightObjectColor, 0.5f, 0.31f, 1.0f);
+			while (false);
+
+			do
+            {
+				mLampShader.Use();
+
+				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
+				GL.UniformMatrix4(mLocLampView, false, ref view);
+
+				Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
+				model = Matrix4.CreateScale(0.2f) * model;
+				GL.UniformMatrix4(mLocLampModel, false, ref model);
+
+				mCube.Draw();
+
 			}
-
-			GL.Uniform3(mLocLightColor, 1.0f, 1.0f, 1.0f);
-			GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
-			GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
-			GL.Uniform1(mLocLightShininess, mShininess);
-			GL.Uniform1(mLocUseWorldSpace, mUseWorldSpace ? 1 : 0);
-			GL.UniformMatrix4(mLocLightModel, false, ref mCubeModel);
-
-			mCube.Draw();
-		}
-
-		private void DrawLamp()
-		{
-			mLampShader.Use();
-
-			GL.UniformMatrix4(mLocLampProjection, false, ref mProjection);
-			GL.UniformMatrix4(mLocLampView, false, ref mView);
-
-			Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
-			model = Matrix4.CreateScale(0.2f) * model;
-			GL.UniformMatrix4(mLocLampModel, false, ref model);
-
-			mCube.Draw();
+			while (false);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-			if (e.Key == OpenTK.Input.Key.Plus)
-			{
-				mShininess *= 2.0f;
-				mShininess = mShininess >= 256.0f ? 256.0f : mShininess;
-			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
-				mShininess /= 2.0f;
-				mShininess = mShininess <= 2.0f ? 2.0f : mShininess;
-			}
-			else if (e.Key == OpenTK.Input.Key.C)
-			{
-				mUseWorldSpace = !mUseWorldSpace;
-			}
 		}
 
-		//
 		private Cube mCube = null;
 		private Camera mCamera = null;
 
 		//
 		private GLProgram mLightShader = null;
+
 		private int mLocLightModel = -1;
 		private int mLocLightView = -1;
 		private int mLocLightProjection = -1;
-		private int mLocLightObjectColor = -1;
-		private int mLocLightColor = -1;
 		private int mLocLightPos = -1;
 		private int mLocLightViewPos = -1;
-		private int mLocLightShininess = -1;
-		private int mLocUseWorldSpace = -1;
+		private int mLocLightAmbient = -1;
+		private int mLocLightDiffuse = -1;
+		private int mLocLightSpecular = -1;
 
+        //
+		private int mLocMaterialDiffuse = -1;
+		private int mLocMaterialSpecular = -1;
+		private int mLocMaterialShininess = -1;
 
 		//
 		private GLProgram mLampShader = null;
@@ -148,12 +150,11 @@ namespace YH
 		private int mLocLampView = -1;
 		private int mLocLampProjection = -1;
 
+        //
+		private GLTexture2D mDiffuseMap = null;
+		private GLTexture2D mSpecularMap = null;
+
 		//
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
-		private float mShininess = 256.0f;
-		private bool mUseWorldSpace = true;
-		private Matrix4 mProjection;
-		private Matrix4 mView;
-		private Matrix4 mCubeModel;
 	}
 }
