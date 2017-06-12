@@ -20,6 +20,10 @@ namespace YH
 			ImageReader loader = new ImageReader();
 			texPath = texPath.Replace(@"\\", @"/");
 			texPath = texPath.Replace(@"\", @"/");
+
+
+            mIsPNG = texPath.EndsWith(".png");
+
 			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
 			{
 				StbSharp.Image image = loader.Read(stream, Stb.STBI_rgb_alpha);
@@ -27,11 +31,11 @@ namespace YH
 				GL.BindTexture(TextureTarget.Texture2D, mTextureId);
 				GL.TexImage2D(TextureTarget.Texture2D,
 						  0,
-						  PixelInternalFormat.Rgba,
+                          mIsPNG ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb,
 						  image.Width,
 						  image.Height,
 						  0,
-						  OpenTK.Graphics.OpenGL.PixelFormat.Rgba,
+						  mIsPNG ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
 						  PixelType.UnsignedByte,
 						  image.Data);
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
@@ -49,5 +53,6 @@ namespace YH
 		}
 
 		private int mTextureId = 0;
+        private bool mIsPNG = false;
 	}
 }

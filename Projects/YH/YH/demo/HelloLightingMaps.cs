@@ -69,8 +69,6 @@ namespace YH
             var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			//Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
-
 			do
 			{
 				mLightShader.Use();
