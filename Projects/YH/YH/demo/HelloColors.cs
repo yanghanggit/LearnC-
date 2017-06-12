@@ -5,9 +5,9 @@ using OpenTK;
 
 namespace YH
 {
-	public class HelloColorScene : Application
+	public class HelloColors : Application
 	{
-		public HelloColorScene() : base("HelloColorScene")
+		public HelloColors() : base("HelloColors")
 		{
 		}
 

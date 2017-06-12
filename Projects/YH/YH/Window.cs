@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using OpenTK;
 using OpenTK.Graphics;
 
@@ -24,8 +24,8 @@ namespace YH
 			//mCurrentApplication = new HelloTransform();
 			//mCurrentApplication = new HelloCoordinateSystem();
 			//mCurrentApplication = new HelloCamera();
-			//mCurrentApplication = new HelloColorScene();
-			//mCurrentApplication = new HelloBasicLightSpecular();
+            //mCurrentApplication = new HelloColors();
+			//mCurrentApplication = new HelloBasicLighting();
 			//mCurrentApplication = new HelloMaterials();
 			//mCurrentApplication = new HelloLightCasters();
             mCurrentApplication = new HelloLightingMaps();

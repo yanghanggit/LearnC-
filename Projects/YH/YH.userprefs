@@ -1,12 +1,14 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTexture2D.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloLightingMaps.cs" Line="51" Column="42" />
-      <File FileName="YH/bin/Debug/Resources/lighting_maps.frag" Line="40" Column="50" />
+      <File FileName="YH/demo/HelloLightingMaps.cs" Line="156" Column="5" />
+      <File FileName="YH/bin/Debug/Resources/lighting_maps.frag" Line="64" Column="6" />
       <File FileName="YH/bin/Debug/Resources/lighting_maps.vs" Line="9" Column="18" />
-      <File FileName="../../../../../Library/Frameworks/Mono.framework/Versions/5.0.1/lib/mono/msbuild/15.0/bin/Microsoft.Common.CurrentVersion.targets" Line="1980" Column="5" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="38" Column="50" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="25" Column="48" />
+      <File FileName="YH/demo/HelloBasicLighting.cs" Line="13" Column="9" />
+      <File FileName="YH/demo/HelloColors.cs" Line="8" Column="29" />
+      <File FileName="YH/Window.cs" Line="27" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

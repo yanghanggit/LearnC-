@@ -22,11 +22,11 @@ namespace YH
 			texPath = texPath.Replace(@"\", @"/");
 
 
-            mIsPNG = texPath.EndsWith(".png");
+            mIsPNG = texPath.EndsWith(@".png");
 
 			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
 			{
-				StbSharp.Image image = loader.Read(stream, Stb.STBI_rgb_alpha);
+				StbSharp.Image image = loader.Read(stream, mIsPNG ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
 				mTextureId = GL.GenTexture();
 				GL.BindTexture(TextureTarget.Texture2D, mTextureId);
 				GL.TexImage2D(TextureTarget.Texture2D,

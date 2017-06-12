@@ -5,9 +5,9 @@ using OpenTK;
 
 namespace YH
 {
-	public class HelloBasicLightSpecular : Application
+	public class HelloBasicLighting : Application
 	{
-		public HelloBasicLightSpecular() : base("HelloBasicLightSpecular")
+		public HelloBasicLighting() : base("HelloBasicLighting")
 		{
 		}
 

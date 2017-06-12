@@ -57,11 +57,11 @@
     <Compile Include="demo\HelloCamera.cs" />
     <Compile Include="demo\CameraController.cs" />
     <Compile Include="demo\Application.cs" />
-    <Compile Include="demo\HelloColorScene.cs" />
-    <Compile Include="demo\HelloBasicLightSpecular.cs" />
+    <Compile Include="demo\HelloColors.cs" />
     <Compile Include="demo\HelloMaterials.cs" />
     <Compile Include="demo\HelloLightCasters.cs" />
     <Compile Include="demo\HelloLightingMaps.cs" />
+    <Compile Include="demo\HelloBasicLighting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

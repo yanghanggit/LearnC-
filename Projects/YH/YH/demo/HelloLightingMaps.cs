@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -35,9 +35,11 @@ namespace YH
 
 			mLocMaterialDiffuse = mLightShader.GetUniformLocation("material.diffuse");
 			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
+            mLocMaterialEmission = mLightShader.GetUniformLocation("material.emission");
 			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
 
             mLocLightReverseSpecular = mLightShader.GetUniformLocation("reverse_specular");
+            mLocMaterialUseEmissionMap = mLightShader.GetUniformLocation("use_emission_map");
 
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
@@ -49,6 +51,7 @@ namespace YH
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
             mColorSpecularMap = new GLTexture2D(@"Resources/Texture/lighting_maps_specular_color.png");
+            mEmissionMap = new GLTexture2D(@"Resources/Texture/matrix.jpg");
 		}
 
 		public override void Update(double dt)
@@ -94,9 +97,15 @@ namespace YH
 				GL.Uniform1(mLocMaterialSpecular, 1);
 
                 //
+				GL.ActiveTexture(TextureUnit.Texture2);
+				GL.BindTexture(TextureTarget.Texture2D, mEmissionMap.getTextureId());
+				GL.Uniform1(mLocMaterialEmission, 2);
+
+                //
 				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
 				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
+                //
 				GL.Uniform3(mLocLightAmbient, 0.2f, 0.2f, 0.2f);
 				GL.Uniform3(mLocLightDiffuse, 0.5f, 0.5f, 0.5f);
 				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
@@ -104,6 +113,7 @@ namespace YH
                 GL.Uniform1(mLocMaterialShininess, 32.0f);
 
                 GL.Uniform1(mLocLightReverseSpecular, mReverseSpecular ? 1 : 0);
+                GL.Uniform1(mLocMaterialUseEmissionMap, mUseEmissionMap ? 1 : 0);
 
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
@@ -144,6 +154,10 @@ namespace YH
 			{
 				mUseColorSpecularTexture = !mUseColorSpecularTexture;
 			}
+            else if (e.Key == OpenTK.Input.Key.C)
+			{
+				mUseEmissionMap = !mUseEmissionMap; 
+			}
 		}
 
 		private Cube mCube = null;
@@ -165,7 +179,9 @@ namespace YH
         //
 		private int mLocMaterialDiffuse = -1;
 		private int mLocMaterialSpecular = -1;
+		private int mLocMaterialEmission = -1;
 		private int mLocMaterialShininess = -1;
+        private int mLocMaterialUseEmissionMap = -1;
 
 		//
 		private GLProgram mLampShader = null;
@@ -177,6 +193,7 @@ namespace YH
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
         private GLTexture2D mColorSpecularMap = null;
+		private GLTexture2D mEmissionMap = null;
 
 		//
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
@@ -184,6 +201,6 @@ namespace YH
         //
         private bool mReverseSpecular = false;
         private bool mUseColorSpecularTexture = false;
-
+        private bool mUseEmissionMap = false;
 	}
 }
