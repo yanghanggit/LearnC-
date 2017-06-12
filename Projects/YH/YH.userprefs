@@ -1,14 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/light_casters.frag">
     <Files>
-      <File FileName="YH/demo/HelloLightingMaps.cs" Line="156" Column="5" />
-      <File FileName="YH/bin/Debug/Resources/lighting_maps.frag" Line="64" Column="6" />
-      <File FileName="YH/bin/Debug/Resources/lighting_maps.vs" Line="9" Column="18" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="25" Column="48" />
-      <File FileName="YH/demo/HelloBasicLighting.cs" Line="13" Column="9" />
-      <File FileName="YH/demo/HelloColors.cs" Line="8" Column="29" />
-      <File FileName="YH/Window.cs" Line="27" Column="13" />
+      <File FileName="YH/demo/HelloLightingMaps.cs" Line="173" Column="37" />
+      <File FileName="YH/demo/HelloLightCasters.cs" Line="20" Column="58" />
+      <File FileName="YH/bin/Debug/Resources/light_casters.vs" Line="5" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/light_casters.frag" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
