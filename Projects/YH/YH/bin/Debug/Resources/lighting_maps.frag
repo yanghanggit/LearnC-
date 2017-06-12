@@ -22,6 +22,7 @@ out vec4 color;
 uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
+uniform bool reverse_specular;
 
 void main()
 {
@@ -38,7 +39,16 @@ void main()
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
-        
+
+    vec3 specular;
+    if (reverse_specular)
+    {
+        specular = light.specular * spec * (vec3(1.0) - vec3(texture(material.specular, TexCoords))); // here we inverse the sampled specular color. Black becomes white and white becomes black.
+    }
+    else 
+    {
+        specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    }
+
     color = vec4(ambient + diffuse + specular, 1.0f); 
 } 

@@ -37,6 +37,8 @@ namespace YH
 			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
 			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
 
+            mLocLightReverseSpecular = mLightShader.GetUniformLocation("reverse_specular");
+
 			//
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 			mLocLampModel = mLampShader.GetUniformLocation("model");
@@ -92,6 +94,8 @@ namespace YH
 
                 GL.Uniform1(mLocMaterialShininess, 32.0f);
 
+                GL.Uniform1(mLocLightReverseSpecular, mReverseSpecular ? 1 : 0);
+
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
@@ -122,6 +126,11 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
+
+			if (e.Key == OpenTK.Input.Key.R)
+			{
+                mReverseSpecular = !mReverseSpecular;
+			}
 		}
 
 		private Cube mCube = null;
@@ -138,6 +147,7 @@ namespace YH
 		private int mLocLightAmbient = -1;
 		private int mLocLightDiffuse = -1;
 		private int mLocLightSpecular = -1;
+        private int mLocLightReverseSpecular = -1;
 
         //
 		private int mLocMaterialDiffuse = -1;
@@ -156,5 +166,8 @@ namespace YH
 
 		//
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
+
+        //
+        private bool mReverseSpecular = false;
 	}
 }
