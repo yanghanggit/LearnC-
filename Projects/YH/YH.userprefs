@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/lighting_maps.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../../../../Library/Frameworks/Mono.framework/Versions/5.0.1/lib/mono/msbuild/15.0/bin/Microsoft.Common.CurrentVersion.targets">
     <Files>
-      <File FileName="YH/demo/HelloLightingMaps.cs" Line="121" Column="17" />
-      <File FileName="YH/bin/Debug/Resources/lighting_maps.frag" Line="43" Column="10" />
+      <File FileName="YH/demo/HelloLightingMaps.cs" Line="88" Column="78" />
+      <File FileName="YH/bin/Debug/Resources/lighting_maps.frag" Line="40" Column="50" />
       <File FileName="YH/bin/Debug/Resources/lighting_maps.vs" Line="9" Column="18" />
+      <File FileName="../../../../../Library/Frameworks/Mono.framework/Versions/5.0.1/lib/mono/msbuild/15.0/bin/Microsoft.Common.CurrentVersion.targets" Line="1980" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

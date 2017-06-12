@@ -48,6 +48,7 @@ namespace YH
 			//
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
+            mColorSpecularMap = new GLTexture2D(@"Resources/Texture/lighting_maps_specular_color.png");
 		}
 
 		public override void Update(double dt)
@@ -81,7 +82,17 @@ namespace YH
 
                 //
 				GL.ActiveTexture(TextureUnit.Texture1);
-				GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+
+                if (mUseColorSpecularTexture)
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, mColorSpecularMap.getTextureId());        
+
+                }
+                else 
+                {
+                    GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+                }
+				
 				GL.Uniform1(mLocMaterialSpecular, 1);
 
                 //
@@ -131,6 +142,10 @@ namespace YH
 			{
                 mReverseSpecular = !mReverseSpecular;
 			}
+		    else if (e.Key == OpenTK.Input.Key.U)
+			{
+				mUseColorSpecularTexture = !mUseColorSpecularTexture;
+			}
 		}
 
 		private Cube mCube = null;
@@ -163,11 +178,14 @@ namespace YH
         //
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
+        private GLTexture2D mColorSpecularMap = null;
 
 		//
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
         //
         private bool mReverseSpecular = false;
+        private bool mUseColorSpecularTexture = false;
+
 	}
 }
