@@ -41,7 +41,7 @@ namespace YH
 			mLocLightLinear = mLightShader.GetUniformLocation("light.linear");
 			mLocLightQuadratic = mLightShader.GetUniformLocation("light.quadratic");
 
-			mLocMaterialAmbient = mLightShader.GetUniformLocation("material.ambient");
+			//mLocMaterialAmbient = mLightShader.GetUniformLocation("material.ambient");
 			mLocMaterialDiffuse = mLightShader.GetUniformLocation("material.diffuse");
 			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
 			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
@@ -65,14 +65,14 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(Color.Black);
+            GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
+			//
 
 			do
 			{
@@ -80,33 +80,33 @@ namespace YH
 
 				GL.ActiveTexture(TextureUnit.Texture0);
 				GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
-				GL.Uniform1(mLocMaterialDiffuse, 0);
+				GL.Uniform1(mLightShader.GetUniformLocation("material.diffuse"), 0);
 
 				GL.ActiveTexture(TextureUnit.Texture1);
 				GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
-				GL.Uniform1(mLocMaterialSpecular, 1);
+				GL.Uniform1(mLightShader.GetUniformLocation("material.specular"), 1);
 
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
-				GL.Uniform3(mLocLightPos, lightPos.X, lightPos.Y, lightPos.Z);
-				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+				GL.Uniform3(mLightShader.GetUniformLocation("viewPos"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
-               	GL.Uniform3(mLocLightSpotdirLoc, mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
-				GL.Uniform1(mLocLightSpotCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(12.5f * mSpotCutOffScale)));
-                GL.Uniform1(mLocLightSpotOuterCutOffLoc, Math.Cos(MathHelper.DegreesToRadians(17.5f * mSpotOuterCutOffScale)));
+               	GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
 
-				GL.Uniform3(mLocLightAmbient, 0.1f, 0.1f, 0.1f);
-				GL.Uniform3(mLocLightDiffuse, 0.8f, 0.8f, 0.8f);
-				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.1f, 0.1f, 0.1f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.8f, 0.8f, 0.8f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.specular"), 1.0f, 1.0f, 1.0f);
 
-				GL.Uniform3(mLocMaterialAmbient, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-				GL.Uniform1(mLocLightConstant, 1.0f);
-				GL.Uniform1(mLocLightLinear, 0.09f);
-				GL.Uniform1(mLocLightQuadratic, 0.032f);
-				GL.Uniform1(mLocMaterialShininess, 32.0f);
+                //GL.Uniform3(mLocLightAmbient, 1.0f, 0.5f, 0.31f);
+				//GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
+				//GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
+				GL.Uniform1(mLightShader.GetUniformLocation("light.constant"), 1.0f);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.linear"), 0.09f);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.quadratic"), 0.032f);
+				GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
 
 				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 
@@ -130,6 +130,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
+                Vector3 lightPos = new Vector3(1.2f, 1.0f, 2.0f);
 				Matrix4 model = Matrix4.CreateTranslation(lightPos.X, lightPos.Y, lightPos.Z);
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
@@ -143,19 +144,19 @@ namespace YH
         public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
             base.OnKeyUp(e);
-            if (e.Key == OpenTK.Input.Key.Plus)
-            {
-                mSpotCutOffScale += 0.5f;
-                mSpotOuterCutOffScale += 0.5f;
-            }
-            else if (e.Key == OpenTK.Input.Key.Minus)
-            {
-                mSpotCutOffScale -= 0.5f;
-                mSpotCutOffScale = mSpotCutOffScale < 0.0f ? 0.0f : mSpotCutOffScale;
+    //        if (e.Key == OpenTK.Input.Key.Plus)
+    //        {
+    //            mSpotCutOffScale += 0.5f;
+    //            mSpotOuterCutOffScale += 0.5f;
+    //        }
+    //        else if (e.Key == OpenTK.Input.Key.Minus)
+    //        {
+    //            mSpotCutOffScale -= 0.5f;
+    //            mSpotCutOffScale = mSpotCutOffScale < 0.0f ? 0.0f : mSpotCutOffScale;
 
-				mSpotOuterCutOffScale -= 0.5f;
-				mSpotOuterCutOffScale = mSpotOuterCutOffScale < 0.0f ? 0.0f : mSpotOuterCutOffScale;
-            }
+				//mSpotOuterCutOffScale -= 0.5f;
+				//mSpotOuterCutOffScale = mSpotOuterCutOffScale < 0.0f ? 0.0f : mSpotOuterCutOffScale;
+            //}
 		}
 
 		private Cube mCube = null;
@@ -183,7 +184,7 @@ namespace YH
 		private int mLocLightLinear = -1;
 		private int mLocLightQuadratic = -1;
 
-		private int mLocMaterialAmbient = -1;
+		//private int mLocMaterialAmbient = -1;
 		private int mLocMaterialDiffuse = -1;
 		private int mLocMaterialSpecular = -1;
 		private int mLocMaterialShininess = -1;
@@ -212,7 +213,7 @@ namespace YH
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
 
-        private float mSpotCutOffScale = 1.0f;
-		private float mSpotOuterCutOffScale = 1.0f;
+  //      private float mSpotCutOffScale = 1.0f;
+		//private float mSpotOuterCutOffScale = 1.0f;
 	}
 }
