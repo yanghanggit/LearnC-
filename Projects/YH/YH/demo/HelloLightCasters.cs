@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -65,8 +65,8 @@ namespace YH
                 GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 				GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
 
-                GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
-                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(17.5f)));
 
                 GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
 
