@@ -17,7 +17,7 @@ namespace YH
 
 			mCube = new Cube();
 
-			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			mLightShader = new GLProgram(@"Resources/light_casters.vs", @"Resources/light_casters.frag");
@@ -69,7 +69,9 @@ namespace YH
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
-            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+                                                                  (float)wnd.Width / (float)wnd.Height, 
+                                                                  0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
 			//
@@ -94,7 +96,7 @@ namespace YH
 
                	GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
 				GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
-                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
+                //GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
 
 				GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.1f, 0.1f, 0.1f);
 				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.8f, 0.8f, 0.8f);
@@ -144,19 +146,6 @@ namespace YH
         public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
             base.OnKeyUp(e);
-    //        if (e.Key == OpenTK.Input.Key.Plus)
-    //        {
-    //            mSpotCutOffScale += 0.5f;
-    //            mSpotOuterCutOffScale += 0.5f;
-    //        }
-    //        else if (e.Key == OpenTK.Input.Key.Minus)
-    //        {
-    //            mSpotCutOffScale -= 0.5f;
-    //            mSpotCutOffScale = mSpotCutOffScale < 0.0f ? 0.0f : mSpotCutOffScale;
-
-				//mSpotOuterCutOffScale -= 0.5f;
-				//mSpotOuterCutOffScale = mSpotOuterCutOffScale < 0.0f ? 0.0f : mSpotOuterCutOffScale;
-            //}
 		}
 
 		private Cube mCube = null;
@@ -212,8 +201,5 @@ namespace YH
 
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
-
-  //      private float mSpotCutOffScale = 1.0f;
-		//private float mSpotOuterCutOffScale = 1.0f;
 	}
 }
