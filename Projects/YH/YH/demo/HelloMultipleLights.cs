@@ -110,8 +110,8 @@ namespace YH
 				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.constant"), 1.0f);
 				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.linear"), 0.09f);
 				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.quadratic"), 0.032f);
-				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f)));
-				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(15.0f)));
+				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f * mCutOffScale)));
+				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(15.0f * mCutOffScale)));
 
 				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 
