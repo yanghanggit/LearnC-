@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloLightCasters.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloMultipleLights.cs">
     <Files>
-      <File FileName="YH/demo/HelloLightCasters.cs" Line="25" Column="54" />
-      <File FileName="YH/bin/Debug/Resources/light_casters.frag" Line="39" Column="43" />
-      <File FileName="YH/bin/Debug/Resources/light_casters.vs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloMultipleLights.cs" Line="141" Column="18" />
+      <File FileName="YH/bin/Debug/Resources/multiple_lights.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/multiple_lights.vs" Line="8" Column="18" />
+      <File FileName="YH/demo/HelloBasicLighting.cs" Line="106" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
