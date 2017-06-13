@@ -61,7 +61,7 @@ namespace YH
 				GL.UniformMatrix4(mLightShader.GetUniformLocation("view"), false, ref view);
 
 				GL.Uniform3(mLightShader.GetUniformLocation("viewPos"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
-                GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
+                GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 256.0f);
 
 				// Directional light
 				GL.Uniform3(mLightShader.GetUniformLocation("dirLight.direction"), -0.2f, -1.0f, -0.3f);
@@ -113,8 +113,10 @@ namespace YH
 				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f * mCutOffScale)));
 				GL.Uniform1(mLightShader.GetUniformLocation("spotLight.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(15.0f * mCutOffScale)));
 
-				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
+                //
+                GL.Uniform1(mLightShader.GetUniformLocation("use_spotlight"), mUseSpotLight ? 1 : 0);
 
+				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 				for (int i = 0; i < mCubePositions.Length; ++i)
 				{
 					Matrix4 model = Matrix4.CreateTranslation(mCubePositions[i]);
@@ -136,6 +138,17 @@ namespace YH
 
                 for (var i = 0; i < 4; i++)
                 {
+                    if (i == 0)
+                    {
+						pointLightPositions[i].X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+						pointLightPositions[i].Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
+                    }
+                    else if (i == 2)
+                    {
+						pointLightPositions[i].X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 1.5f;
+						pointLightPositions[i].Y = (float)Math.Sin((float)mTotalRuningTime / 1.5f) * 1.1f;
+                    }
+
                     Matrix4 model = Matrix4.CreateTranslation(pointLightPositions[i]);
                     model = Matrix4.CreateScale(0.2f) * model;
                     GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
@@ -163,7 +176,7 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.P)
 			{
-
+                mUseSpotLight = !mUseSpotLight;
 			}
 		}
 
@@ -199,5 +212,6 @@ namespace YH
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
 		private float mCutOffScale = 1.0f;
+		private bool mUseSpotLight = true;
 	}
 }

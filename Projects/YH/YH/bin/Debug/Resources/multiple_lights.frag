@@ -53,6 +53,7 @@ uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
 uniform Material material;
+uniform bool use_spotlight;
 
 // Function prototypes
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -77,8 +78,11 @@ void main()
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
     // Phase 3: Spot light
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
-    
+    if (use_spotlight)
+    {
+        result += CalcSpotLight(spotLight, norm, FragPos, viewDir); 
+    }
+       
     color = vec4(result, 1.0);
 }
 
