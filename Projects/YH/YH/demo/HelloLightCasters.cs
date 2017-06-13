@@ -22,7 +22,6 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			mLightShader = new GLProgram(@"Resources/light_casters.vs", @"Resources/light_casters.frag");
-            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
@@ -36,7 +35,7 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            GL.ClearColor(Color.Black);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			GL.Enable(EnableCap.DepthTest);
 
@@ -65,8 +64,8 @@ namespace YH
                 GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 				GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
 
-                GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f)));
-                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(17.5f)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(12.5f * mCutOffScale)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), (float)Math.Cos(MathHelper.DegreesToRadians(17.5f * mCutOffScale)));
 
                 GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
 
@@ -90,35 +89,36 @@ namespace YH
 				}
 			}
 			while (false);
-
-            do
-            {
-                mLampShader.Use();
-
-                GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
-                GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-
-                Matrix4 model = Matrix4.CreateTranslation(1.2f, 1.0f, 2.0f);
-                model = Matrix4.CreateScale(0.2f) * model;
-                GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
-
-                mCube.Draw();
-
-            }
-            while (false);
 		}
 
         public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
             base.OnKeyUp(e);
+
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+                const float maxValue = 2.0f;
+                mCutOffScale += 0.1f;
+                mCutOffScale = mCutOffScale >= maxValue ? maxValue : mCutOffScale;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+                const float minValue = 0.3f;
+				mCutOffScale -= 0.1f;
+                mCutOffScale = mCutOffScale <= minValue ? minValue : mCutOffScale;
+			}
+			else if (e.Key == OpenTK.Input.Key.P)
+			{
+				
+			}
 		}
 
+        //
 		private Cube mCube = null;
 		private Camera mCamera = null;
 
 		//
 		private GLProgram mLightShader = null;
-        private GLProgram mLampShader = null;
 
         //
 		Vector3[] mCubePositions = {
@@ -136,5 +136,6 @@ namespace YH
 
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
+        private float mCutOffScale = 1.0f;
 	}
 }

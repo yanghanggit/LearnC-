@@ -2,11 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloLightCasters.cs">
     <Files>
-      <File FileName="YH/demo/HelloLightCasters.cs" Line="100" Column="33" />
-      <File FileName="YH/bin/Debug/Resources/light_casters.frag" Line="63" Column="13" />
+      <File FileName="YH/demo/HelloLightCasters.cs" Line="25" Column="54" />
+      <File FileName="YH/bin/Debug/Resources/light_casters.frag" Line="39" Column="43" />
       <File FileName="YH/bin/Debug/Resources/light_casters.vs" Line="1" Column="1" />
-      <File FileName="YH/src/Camera.cs" Line="28" Column="103" />
-      <File FileName="YH/demo/HelloBasicLighting.cs" Line="146" Column="40" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
