@@ -27,8 +27,8 @@ namespace YH
             //mCurrentApplication = new HelloColors();
 			//mCurrentApplication = new HelloBasicLighting();
 			//mCurrentApplication = new HelloMaterials();
-			mCurrentApplication = new HelloLightCasters();
             //mCurrentApplication = new HelloLightingMaps();
+            mCurrentApplication = new HelloLightCasters();
 
 			Title = mCurrentApplication.mAppName;
 		}

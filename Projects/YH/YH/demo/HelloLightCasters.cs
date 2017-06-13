@@ -7,7 +7,7 @@ namespace YH
 {
 	public class HelloLightCasters : Application
 	{
-		public HelloLightCasters() : base("HelloLightCasters")
+		public HelloLightCasters() : base("HelloLightCastersDirection")
 		{
             
 		}
@@ -22,6 +22,7 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			mLightShader = new GLProgram(@"Resources/light_casters.vs", @"Resources/light_casters.frag");
+            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
@@ -44,8 +45,6 @@ namespace YH
                                                                   0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			//
-
 			do
 			{
 				mLightShader.Use();
@@ -60,13 +59,23 @@ namespace YH
 
 				GL.UniformMatrix4(mLightShader.GetUniformLocation("projection"), false, ref projection);
 				GL.UniformMatrix4(mLightShader.GetUniformLocation("view"), false, ref view);
+
                 GL.Uniform3(mLightShader.GetUniformLocation("viewPos"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
-               	GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), -0.2f, -1.0f, -0.3f);
-				GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.2f, 0.2f, 0.2f);
-				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.5f, 0.5f, 0.5f);
+                GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
+
+                GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
+                GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
+
+                GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
+
+                GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.1f, 0.1f, 0.1f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.8f, 0.8f, 0.8f);
 				GL.Uniform3(mLightShader.GetUniformLocation("light.specular"), 1.0f, 1.0f, 1.0f);
-				GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.constant"), 1.0f);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.linear"), 0.09f);
+				GL.Uniform1(mLightShader.GetUniformLocation("light.quadratic"), 0.032f);
 
 				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 
@@ -81,6 +90,22 @@ namespace YH
 				}
 			}
 			while (false);
+
+            do
+            {
+                mLampShader.Use();
+
+                GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+                GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+
+                Matrix4 model = Matrix4.CreateTranslation(1.2f, 1.0f, 2.0f);
+                model = Matrix4.CreateScale(0.2f) * model;
+                GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+
+                mCube.Draw();
+
+            }
+            while (false);
 		}
 
         public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -93,6 +118,7 @@ namespace YH
 
 		//
 		private GLProgram mLightShader = null;
+        private GLProgram mLampShader = null;
 
         //
 		Vector3[] mCubePositions = {
