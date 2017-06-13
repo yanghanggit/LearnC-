@@ -91,23 +91,23 @@ namespace YH
 				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
 				GL.UniformMatrix4(mLocLightView, false, ref view);
 
-				GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
+				//GL.Uniform3(mLightShader.GetUniformLocation("light.position"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 				GL.Uniform3(mLightShader.GetUniformLocation("viewPos"), mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
 
-               	GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), mCamera.Front.X, mCamera.Front.Y, mCamera.Front.Z);
-				GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
+               	GL.Uniform3(mLightShader.GetUniformLocation("light.direction"), -0.2f, -1.0f, -0.3f);
+				//GL.Uniform1(mLightShader.GetUniformLocation("light.cutOff"), Math.Cos(MathHelper.DegreesToRadians(12.5f)));
                 //GL.Uniform1(mLightShader.GetUniformLocation("light.outerCutOff"), Math.Cos(MathHelper.DegreesToRadians(17.5f)));
 
-				GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.1f, 0.1f, 0.1f);
-				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.8f, 0.8f, 0.8f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.ambient"), 0.2f, 0.2f, 0.2f);
+				GL.Uniform3(mLightShader.GetUniformLocation("light.diffuse"), 0.5f, 0.5f, 0.5f);
 				GL.Uniform3(mLightShader.GetUniformLocation("light.specular"), 1.0f, 1.0f, 1.0f);
 
                 //GL.Uniform3(mLocLightAmbient, 1.0f, 0.5f, 0.31f);
 				//GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
 				//GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-				GL.Uniform1(mLightShader.GetUniformLocation("light.constant"), 1.0f);
-				GL.Uniform1(mLightShader.GetUniformLocation("light.linear"), 0.09f);
-				GL.Uniform1(mLightShader.GetUniformLocation("light.quadratic"), 0.032f);
+				//GL.Uniform1(mLightShader.GetUniformLocation("light.constant"), 1.0f);
+				//GL.Uniform1(mLightShader.GetUniformLocation("light.linear"), 0.09f);
+				//GL.Uniform1(mLightShader.GetUniformLocation("light.quadratic"), 0.032f);
 				GL.Uniform1(mLightShader.GetUniformLocation("material.shininess"), 32.0f);
 
 				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
