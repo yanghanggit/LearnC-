@@ -1,11 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloStencilTesting.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
       <File FileName="YH/bin/Debug/Resources/stencil_single_color.frag" Line="10" Column="2" />
       <File FileName="YH/bin/Debug/Resources/stencil_testing.frag" Line="11" Column="1" />
       <File FileName="YH/bin/Debug/Resources/stencil_testing.vs" Line="9" Column="25" />
-      <File FileName="YH/demo/HelloStencilTesting.cs" Line="89" Column="33" />
+      <File FileName="YH/demo/HelloStencilTesting.cs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloBlending1.cs" Line="11" Column="24" />
+      <File FileName="YH/Window.cs" Line="38" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

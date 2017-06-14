@@ -33,7 +33,8 @@ namespace YH
 			//mCurrentApplication = new HelloMultipleLights();
 			//mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
-			mCurrentApplication = new HelloStencilTesting();
+			//mCurrentApplication = new HelloStencilTesting();
+			mCurrentApplication = new HelloBlending1();
 
 			Title = mCurrentApplication.mAppName;
 		}
