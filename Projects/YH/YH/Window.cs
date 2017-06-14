@@ -11,7 +11,7 @@ namespace YH
 		(
 		w, // initial width
 		h, // initial height
-		GraphicsMode.Default,
+		new GraphicsMode(32, 24, 8, 0),//GraphicsMode.Default, //public GraphicsMode (ColorFormat color, int depth, int stencil, int samples);
 		"OpenTK.GameWindow",  // initial title
 		GameWindowFlags.Default,
 		DisplayDevice.Default,
@@ -19,17 +19,18 @@ namespace YH
 		0, // OpenGL minor version
 		GraphicsContextFlags.ForwardCompatible)
 		{
+			//public GraphicsMode (ColorFormat color, int depth, int stencil, int samples);
 			//mCurrentApplication = new HelloTriangle();
 			//mCurrentApplication = new HelloTexture2D();
 			//mCurrentApplication = new HelloTransform();
 			//mCurrentApplication = new HelloCoordinateSystem();
 			//mCurrentApplication = new HelloCamera();
-            //mCurrentApplication = new HelloColors();
+			//mCurrentApplication = new HelloColors();
 			//mCurrentApplication = new HelloBasicLighting();
 			//mCurrentApplication = new HelloMaterials();
-            //mCurrentApplication = new HelloLightingMaps();
-            //mCurrentApplication = new HelloLightCasters();
-            //mCurrentApplication = new HelloMultipleLights();
+			//mCurrentApplication = new HelloLightingMaps();
+			//mCurrentApplication = new HelloLightCasters();
+			//mCurrentApplication = new HelloMultipleLights();
 			//mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
 			mCurrentApplication = new HelloStencilTesting();

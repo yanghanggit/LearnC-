@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -22,8 +22,8 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-            shader = new GLProgram(@"Resources/stencil_testing.vs", @"Resources/stencil_testing.frag");
-            shaderSingleColor = new GLProgram(@"Resources/stencil_testing.vs", @"Resources/stencil_single_color.frag");
+            mShader = new GLProgram(@"Resources/stencil_testing.vs", @"Resources/stencil_testing.frag");
+            mShaderSingleColor = new GLProgram(@"Resources/stencil_testing.vs", @"Resources/stencil_single_color.frag");
 
 			mCubeTexture = new GLTexture2D(@"Resources/Texture/marble.jpg");
 			mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
@@ -31,11 +31,13 @@ namespace YH
 			//
 			GL.Enable(EnableCap.DepthTest);
 			GL.DepthFunc(DepthFunction.Less);
+            //GL.ClearDepth(1.0f);
 
             //
 			GL.Enable(EnableCap.StencilTest);
             GL.StencilFunc(StencilFunction.Notequal, 1, 0xFFFFFFFF);
-			GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+            GL.StencilOp(StencilOp.Keep, StencilOp.Keep, StencilOp.Replace);
+            //GL.ClearStencil(0);
    
             //
             GL.ClearColor(Color.Gray);
@@ -55,43 +57,56 @@ namespace YH
                                                                   (float)wnd.Width / (float)wnd.Height,
                                                                   0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
+
 			Matrix4 model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
 
+            mShader.Use();
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
+
+
             GL.StencilMask(0x00000000);
+            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
+            mPlane.Draw();
+
+            //
+            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 
 			GL.StencilFunc(StencilFunction.Always, 1, 0xFFFFFFFF);
 			GL.StencilMask(0xFFFFFFFF);
 
-            GL.Enable(EnableCap.DepthTest);
-
-            shader.Use();
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
-
-            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
-
-            model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
-            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            model = Matrix4.CreateTranslation(-1.0f, 0.01f, -1.0f);
+            model = Matrix4.CreateScale(0.5f) * model;
+            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
-            if (false)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+			model = Matrix4.CreateTranslation(2.0f, 0.01f, 0.0f);
+            model = Matrix4.CreateScale(0.5f) * model;
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
 
+            if (mObjectOutlining)
+            {
                 GL.Disable(EnableCap.DepthTest);
                 GL.StencilFunc(StencilFunction.Notequal, 1, 0xFFFFFFFF);
 				GL.StencilMask(0x00000000);
 				
-				shaderSingleColor.Use();
+				mShaderSingleColor.Use();
 
                 const float scale = 1.1f;
 
-				GL.UniformMatrix4(shaderSingleColor.GetUniformLocation("projection"), false, ref projection);
-				GL.UniformMatrix4(shaderSingleColor.GetUniformLocation("view"), false, ref view);
+				GL.UniformMatrix4(mShaderSingleColor.GetUniformLocation("projection"), false, ref projection);
+				GL.UniformMatrix4(mShaderSingleColor.GetUniformLocation("view"), false, ref view);
 
 				model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
-				model = Matrix4.CreateScale(scale) * model;
-				GL.UniformMatrix4(shaderSingleColor.GetUniformLocation("model"), false, ref model);
+				model = Matrix4.CreateScale(scale * 0.5f) * model;
+				GL.UniformMatrix4(mShaderSingleColor.GetUniformLocation("model"), false, ref model);
+				mCube.Draw();
+
+				model = Matrix4.CreateTranslation(2.0f, 0.01f, 0.0f);
+				model = Matrix4.CreateScale(scale * 0.5f) * model;
+				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 				mCube.Draw();
 
 				GL.StencilMask(0xFFFFFFFF);
@@ -113,7 +128,7 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
-                
+                mObjectOutlining = !mObjectOutlining;
 			}
 			else if (e.Key == OpenTK.Input.Key.Space)
 			{
@@ -126,7 +141,8 @@ namespace YH
 		private Camera mCamera = null;
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
-        private GLProgram shader = null;
-		private GLProgram shaderSingleColor = null;
+        private GLProgram mShader = null;
+		private GLProgram mShaderSingleColor = null;
+        private bool mObjectOutlining = true;
 	}
 }
