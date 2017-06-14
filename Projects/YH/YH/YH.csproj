@@ -63,7 +63,8 @@
     <Compile Include="demo\HelloLightingMaps.cs" />
     <Compile Include="demo\HelloBasicLighting.cs" />
     <Compile Include="demo\HelloMultipleLights.cs" />
-    <Compile Include="demo\HelloDepthTesting.cs" />
+    <Compile Include="demo\HelloDepthTesting1.cs" />
+    <Compile Include="demo\HelloDepthTesting2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

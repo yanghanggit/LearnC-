@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace YH
 {
-	public class HelloDepthTesting : Application
+	public class HelloDepthTesting1 : Application
 	{
-		public HelloDepthTesting() : base("HelloDepthTesting")
+		public HelloDepthTesting1() : base("HelloDepthTesting1")
 		{
 		}
 
@@ -113,6 +113,4 @@ namespace YH
         private int mDepthFuncIndex = 0;
         private List<DepthFunction> mDepthFunction = new List<DepthFunction>();
 	}
-
-
 }
