@@ -1,10 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloMultipleLights.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Program.cs">
     <Files>
-      <File FileName="YH/demo/HelloMultipleLights.cs" Line="118" Column="17" />
+      <File FileName="YH/demo/HelloMultipleLights.cs" Line="172" Column="5" />
       <File FileName="YH/bin/Debug/Resources/multiple_lights.frag" Line="142" Column="43" />
       <File FileName="YH/bin/Debug/Resources/multiple_lights.vs" Line="13" Column="25" />
+      <File FileName="YH/Window.cs" Line="1" Column="1" />
+      <File FileName="YH/Program.cs" Line="14" Column="1" />
+      <File FileName="YH/Properties/AssemblyInfo.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
