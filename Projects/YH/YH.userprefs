@@ -1,13 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloTexture2D.cs">
     <Files>
-      <File FileName="YH/Program.cs" Line="11" Column="23" />
-      <File FileName="YH/Window.cs" Line="34" Column="13" />
-      <File FileName="YH/demo/HelloDepthTesting.cs" Line="10" Column="27" />
-      <File FileName="YH/demo/HelloLightingMaps.cs" Line="1" Column="1" />
-      <File FileName="YH/demo/HelloColors.cs" Line="106" Column="3" />
-      <File FileName="YH/demo/HelloMultipleLights.cs" Line="8" Column="15" />
+      <File FileName="YH/demo/HelloDepthTesting.cs" Line="38" Column="26" />
+      <File FileName="YH/bin/Debug/Resources/advanced.vs" Line="6" Column="38" />
+      <File FileName="YH/bin/Debug/Resources/advanced.frag" Line="3" Column="18" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="282" Column="38" />
+      <File FileName="YH/demo/HelloMaterials.cs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloTexture2D.cs" Line="24" Column="63" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
