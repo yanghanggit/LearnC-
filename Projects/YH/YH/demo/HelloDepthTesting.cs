@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
+using System.Collections.Generic;
 
 namespace YH
 {
@@ -21,8 +22,13 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 			mShader = new GLProgram(@"Resources/advanced.vs", @"Resources/advanced.frag");
-		    mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg"); ;
-		    mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png"); ;
+		    mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
+		    mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
+
+            //
+            mDepthFunction.Add(DepthFunction.Less);
+            mDepthFunction.Add(DepthFunction.Always);
+            mDepthFunction.Add(DepthFunction.Never);
 		}
 
 		public override void Update(double dt)
@@ -35,7 +41,17 @@ namespace YH
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			GL.Enable(EnableCap.DepthTest);
+
+            if (mUseDepthTest)
+            {
+                GL.Enable(EnableCap.DepthTest);
+            }
+            else
+            {
+                GL.Disable(EnableCap.DepthTest);
+            }
+
+            GL.DepthFunc(mDepthFunction[mDepthFuncIndex]);
 
             var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
@@ -63,12 +79,39 @@ namespace YH
             mPlane.Draw();
 		}
 
+		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyUp(e);
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+                ++mDepthFuncIndex;
+                mDepthFuncIndex = mDepthFuncIndex >= mDepthFunction.Count ? 0 : mDepthFuncIndex;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+                --mDepthFuncIndex;
+                mDepthFuncIndex = mDepthFuncIndex < 0 ? 0 : mDepthFuncIndex;
+			}
+			else if (e.Key == OpenTK.Input.Key.C)
+			{
+				mUseDepthTest = !mUseDepthTest;
+			}
+            else if (e.Key == OpenTK.Input.Key.Space)
+			{
+				mUseDepthTest = true;
+				mDepthFuncIndex = 0;
+			}
+		}
+
 		private Cube mCube = null;
         private Plane mPlane = null;
 		private Camera mCamera = null;
 		private GLProgram mShader = null;
         private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
+        private bool mUseDepthTest = true;
+        private int mDepthFuncIndex = 0;
+        private List<DepthFunction> mDepthFunction = new List<DepthFunction>();
 	}
 
 

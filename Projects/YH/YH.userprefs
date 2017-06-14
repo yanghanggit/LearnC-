@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloDepthTesting.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloBasicLighting.cs">
     <Files>
       <File FileName="YH/bin/Debug/Resources/advanced.vs" Line="6" Column="38" />
       <File FileName="YH/bin/Debug/Resources/advanced.frag" Line="3" Column="18" />
-      <File FileName="YH/demo/HelloDepthTesting.cs" Line="88" Column="49" />
+      <File FileName="YH/demo/HelloDepthTesting.cs" Line="47" Column="4" />
+      <File FileName="YH/demo/HelloBasicLighting.cs" Line="126" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
