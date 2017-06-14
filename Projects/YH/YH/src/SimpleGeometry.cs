@@ -311,4 +311,66 @@ namespace YH
 		private int mVAO = 0;
 		private int mVBO = 0;
 	}
+
+	//=============================================================================================
+	public class Wall : SimpleGeometry
+	{
+		public Wall() : base("Wall")
+		{
+
+		}
+
+		public override void Draw()
+		{
+			if (mVAO <= 0)
+			{
+				build();
+			}
+
+			if (mVAO > 0)
+			{
+				GL.BindVertexArray(mVAO);
+				GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+				GL.BindVertexArray(0);
+			}
+		}
+
+		private void build()
+		{
+			float[] vertices =
+			{
+				// Positions         // Texture Coords (swapped y coordinates because texture is flipped upside down)
+				0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+				0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+				1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+				0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+				1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+				1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+			};
+
+			mVAO = GL.GenVertexArray();
+			mVBO = GL.GenBuffer();
+
+			//
+			GL.BindVertexArray(mVAO);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, mVBO);
+			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
+			// Position attribute
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+			// Color attribute
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
+
+			//
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindVertexArray(0); // Unbind VAO
+		}
+
+		private int mVAO = 0;
+		private int mVBO = 0;
+	}
 }
