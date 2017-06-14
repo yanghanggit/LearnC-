@@ -1,10 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/depth_testing.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloDepthTesting2.cs" Line="65" Column="4" />
-      <File FileName="YH/bin/Debug/Resources/depth_testing.frag" Line="4" Column="7" />
+      <File FileName="YH/demo/HelloDepthTesting2.cs" Line="77" Column="5" />
+      <File FileName="YH/bin/Debug/Resources/depth_testing.frag" Line="22" Column="7" />
       <File FileName="YH/bin/Debug/Resources/depth_testing.vs" Line="10" Column="1" />
+      <File FileName="YH/demo/HelloStencilTesting.cs" Line="9" Column="34" />
+      <File FileName="YH/demo/HelloDepthTesting1.cs" Line="1" Column="1" />
+      <File FileName="YH/Window.cs" Line="36" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
