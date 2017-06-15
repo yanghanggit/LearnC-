@@ -10,7 +10,7 @@ uniform sampler2D screenTexture;
 void main()
 {
     color = texture(screenTexture, TexCoords);
-    color = vec4(1, 0, 0, 1);
+    //color = vec4(1, 0, 0, 1);
     /*
     vec2 offsets[9] = vec2[](
         vec2(-offset, offset),  // top-left

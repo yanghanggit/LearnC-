@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -39,10 +39,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-            if (mUseFramebuffer)
-            {
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, mFramebuffer.mFrameBufferId);
-            }
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mFramebuffer.mFrameBufferId);
 
 			GL.Enable(EnableCap.DepthTest);
 			GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -78,19 +75,23 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
-			if (mUseFramebuffer)
-			{
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-				GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-				GL.Clear(ClearBufferMask.ColorBufferBit);
-				GL.Disable(EnableCap.DepthTest);
+			GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			GL.Clear(ClearBufferMask.ColorBufferBit);
+			GL.Disable(EnableCap.DepthTest);
 
-				mScreenShader.Use();
-				GL.BindTexture(TextureTarget.Texture2D, mFramebuffer.mColorAttachment0);
-				mQuad.Draw();
-				GL.BindTexture(TextureTarget.Texture2D, 0);
-			}
+			mScreenShader.Use();
+			GL.BindTexture(TextureTarget.Texture2D, mFramebuffer.mColorAttachment0);
+			mQuad.Draw();
+			
+            if (mUseFramebuffer)
+            {
+                GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
+                mQuad.Draw();
+            }
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
