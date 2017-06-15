@@ -1,4 +1,4 @@
-﻿﻿﻿﻿
+﻿﻿﻿﻿﻿
 using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -552,5 +552,94 @@ namespace YH
 		private int vertexIndexBuffer = 0;
         private int vao = 0;
         private List<int> indexData = null;
+	}
+
+	//=============================================================================================
+	public class Skybox : SimpleGeometry
+	{
+		public Skybox() : base("Skybox")
+		{
+
+		}
+
+		public override void Draw()
+		{
+			if (mVAO <= 0)
+			{
+				build();
+			}
+
+			if (mVAO > 0)
+			{
+				GL.BindVertexArray(mVAO);
+				GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+				GL.BindVertexArray(0);
+			}
+		}
+
+		private void build()
+		{
+			float[] vertices =
+			{
+				// Positions          
+		        -1.0f, 1.0f, -1.0f,
+				-1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f, 1.0f, -1.0f,
+				-1.0f, 1.0f, -1.0f,
+
+				-1.0f, -1.0f, 1.0f,
+				-1.0f, -1.0f, -1.0f,
+				-1.0f, 1.0f, -1.0f,
+				-1.0f, 1.0f, -1.0f,
+				-1.0f, 1.0f, 1.0f,
+				-1.0f, -1.0f, 1.0f,
+
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+
+				-1.0f, -1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, -1.0f, 1.0f,
+				-1.0f, -1.0f, 1.0f,
+
+				-1.0f, 1.0f, -1.0f,
+				1.0f, 1.0f, -1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f, -1.0f,
+
+				-1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f, 1.0f,
+				1.0f, -1.0f, -1.0f,
+				1.0f, -1.0f, -1.0f,
+				-1.0f, -1.0f, 1.0f,
+				1.0f, -1.0f, 1.0f
+			};
+
+			mVAO = GL.GenVertexArray();
+			mVBO = GL.GenBuffer();
+
+			GL.BindVertexArray(mVAO);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, mVBO);
+			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindVertexArray(0); 
+		}
+
+		private int mVAO = 0;
+		private int mVBO = 0;
 	}
 }
