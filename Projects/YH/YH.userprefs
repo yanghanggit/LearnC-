@@ -1,13 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSkyBox.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTexture2D.cs">
     <Files>
-      <File FileName="YH/demo/HelloColors.cs" Line="84" Column="31" />
-      <File FileName="YH/Window.cs" Line="23" Column="46" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="534" Column="13" />
-      <File FileName="YH/demo/HelloFramebuffer.cs" Line="93" Column="30" />
-      <File FileName="YH/demo/HelloSkyBox.cs" Line="10" Column="5" />
-      <File FileName="YH/demo/HelloDepthTesting1.cs" Line="115" Column="3" />
+      <File FileName="YH/src/GLTextureCube.cs" Line="38" Column="52" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
