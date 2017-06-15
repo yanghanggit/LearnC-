@@ -435,7 +435,7 @@ namespace YH
 	//=============================================================================================
 	public class Sphere : SimpleGeometry
 	{
-		public Sphere(float cx, float cy, float cz, float r, int p) : base("Sphere")
+		public Sphere() : base("Sphere")
 		{
             
 		}
