@@ -82,11 +82,13 @@ namespace YH
 			GL.Disable(EnableCap.DepthTest);
 
 			mScreenShader.Use();
+            GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
 			GL.BindTexture(TextureTarget.Texture2D, mFramebuffer.mColorAttachment0);
 			mQuad.Draw();
 			
             if (mUseFramebuffer)
             {
+                GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), mPostProcessing);
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
                 mQuad.Draw();
             }
@@ -98,13 +100,18 @@ namespace YH
 		{
 			base.OnKeyUp(e);
 
+            const int maxPostProcess = 4;
+
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-
+                ++mPostProcessing;
+                mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-
+                --mPostProcessing;
+                mPostProcessing = mPostProcessing >= 0 ? mPostProcessing : 0;
+                mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
@@ -125,5 +132,6 @@ namespace YH
 		private GLProgram mScreenShader = null; 
         private GLFramebuffer mFramebuffer = null;
         private bool mUseFramebuffer = false;
+        private int mPostProcessing = 0;
 	}
 }
