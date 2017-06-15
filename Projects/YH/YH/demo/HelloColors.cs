@@ -81,7 +81,7 @@ namespace YH
 				model = Matrix4.CreateScale(0.2f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
-				mCube.Draw();
+                mSphere.Draw();//mCube.Draw();
 
 			}
 			while (false);

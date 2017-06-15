@@ -458,9 +458,9 @@ namespace YH
 		private void build()
 		{
 			var vertexPositionData = new List<float>();
+            var textureCoordData = new List<float>();
 			var normalData = new List<float>();
-			var textureCoordData = new List<float>();
-
+			
 			for (var latNumber = 0; latNumber <= latitudeBands; latNumber++)
 			{
 				var theta = latNumber * Math.PI / latitudeBands;
@@ -494,16 +494,16 @@ namespace YH
                 _vertexPositionData[i] = vertexPositionData[i];
             }
 
-			_normalData = new float[normalData.Count];
-			for (int i = 0; i < normalData.Count; ++i)
-			{
-				_normalData[i] = normalData[i];
-			}
-
 			_textureCoordData = new float[textureCoordData.Count];
 			for (int i = 0; i < textureCoordData.Count; ++i)
 			{
 				_textureCoordData[i] = textureCoordData[i];
+			}
+
+			_normalData = new float[normalData.Count];
+			for (int i = 0; i < normalData.Count; ++i)
+			{
+				_normalData[i] = normalData[i];
 			}
 
             var indexData = new List<int>();
@@ -528,6 +528,7 @@ namespace YH
 				_indexData[i] = indexData[i];
 			}
 
+            //
             mVAO = GL.GenVertexArray();
             GL.BindVertexArray(mVAO);
 
