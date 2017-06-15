@@ -442,15 +442,15 @@ namespace YH
 
 		public override void Draw()
 		{
-            if (mVAO <= 0)
+            if (vao <= 0)
             {
                 build();
             }
 
-            if (mVAO > 0)
+            if (vao > 0)
             {
-                GL.BindVertexArray(mVAO);
-                GL.DrawElements(PrimitiveType.Triangles, _indexData.Length, DrawElementsType.UnsignedInt, 0);
+                GL.BindVertexArray(vao);
+                GL.DrawElements(PrimitiveType.Triangles, indexData.Count, DrawElementsType.UnsignedInt, 0);
 				GL.BindVertexArray(0);
             }
 		}
@@ -460,7 +460,7 @@ namespace YH
 			var vertexPositionData = new List<float>();
             var textureCoordData = new List<float>();
 			var normalData = new List<float>();
-			
+            			
 			for (var latNumber = 0; latNumber <= latitudeBands; latNumber++)
 			{
 				var theta = latNumber * Math.PI / latitudeBands;
@@ -477,36 +477,21 @@ namespace YH
 					var z = sinPhi * sinTheta;
 					var u = 1 - (longNumber / longitudeBands);
 					var v = latNumber / latitudeBands;
+
                     normalData.Add((float)x);
 					normalData.Add((float)y);
 					normalData.Add((float)z);
+
 					textureCoordData.Add(u);
 					textureCoordData.Add(v);
+
 					vertexPositionData.Add((float)radius * (float)x);
 					vertexPositionData.Add((float)radius * (float)y);
 					vertexPositionData.Add((float)radius * (float)z);
 				}
 			}
 
-            _vertexPositionData = new float[vertexPositionData.Count];
-            for (int i = 0; i < vertexPositionData.Count; ++i)
-            {
-                _vertexPositionData[i] = vertexPositionData[i];
-            }
-
-			_textureCoordData = new float[textureCoordData.Count];
-			for (int i = 0; i < textureCoordData.Count; ++i)
-			{
-				_textureCoordData[i] = textureCoordData[i];
-			}
-
-			_normalData = new float[normalData.Count];
-			for (int i = 0; i < normalData.Count; ++i)
-			{
-				_normalData[i] = normalData[i];
-			}
-
-            var indexData = new List<int>();
+            indexData = new List<int>();
 			for (var latNumber = 0; latNumber < latitudeBands; latNumber++)
 			{
 				for (var longNumber = 0; longNumber < longitudeBands; longNumber++)
@@ -522,48 +507,41 @@ namespace YH
 				}
 			}
 
-			_indexData = new int[indexData.Count];
-			for (int i = 0; i < indexData.Count; ++i)
-			{
-				_indexData[i] = indexData[i];
-			}
-
             //
-            mVAO = GL.GenVertexArray();
-            GL.BindVertexArray(mVAO);
+            vao = GL.GenVertexArray();
+            GL.BindVertexArray(vao);
 
 			//
 			vertexPositionBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexPositionBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * _vertexPositionData.Length, _vertexPositionData, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertexPositionData.Count, vertexPositionData.ToArray(), BufferUsageHint.StaticDraw);
             GL.EnableVertexAttribArray(0);
 			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
 			
 			//
 			vertexTextureCoordBuffer = GL.GenBuffer();
 			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexTextureCoordBuffer);
-			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * _textureCoordData.Length, _textureCoordData, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordData.Count, textureCoordData.ToArray(), BufferUsageHint.StaticDraw);
 			GL.EnableVertexAttribArray(1);
 			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
 
 			//
 			vertexNormalBuffer = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexNormalBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * _normalData.Length, _normalData , BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * normalData.Count, normalData.ToArray() , BufferUsageHint.StaticDraw);
 			GL.EnableVertexAttribArray(2);
 			GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, 0);
 
             //
 			vertexIndexBuffer = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, vertexIndexBuffer);
-			GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * _indexData.Length, _indexData, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indexData.Count, indexData.ToArray(), BufferUsageHint.StaticDraw);
 
             //
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 			GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
 		}
-
 
         private int latitudeBands = 30;
 		private int longitudeBands = 30;
@@ -572,11 +550,7 @@ namespace YH
 		private int vertexNormalBuffer = 0;
 		private int vertexTextureCoordBuffer = 0;
 		private int vertexIndexBuffer = 0;
-        private int mVAO = 0;
-
-        private float[] _vertexPositionData = null;
-		private float[] _normalData = null;
-		private float[] _textureCoordData = null;
-        private int[] _indexData = null;
+        private int vao = 0;
+        private List<int> indexData = null;
 	}
 }
