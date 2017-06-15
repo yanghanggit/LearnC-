@@ -2,7 +2,10 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFramebuffer.cs">
     <Files>
-      <File FileName="YH/demo/HelloFramebuffer.cs" Line="77" Column="34" />
+      <File FileName="YH/demo/HelloColors.cs" Line="63" Column="17" />
+      <File FileName="YH/Window.cs" Line="32" Column="52" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="559" Column="13" />
+      <File FileName="YH/demo/HelloFramebuffer.cs" Line="125" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

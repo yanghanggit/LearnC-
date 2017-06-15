@@ -68,14 +68,14 @@ namespace YH
 			model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-			mCube.Draw();
+            mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 0.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 			GL.ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -100,18 +100,14 @@ namespace YH
 		{
 			base.OnKeyUp(e);
 
-            //const int maxPostProcess = 5;
-
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
                 ++mPostProcessing;
-                //mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
                 --mPostProcessing;
                 mPostProcessing = mPostProcessing >= 0 ? mPostProcessing : 0;
-                //mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
@@ -122,6 +118,7 @@ namespace YH
 		private Cube mCube = null;
 		private Floor mFloor = null;
         private Quad mQuad = null;
+        //private Sphere mSphere = new Sphere();
 
 		private Camera mCamera = null;
 

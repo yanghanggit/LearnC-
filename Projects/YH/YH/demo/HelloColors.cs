@@ -16,6 +16,7 @@ namespace YH
 			base.Start(wnd);
 
 			mCube = new Cube();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -64,7 +65,7 @@ namespace YH
 				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLightModel, false, ref model);
 
-				mCube.Draw();
+                mCube.Draw();
 
 			}
 			while (false);
@@ -87,6 +88,7 @@ namespace YH
 		}
 
 		private Cube mCube = null;
+        private Sphere mSphere = null;
 
 		private Camera mCamera = null;	
 
