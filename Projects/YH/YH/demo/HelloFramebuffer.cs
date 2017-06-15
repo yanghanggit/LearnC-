@@ -100,18 +100,18 @@ namespace YH
 		{
 			base.OnKeyUp(e);
 
-            const int maxPostProcess = 4;
+            //const int maxPostProcess = 5;
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
                 ++mPostProcessing;
-                mPostProcessing %= maxPostProcess;
+                //mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
                 --mPostProcessing;
                 mPostProcessing = mPostProcessing >= 0 ? mPostProcessing : 0;
-                mPostProcessing %= maxPostProcess;
+                //mPostProcessing %= maxPostProcess;
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
