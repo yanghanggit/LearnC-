@@ -313,9 +313,9 @@ namespace YH
 	}
 
 	//=============================================================================================
-	public class Wall : SimpleGeometry
+	public class Billboard : SimpleGeometry
 	{
-		public Wall() : base("Wall")
+		public Billboard() : base("Billboard")
 		{
 
 		}

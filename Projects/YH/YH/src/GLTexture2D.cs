@@ -10,8 +10,9 @@ namespace YH
 {
 	public class GLTexture2D
 	{
-		public GLTexture2D(string texPath)
+        public GLTexture2D(string texPath, bool wrapRepeat = true)
 		{
+            mRepeatOrClampToEdge = wrapRepeat;
 			LoadFromPath(texPath);
 		}
 
@@ -41,8 +42,14 @@ namespace YH
                 
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+                GL.TexParameter(TextureTarget.Texture2D,
+                                TextureParameterName.TextureWrapS,
+                                mRepeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
+                
+                GL.TexParameter(TextureTarget.Texture2D, 
+                                TextureParameterName.TextureWrapT, 
+                                mRepeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
+                
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 				
@@ -57,5 +64,6 @@ namespace YH
 
 		private int mTextureId = 0;
         private bool mIsPNG = false;
+        private bool mRepeatOrClampToEdge = true;
 	}
 }
