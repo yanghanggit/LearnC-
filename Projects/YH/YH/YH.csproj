@@ -68,6 +68,7 @@
     <Compile Include="demo\HelloStencilTesting.cs" />
     <Compile Include="demo\HelloDiscard.cs" />
     <Compile Include="demo\HelloBlending.cs" />
+    <Compile Include="demo\HelloFramebuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
