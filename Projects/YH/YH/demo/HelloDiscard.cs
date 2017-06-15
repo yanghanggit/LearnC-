@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace YH
 {
-	public class HelloBlending1 : Application
+	public class HelloDiscard : Application
 	{
-		public HelloBlending1() : base("HelloBlending1")
+		public HelloDiscard() : base("HelloDiscard")
 		{
             
 		}
