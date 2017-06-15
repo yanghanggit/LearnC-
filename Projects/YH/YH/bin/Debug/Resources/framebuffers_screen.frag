@@ -5,10 +5,13 @@ out vec4 color;
 
 uniform sampler2D screenTexture;
 
-const float offset = 1.0 / 300;  
+//const float offset = 1.0 / 300;  
 
 void main()
 {
+    color = texture(screenTexture, TexCoords);
+    color = vec4(1, 0, 0, 1);
+    /*
     vec2 offsets[9] = vec2[](
         vec2(-offset, offset),  // top-left
         vec2(0.0f,    offset),  // top-center
@@ -37,4 +40,5 @@ void main()
         col += sampleTex[i] * kernel[i];
     
     color = vec4(col, 1.0);
+    */
 } 
