@@ -1,14 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloLightCasters.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/SimpleGeometry.cs">
     <Files>
-      <File FileName="YH/src/GLFramebuffer.cs" Line="23" Column="66" />
-      <File FileName="YH/bin/Debug/Resources/framebuffers_screen.frag" Line="13" Column="7" />
-      <File FileName="YH/bin/Debug/Resources/framebuffers_screen.vs" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/framebuffers.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/framebuffers.vs" Line="1" Column="1" />
-      <File FileName="YH/demo/HelloFramebuffer.cs" Line="107" Column="5" />
-      <File FileName="YH/demo/HelloLightCasters.cs" Line="77" Column="29" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="174" Column="32" />
+      <File FileName="YH/bin/Debug/Resources/blend.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/blend.vs" Line="6" Column="21" />
+      <File FileName="YH/demo/HelloLightCasters.cs" Line="122" Column="9" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

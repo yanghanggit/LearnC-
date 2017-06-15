@@ -431,4 +431,114 @@ namespace YH
 		private int mVAO = 0;
 		private int mVBO = 0;
 	}
+
+
+	//=============================================================================================
+	public class Sphere : SimpleGeometry
+	{
+		public Sphere(float cx, float cy, float cz, float r, int p) : base("Sphere")
+		{
+			this.cx = cx;
+			this.cy = cy;
+			this.cz = cz;
+			this.r = r;
+			this.p = p;
+
+			this.vertices = new float[p * 6 + 6];
+            this.normals = new float[p * 6 + 6];
+            this.texCoords = new float[p * 4 + 4];
+		}
+
+		public override void Draw()
+		{
+            if (!buildFinished)
+            {
+                buildFinished = true;
+                build();
+            }
+
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, this.vertices);
+
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, this.texCoords);
+
+			GL.EnableVertexAttribArray(2);
+			GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, this.normals);
+			
+            GL.DrawArrays(PrimitiveType.TriangleStrip, 0, (this.p + 1) * 2);
+		}
+
+		private void build()
+		{
+            double theta1 = 0.0, theta2 = 0.0, theta3 = 0.0;
+			double ex = 0.0, ey = 0.0, ez = 0.0;
+			double px = 0.0, py = 0.0, pz = 0.0;
+			//GLfloat vertices[p * 6 + 6], normals[p * 6 + 6], texCoords[p * 4 + 4];
+
+			if (r < 0)
+				r = -r;
+
+			if (p < 0)
+				p = -p;
+
+			for (int i = 0; i < p / 2; ++i)
+			{
+				theta1 = i * (Math.PI * 2) / p - Math.PI;
+				theta2 = (i + 1) * (Math.PI * 2) / p - Math.PI;
+
+				for (int j = 0; j <= p; ++j)
+				{
+					theta3 = j * (Math.PI * 2) / p;
+
+                    ex = Math.Cos(theta2) * Math.Cos(theta3);
+                    ey = Math.Sin(theta2);
+					ez = Math.Cos(theta2) * Math.Sin(theta3);
+					px = cx + r * ex;
+					py = cy + r * ey;
+					pz = cz + r * ez;
+
+					vertices[(6 * j) + (0 % 6)] = (float)px;
+					vertices[(6 * j) + (1 % 6)] = (float)py;
+					vertices[(6 * j) + (2 % 6)] = (float)pz;
+
+					normals[(6 * j) + (0 % 6)] = (float)ex;
+					normals[(6 * j) + (1 % 6)] = (float)ey;
+					normals[(6 * j) + (2 % 6)] = (float)ez;
+
+					texCoords[(4 * j) + (0 % 4)] = -(j / (float)p);
+					texCoords[(4 * j) + (1 % 4)] = 2 * (i + 1) / (float)p;
+
+
+					ex = Math.Cos(theta1) * Math.Cos(theta3);
+					ey = Math.Sin(theta1);
+					ez = Math.Cos(theta1) * Math.Sin(theta3);
+					px = cx + r * ex;
+					py = cy + r * ey;
+					pz = cz + r * ez;
+
+					vertices[(6 * j) + (3 % 6)] = (float)px;
+					vertices[(6 * j) + (4 % 6)] = (float)py;
+					vertices[(6 * j) + (5 % 6)] = (float)pz;
+
+					normals[(6 * j) + (3 % 6)] = (float)ex;
+					normals[(6 * j) + (4 % 6)] = (float)ey;
+					normals[(6 * j) + (5 % 6)] = (float)ez;
+
+					texCoords[(4 * j) + (2 % 4)] = -(j / (float)p);
+					texCoords[(4 * j) + (3 % 4)] = 2 * i / (float)p;
+				}
+			}
+		}
+
+        private float cx = 0.0f;
+        private float cy = 0.0f; 
+        private float cz = 0.0f;
+        private float r = 0.5f;
+        private int p = 256;
+        private float[] vertices = null;
+        private float[] normals = null;
+        private float[] texCoords = null;
+        private bool buildFinished = false;
+	}
 }
