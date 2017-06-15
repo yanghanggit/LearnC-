@@ -1,19 +1,18 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/SimpleGeometry.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSkyBox.cs">
     <Files>
       <File FileName="YH/demo/HelloColors.cs" Line="84" Column="31" />
       <File FileName="YH/Window.cs" Line="23" Column="46" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="503" Column="4" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="534" Column="13" />
       <File FileName="YH/demo/HelloFramebuffer.cs" Line="93" Column="30" />
+      <File FileName="YH/demo/HelloSkyBox.cs" Line="10" Column="5" />
+      <File FileName="YH/demo/HelloDepthTesting1.cs" Line="115" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/src/SimpleGeometry.cs" relfile="YH/src/SimpleGeometry.cs" line="464" column="1" />
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/src/SimpleGeometry.cs" relfile="YH/src/SimpleGeometry.cs" line="491" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />

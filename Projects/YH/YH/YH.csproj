@@ -70,6 +70,7 @@
     <Compile Include="demo\HelloBlending.cs" />
     <Compile Include="demo\HelloFramebuffer.cs" />
     <Compile Include="src\GLFramebuffer.cs" />
+    <Compile Include="demo\HelloSkyBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
