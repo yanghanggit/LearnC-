@@ -2,9 +2,18 @@
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
+using System.Collections.Generic;
 
 namespace YH
 {
+    public class IntegerDecreaseComparer : IComparer<float>
+    {
+        public int Compare(float x, float y)
+        {
+            return (x < y) ? 1 : -1;
+        }
+    }
+
 	public class HelloBlending : Application
 	{
 		public HelloBlending() : base("HelloBlending")
@@ -27,16 +36,27 @@ namespace YH
 
 			mCubeTexture = new GLTexture2D(@"Resources/Texture/marble.jpg");
 			mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
-			mTransparentTexture = new GLTexture2D(@"Resources/Texture/grass.png", false);
+			mTransparentTexture = new GLTexture2D(@"Resources/Texture/window.png", false);
 
 			//
 			GL.Enable(EnableCap.DepthTest);
 			GL.ClearColor(Color.Gray);
+
+            //
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 		}
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+            mSortedDistance.Clear();
+            foreach (var pos in mWindowsPositions)
+            {
+                float distance = (mCamera.Position - pos).LengthFast;
+                mSortedDistance.Add(distance, pos);
+            }
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -54,7 +74,6 @@ namespace YH
 			mShader.Use();
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
-			GL.Uniform1(mShader.GetUniformLocation("discard_pixel"), mDiscard ? 1 : 0);
 
 			GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
@@ -73,12 +92,12 @@ namespace YH
 			mFloor.Draw();
 
 			GL.BindTexture(TextureTarget.Texture2D, mTransparentTexture.getTextureId());
-			foreach (var p in mVegetationPositions)
-			{
-				model = Matrix4.CreateTranslation(p);
+            foreach (var itr in mSortedDistance)
+            {
+				model = Matrix4.CreateTranslation(itr.Value);
 				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 				mBillboard.Draw();
-			}
+            }
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -95,7 +114,7 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
-				mDiscard = !mDiscard;
+				
 			}
 		}
 
@@ -111,7 +130,7 @@ namespace YH
 
 		private GLProgram mShader = null;
 
-		Vector3[] mVegetationPositions = {
+		Vector3[] mWindowsPositions = {
 			new Vector3(-1.5f,  0.0f, -0.48f),
 			new Vector3( 1.5f,  0.0f,  0.51f),
 			new Vector3( 0.0f,  0.0f,  0.7f),
@@ -119,6 +138,6 @@ namespace YH
 			new Vector3( 0.5f,  0.0f, -0.6f)
 		};
 
-		private bool mDiscard = true;
+        private SortedDictionary<float, Vector3> mSortedDistance = new SortedDictionary<float, Vector3>(new IntegerDecreaseComparer());
 	}
 }
