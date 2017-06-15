@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -17,7 +17,7 @@ namespace YH
 			base.Start(wnd);
 
 			mCube = new Cube();
-			mPlane = new Plane();
+			mFloor = new Floor();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -68,7 +68,7 @@ namespace YH
             GL.StencilMask(0x00000000);
             GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-            mPlane.Draw();
+            mFloor.Draw();
 
             //
             GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
@@ -137,7 +137,7 @@ namespace YH
 		}
 
 		private Cube mCube = null;
-		private Plane mPlane = null;
+		private Floor mFloor = null;
 		private Camera mCamera = null;
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;

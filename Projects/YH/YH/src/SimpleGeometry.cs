@@ -252,9 +252,9 @@ namespace YH
 	}
 
 	//=============================================================================================
-	public class Plane : SimpleGeometry
+	public class Floor : SimpleGeometry
 	{
-		public Plane() : base("Plane")
+		public Floor() : base("Floor")
 		{
 
 		}
