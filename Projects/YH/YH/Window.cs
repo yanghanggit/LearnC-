@@ -34,7 +34,8 @@ namespace YH
 			//mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
 			//mCurrentApplication = new HelloStencilTesting();
-			mCurrentApplication = new HelloDiscard();
+			//mCurrentApplication = new HelloDiscard();
+			mCurrentApplication = new HelloBlending();
 
 			Title = mCurrentApplication.mAppName;
 		}

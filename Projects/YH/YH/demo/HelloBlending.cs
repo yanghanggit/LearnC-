@@ -1,15 +1,15 @@
-﻿﻿﻿﻿using System;
+﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
 
 namespace YH
 {
-	public class HelloDiscard : Application
+	public class HelloBlending : Application
 	{
-		public HelloDiscard() : base("HelloDiscard")
+		public HelloBlending() : base("HelloBlending")
 		{
-            
+
 		}
 
 		public override void Start(Window wnd)
@@ -18,7 +18,7 @@ namespace YH
 
 			mCube = new Cube();
 			mFloor = new Floor();
-            mBillboard = new Billboard();
+			mBillboard = new Billboard();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -27,8 +27,8 @@ namespace YH
 
 			mCubeTexture = new GLTexture2D(@"Resources/Texture/marble.jpg");
 			mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
-            mTransparentTexture = new GLTexture2D(@"Resources/Texture/grass.png", false);
-			
+			mTransparentTexture = new GLTexture2D(@"Resources/Texture/grass.png", false);
+
 			//
 			GL.Enable(EnableCap.DepthTest);
 			GL.ClearColor(Color.Gray);
@@ -56,29 +56,29 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 			GL.Uniform1(mShader.GetUniformLocation("discard_pixel"), mDiscard ? 1 : 0);
 
-            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+			GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-            mCube.Draw();
+			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 0.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
-            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-            mCube.Draw();
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
 
-            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+			GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
 			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
-            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-            mFloor.Draw();
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
+			mFloor.Draw();
 
-            GL.BindTexture(TextureTarget.Texture2D, mTransparentTexture.getTextureId());
-            foreach(var p in mVegetationPositions)
-            {
-                model = Matrix4.CreateTranslation(p);
-                GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-                mBillboard.Draw();
-            }
+			GL.BindTexture(TextureTarget.Texture2D, mTransparentTexture.getTextureId());
+			foreach (var p in mVegetationPositions)
+			{
+				model = Matrix4.CreateTranslation(p);
+				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
+				mBillboard.Draw();
+			}
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -95,13 +95,13 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
-                mDiscard = !mDiscard;
-            }
+				mDiscard = !mDiscard;
+			}
 		}
 
 		private Cube mCube = null;
 		private Floor mFloor = null;
-        private Billboard mBillboard = null;
+		private Billboard mBillboard = null;
 
 		private Camera mCamera = null;
 
@@ -119,6 +119,6 @@ namespace YH
 			new Vector3( 0.5f,  0.0f, -0.6f)
 		};
 
-        private bool mDiscard = true;
+		private bool mDiscard = true;
 	}
 }
