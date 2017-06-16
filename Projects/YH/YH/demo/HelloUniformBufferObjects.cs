@@ -105,5 +105,13 @@ namespace YH
 		private int mLocLampModel = -1;
 		private int mLocLampView = -1;
 		private int mLocLampProjection = -1;
+
+        //
+        private GLProgram shaderRed = null;//("uniform_buffers.vs", "red.frag");
+		private GLProgram shaderGreen = null;//("uniform_buffers.vs", "green.frag");
+		private GLProgram shaderBlue = null;//("uniform_buffers.vs", "blue.frag");
+		private GLProgram shaderYellow = null;//("uniform_buffers.vs", "yellow.frag");
+
+
 	}
 }
