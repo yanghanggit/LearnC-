@@ -15,7 +15,10 @@ namespace YH
 		{
 			base.Start(wnd);
 
+            mCube = new Cube();
+            mSphere = new Sphere();
             mSkybox = new Skybox();
+            mFloor = new Floor();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -47,23 +50,34 @@ namespace YH
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
 
-	
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
+            Matrix4 model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+
+			// Draw scene as normal
+			shader.Use();
+
+            GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+            GL.Uniform3(shader.GetUniformLocation("cameraPos"), mCamera.Position);
+            GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			
+            model = Matrix4.CreateTranslation(0.0f, -2.0f, 0.0f);
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            mSphere.Draw();
+
+			model = Matrix4.CreateTranslation(0.0f, 2.0f, 0.0f);
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
 
 			// Draw skybox as last
             GL.DepthFunc(DepthFunction.Equal); 
 			skyboxShader.Use();
-
             var skyView = new Matrix4(new Matrix3(view));
-
             GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
             GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
-
             GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
-
             mSkybox.Draw();
-
             GL.DepthFunc(DepthFunction.Less);
 		}
 
@@ -83,6 +97,9 @@ namespace YH
 			}
 		}
 
+        private Cube mCube = null;
+        private Sphere mSphere = null;
+        private Floor mFloor = new Floor();
 		private Camera mCamera = null;
         private GLProgram shader = null;
 		private GLProgram skyboxShader = null;
