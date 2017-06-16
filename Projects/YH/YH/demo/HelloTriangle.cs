@@ -28,7 +28,7 @@ namespace YH
 		{
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Gray);
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			GL.Clear(ClearBufferMask.ColorBufferBit);
 
 			mProgram.Use();
 			mSimpleRectangle.Draw();
