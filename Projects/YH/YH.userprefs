@@ -2,12 +2,7 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloUniformBufferObjects.cs">
     <Files>
-      <File FileName="YH/demo/HelloUniformBufferObjects.cs" Line="109" Column="9" />
-      <File FileName="YH/bin/Debug/Resources/uniform_buffers.vs" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/red.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/green.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/blue.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/yellow.frag" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloUniformBufferObjects.cs" Line="88" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

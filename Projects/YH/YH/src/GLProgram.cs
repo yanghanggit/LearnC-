@@ -42,7 +42,7 @@ namespace YH
 			return mIsValid;
 		}
 
-		private int mProgram = 0;
+        public int mProgram = 0;
 		private GLShader mVertexShader = null;
 		private GLShader mFragmentShader = null;
 		private bool mIsValid = false;	
