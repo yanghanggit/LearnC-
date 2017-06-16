@@ -37,7 +37,8 @@ namespace YH
 			//mCurrentApplication = new HelloDiscard();
 			//mCurrentApplication = new HelloBlending();
 			//mCurrentApplication = new HelloFramebuffer();
-			mCurrentApplication = new HelloSkyBox();
+			//mCurrentApplication = new HelloSkyBox();
+            mCurrentApplication = new HelloUniformBufferObjects();
 
 			Title = mCurrentApplication.mAppName;
 		}

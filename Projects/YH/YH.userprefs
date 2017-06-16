@@ -1,11 +1,14 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/SimpleGeometry.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
       <File FileName="YH/demo/HelloSkyBox.cs" Line="123" Column="41" />
       <File FileName="YH/bin/Debug/Resources/cubemaps.frag" Line="25" Column="30" />
       <File FileName="YH/bin/Debug/Resources/cubemaps.vs" Line="11" Column="20" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="544" Column="32" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="534" Column="21" />
+      <File FileName="YH/demo/HelloUniformBufferObjects.cs" Line="8" Column="40" />
+      <File FileName="YH/demo/HelloColors.cs" Line="2" Column="1" />
+      <File FileName="YH/Window.cs" Line="40" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

@@ -72,6 +72,7 @@
     <Compile Include="src\GLFramebuffer.cs" />
     <Compile Include="demo\HelloSkyBox.cs" />
     <Compile Include="src\GLTextureCube.cs" />
+    <Compile Include="demo\HelloUniformBufferObjects.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
