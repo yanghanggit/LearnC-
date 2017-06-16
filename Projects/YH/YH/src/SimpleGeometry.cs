@@ -507,40 +507,93 @@ namespace YH
 				}
 			}
 
-            //
-            vao = GL.GenVertexArray();
-            GL.BindVertexArray(vao);
 
-			//
-			vertexPositionBuffer = GL.GenBuffer();
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexPositionBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertexPositionData.Count, vertexPositionData.ToArray(), BufferUsageHint.StaticDraw);
-            GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-			
-			//
-			vertexTextureCoordBuffer = GL.GenBuffer();
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vertexTextureCoordBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordData.Count, textureCoordData.ToArray(), BufferUsageHint.StaticDraw);
-			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
+            if (true)
+            {
+				vao = GL.GenVertexArray();
+				GL.BindVertexArray(vao);
 
-			//
-			vertexNormalBuffer = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexNormalBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * normalData.Count, normalData.ToArray() , BufferUsageHint.StaticDraw);
-			GL.EnableVertexAttribArray(2);
-			GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, 0);
+                batchVBO = GL.GenBuffer();
+                GL.BindBuffer(BufferTarget.ArrayBuffer, batchVBO);
 
-            //
-			vertexIndexBuffer = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, vertexIndexBuffer);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indexData.Count, indexData.ToArray(), BufferUsageHint.StaticDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, 
+                              sizeof(float) * (vertexPositionData.Count + textureCoordData.Count + normalData.Count),
+                              IntPtr.Zero,
+                              BufferUsageHint.StaticDraw);
 
-            //
-			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			GL.BindVertexArray(0);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+				GL.BufferSubData(BufferTarget.ArrayBuffer,
+                                 (IntPtr)0,
+                                 sizeof(float) * vertexPositionData.Count, 
+                                 vertexPositionData.ToArray());
+                
+                GL.BufferSubData(BufferTarget.ArrayBuffer,
+                                 (IntPtr)(sizeof(float) * vertexPositionData.Count),
+                                 sizeof(float) * textureCoordData.Count, 
+                                 textureCoordData.ToArray());
+                
+				GL.BufferSubData(BufferTarget.ArrayBuffer, 
+                                 (IntPtr)(sizeof(float) * vertexPositionData.Count + sizeof(float) * textureCoordData.Count),
+                                 sizeof(float) * normalData.Count, 
+                                 normalData.ToArray());
+                
+				GL.EnableVertexAttribArray(0);
+				GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+
+				GL.EnableVertexAttribArray(1);
+				GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), (sizeof(float) * vertexPositionData.Count));
+
+				GL.EnableVertexAttribArray(2);
+				GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), (sizeof(float) * vertexPositionData.Count + sizeof(float) * textureCoordData.Count));
+
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+		
+				vertexIndexBuffer = GL.GenBuffer();
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, vertexIndexBuffer);
+				GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indexData.Count, indexData.ToArray(), BufferUsageHint.StaticDraw);
+
+				GL.BindVertexArray(0);
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            }
+            else 
+            {
+				//
+				vao = GL.GenVertexArray();
+				GL.BindVertexArray(vao);
+
+				//
+				vertexPositionBuffer = GL.GenBuffer();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexPositionBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertexPositionData.Count, vertexPositionData.ToArray(), BufferUsageHint.StaticDraw);
+				GL.EnableVertexAttribArray(0);
+				GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+				//
+				vertexTextureCoordBuffer = GL.GenBuffer();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexTextureCoordBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * textureCoordData.Count, textureCoordData.ToArray(), BufferUsageHint.StaticDraw);
+				GL.EnableVertexAttribArray(1);
+				GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
+
+				//
+				vertexNormalBuffer = GL.GenBuffer();
+				GL.BindBuffer(BufferTarget.ArrayBuffer, vertexNormalBuffer);
+				GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * normalData.Count, normalData.ToArray(), BufferUsageHint.StaticDraw);
+				GL.EnableVertexAttribArray(2);
+				GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 0, 0);
+
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+				//
+				vertexIndexBuffer = GL.GenBuffer();
+				GL.BindBuffer(BufferTarget.ElementArrayBuffer, vertexIndexBuffer);
+				GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indexData.Count, indexData.ToArray(), BufferUsageHint.StaticDraw);
+
+		
+				GL.BindVertexArray(0);
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            }
 		}
 
         private int latitudeBands = 30;
@@ -552,6 +605,7 @@ namespace YH
 		private int vertexIndexBuffer = 0;
         private int vao = 0;
         private List<int> indexData = null;
+        private int batchVBO = 0;
 	}
 
 	//=============================================================================================
