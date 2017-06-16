@@ -2,12 +2,7 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSkyBox.cs">
     <Files>
-      <File FileName="YH/demo/HelloSkyBox.cs" Line="76" Column="89" />
-      <File FileName="YH/bin/Debug/Resources/cubemaps.frag" Line="5" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/cubemaps.vs" Line="2" Column="40" />
-      <File FileName="YH/bin/Debug/Resources/skybox.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/skybox.vs" Line="1" Column="1" />
-      <File FileName="YH/src/GLTextureCube.cs" Line="60" Column="34" />
+      <File FileName="YH/demo/HelloSkyBox.cs" Line="64" Column="89" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

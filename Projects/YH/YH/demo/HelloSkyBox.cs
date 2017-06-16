@@ -2,7 +2,6 @@
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
-//using System.Collections.Generic;
 
 namespace YH
 {
