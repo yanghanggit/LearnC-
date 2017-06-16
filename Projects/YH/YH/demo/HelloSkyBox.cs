@@ -57,10 +57,13 @@ namespace YH
 			// Draw scene as normal
 			shader.Use();
 
+			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+            GL.Uniform1(shader.GetUniformLocation("ratio"), ParseRatio(mRatioIndex));
+
             GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
             GL.Uniform3(shader.GetUniformLocation("cameraPos"), mCamera.Position);
-            GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+           
 			
             model = Matrix4.CreateTranslation(0.0f, -2.0f, 0.0f);
             GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
@@ -86,16 +89,32 @@ namespace YH
 			base.OnKeyUp(e);
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				
+                ++mRatioIndex;
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				
+                --mRatioIndex;
+                mRatioIndex = mRatioIndex >= 0 ? mRatioIndex : 0;
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
 			}
 		}
+
+        float ParseRatio(int index)
+        {
+            float[] ratios = {
+                0.0f, //nothing
+                //1.00f,//空气
+				1.33f,//水
+				1.309f,//冰
+				1.52f,//玻璃
+				2.42f,//宝石
+            };
+
+            int mod = index % ratios.Length;
+            return ratios[mod];
+        }
 
         private Cube mCube = null;
         private Sphere mSphere = null;
@@ -105,5 +124,9 @@ namespace YH
 		private GLProgram skyboxShader = null;
         private Skybox mSkybox = null;
         private GLTextureCube mGLTextureCube = null;
+        private int mRatioIndex = 0;
+
+
+
 	}
 }
