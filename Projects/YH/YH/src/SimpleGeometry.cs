@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿
+﻿﻿﻿﻿﻿﻿
 using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -34,12 +34,21 @@ namespace YH
 			if (mVAO <= 0)
 			{
 				build();
-			}
+            }
 
 			if (mVAO > 0)
 			{
 				GL.BindVertexArray(mVAO);
-				GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+
+                if (mDrawPoints)
+                {
+                    GL.DrawArrays(PrimitiveType.Points, 0, 4);
+                }
+                else 
+                {
+                    GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+                }
+
 				GL.BindVertexArray(0);
 			}
 		}
@@ -78,7 +87,8 @@ namespace YH
 
 		private int mVAO = 0;
 		private int mVBO = 0;
-		private int mEBO = 0;	
+		private int mEBO = 0;
+        public bool mDrawPoints = false;
 	}
 	//=============================================================================================
 	public class SimpleTextureRectangle : SimpleGeometry
