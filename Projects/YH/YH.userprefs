@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFramebuffer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloTriangle.cs">
     <Files>
       <File FileName="YH/Window.cs" Line="22" Column="37" />
       <File FileName="YH/demo/HelloTriangle.cs" Line="46" Column="5" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="88" Column="24" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="46" Column="30" />
       <File FileName="YH/bin/Debug/Resources/testshader.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/testshader.vert" Line="5" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/testshader.vert" Line="5" Column="25" />
       <File FileName="YH/demo/HelloTransform.cs" Line="1" Column="1" />
       <File FileName="YH/demo/HelloDepthTesting1.cs" Line="63" Column="38" />
       <File FileName="YH/demo/HelloDiscard.cs" Line="1" Column="1" />

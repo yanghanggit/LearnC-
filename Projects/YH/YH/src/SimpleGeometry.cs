@@ -39,16 +39,8 @@ namespace YH
 			if (mVAO > 0)
 			{
 				GL.BindVertexArray(mVAO);
-
-                if (mDrawPoints)
-                {
-                    GL.DrawArrays(PrimitiveType.Points, 0, 4);
-                }
-                else 
-                {
-                    GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
-                }
-
+                PrimitiveType pt = mDrawPoints ? PrimitiveType.Points : PrimitiveType.Triangles;
+				GL.DrawElements(pt, 6, DrawElementsType.UnsignedInt, 0);
 				GL.BindVertexArray(0);
 			}
 		}
