@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/colors.frag">
     <Files>
-      <File FileName="YH/demo/HelloTriangle.cs" Line="37" Column="86" />
-      <File FileName="YH/bin/Debug/Resources/testshader.frag" Line="11" Column="32" />
-      <File FileName="YH/bin/Debug/Resources/testshader.vert" Line="5" Column="25" />
-      <File FileName="YH/Window.cs" Line="22" Column="37" />
-      <File FileName="YH/Program.cs" Line="11" Column="22" />
+      <File FileName="YH/Window.cs" Line="27" Column="25" />
+      <File FileName="YH/Program.cs" Line="14" Column="2" />
+      <File FileName="YH/demo/HelloColors.cs" Line="25" Column="51" />
+      <File FileName="YH/bin/Debug/Resources/colors.frag" Line="1" Column="19" />
+      <File FileName="YH/bin/Debug/Resources/colors.vs" Line="2" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

@@ -19,7 +19,7 @@ namespace YH
 		0, // OpenGL minor version
 		GraphicsContextFlags.ForwardCompatible)
 		{
-			mCurrentApplication = new HelloTriangle();
+			//mCurrentApplication = new HelloTriangle();
 			//mCurrentApplication = new HelloTexture2D();
 			//mCurrentApplication = new HelloTransform();
 			//mCurrentApplication = new HelloCoordinateSystem();
@@ -33,7 +33,7 @@ namespace YH
 			//mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
 			//mCurrentApplication = new HelloStencilTesting();
-			//mCurrentApplication = new HelloDiscard();
+			mCurrentApplication = new HelloDiscard();
 			//mCurrentApplication = new HelloBlending();
 			//mCurrentApplication = new HelloFramebuffer();
 			//mCurrentApplication = new HelloSkyBox();
