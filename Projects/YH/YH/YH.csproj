@@ -73,7 +73,7 @@
     <Compile Include="demo\HelloSkyBox.cs" />
     <Compile Include="src\GLTextureCube.cs" />
     <Compile Include="demo\HelloUniformBufferObjects.cs" />
-    <Compile Include="demo\HelloGeometryShader.cs" />
+    <Compile Include="demo\HelloGeometryShaderHouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

@@ -1,9 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLProgram.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLShader.cs">
     <Files>
       <File FileName="YH/Window.cs" Line="40" Column="42" />
-      <File FileName="YH/src/GLProgram.cs" Line="17" Column="13" />
+      <File FileName="YH/src/GLProgram.cs" Line="24" Column="58" />
+      <File FileName="YH/demo/HelloGeometryShader.cs" Line="20" Column="6" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="64" Column="31" />
+      <File FileName="YH/src/GLShader.cs" Line="11" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
