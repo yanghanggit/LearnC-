@@ -5,14 +5,25 @@ namespace YH
 {
 	public class GLProgram
 	{
-		public GLProgram(string vertPath, string fragPath)
+        public GLProgram(string vertPath, string fragPath, string geomPath = "")
 		{
 			mVertexShader = new GLShader(ShaderType.VertexShader, vertPath);
 			mFragmentShader = new GLShader(ShaderType.FragmentShader, fragPath);
 
+            if (geomPath.Length > 0)
+            {
+                mGeometryShader = new GLShader(ShaderType.GeometryShader, geomPath);        
+            }   
+
 			mProgram = GL.CreateProgram();
 			GL.AttachShader(mProgram, mVertexShader.getShaderId());
 			GL.AttachShader(mProgram, mFragmentShader.getShaderId());
+
+            if (mGeometryShader != null)
+            {
+                GL.AttachShader(mProgram, mGeometryShader.getShaderId());
+            }
+
 			GL.LinkProgram(mProgram);
 
 			string error = GL.GetProgramInfoLog(mProgram);
@@ -45,6 +56,7 @@ namespace YH
         public int mProgram = 0;
 		private GLShader mVertexShader = null;
 		private GLShader mFragmentShader = null;
+        private GLShader mGeometryShader = null;
 		private bool mIsValid = false;	
 	}
 }

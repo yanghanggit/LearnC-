@@ -33,11 +33,12 @@ namespace YH
 			//mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
 			//mCurrentApplication = new HelloStencilTesting();
-			mCurrentApplication = new HelloDiscard();
+			//mCurrentApplication = new HelloDiscard();
 			//mCurrentApplication = new HelloBlending();
 			//mCurrentApplication = new HelloFramebuffer();
 			//mCurrentApplication = new HelloSkyBox();
             //mCurrentApplication = new HelloUniformBufferObjects();
+			mCurrentApplication = new HelloGeometryShader();
 
 			Title = mCurrentApplication.mAppName;
 		}
