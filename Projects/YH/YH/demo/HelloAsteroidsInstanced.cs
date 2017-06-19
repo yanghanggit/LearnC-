@@ -26,8 +26,9 @@ namespace YH
 
 			shader = new GLProgram(@"Resources/planet.vs", @"Resources/planet.frag");
 			skyboxShader = new GLProgram(@"Resources/skybox.vs", @"Resources/skybox.frag");
+            instanceShader = new GLProgram(@"Resources/instanced_asteroids.vs", @"Resources/instanced_asteroids.frag");
 
-			mGLTextureCube = new GLTextureCube(
+		    mGLTextureCube = new GLTextureCube(
 				@"Resources/Texture/skybox/right.jpg",
 				@"Resources/Texture/skybox/left.jpg",
 				@"Resources/Texture/skybox/top.jpg",
@@ -97,7 +98,7 @@ namespace YH
 			shader.Use();
 
 			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
-			GL.Uniform1(shader.GetUniformLocation("ratio"), ParseRatio(mRatioIndex));
+			//GL.Uniform1(shader.GetUniformLocation("ratio"), ParseRatio(mRatioIndex));
 
 			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
@@ -126,34 +127,34 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-			if (e.Key == OpenTK.Input.Key.Plus)
-			{
-				++mRatioIndex;
-			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
-				--mRatioIndex;
-				mRatioIndex = mRatioIndex >= 0 ? mRatioIndex : 0;
-			}
-			else if (e.Key == OpenTK.Input.Key.C)
-			{
-			}
+			//if (e.Key == OpenTK.Input.Key.Plus)
+			//{
+			//	++mRatioIndex;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Minus)
+			//{
+			//	--mRatioIndex;
+			//	mRatioIndex = mRatioIndex >= 0 ? mRatioIndex : 0;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.C)
+			//{
+			//}
 		}
 
-		float ParseRatio(int index)
-		{
-			float[] ratios = {
-				0.0f, //nothing
-                //1.00f,//空气
-                1.33f,//水
-                1.309f,//冰
-                1.52f,//玻璃
-                2.42f,//宝石
-            };
+		//float ParseRatio(int index)
+		//{
+		//	float[] ratios = {
+		//		0.0f, //nothing
+  //              //1.00f,//空气
+  //              1.33f,//水
+  //              1.309f,//冰
+  //              1.52f,//玻璃
+  //              2.42f,//宝石
+  //          };
 
-			int mod = index % ratios.Length;
-			return ratios[mod];
-		}
+		//	int mod = index % ratios.Length;
+		//	return ratios[mod];
+		//}
 
 		private Cube mCube = null;
 		private Sphere mSphere = null;
@@ -165,6 +166,8 @@ namespace YH
 		private GLTextureCube mGLTextureCube = null;
 		private int mRatioIndex = 0;
         private Matrix4[] modelMatrices = new Matrix4[1000];
+        private GLProgram instanceShader = null;
+        //Shader instanceShader("instanced_asteroids.vs", "instanced_asteroids.frag");
 	}
 
 }

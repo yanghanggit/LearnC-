@@ -53,7 +53,7 @@ namespace YH
 
 			mProgram.Use();
             GL.BindVertexArray(mVAO);
-            GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, 6, 100);
+            GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, 6, mTranslations.Length);
             GL.BindVertexArray(0);
 		}
 

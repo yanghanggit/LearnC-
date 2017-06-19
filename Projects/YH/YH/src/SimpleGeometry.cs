@@ -249,8 +249,8 @@ namespace YH
 			GL.BindVertexArray(0); // Unbind VAO
 		}
 
-		private int mVAO = 0;
-		private int mVBO = 0;
+        public int mVAO = 0;
+		public int mVBO = 0;
 	}
 
 	//=============================================================================================
