@@ -17,6 +17,7 @@ namespace YH
 			base.Start(wnd);
 
 			mCube = new Cube();
+            mCubeInstanced = new Cube();
 			mSphere = new Sphere();
 			mSkybox = new Skybox();
 			mFloor = new Floor();
@@ -41,13 +42,15 @@ namespace YH
 			GL.Enable(EnableCap.DepthTest);
 			GL.DepthFunc(DepthFunction.Less);
             GL.ClearColor(Color.Gray);
+
+            InitModelMatrices();
 		}
 
         private void InitModelMatrices()
         {
             var rd = new Random(System.DateTime.Now.Millisecond);
             const float radius = 150.0f;
-			const float offset = 25.0f;
+            const float offset = 25.0f;
             var amount = modelMatrices.Length;
    
             for (int i = 0; i < modelMatrices.Length; i++)
@@ -79,6 +82,35 @@ namespace YH
 				// 4. Now add to list of matrices
 				modelMatrices[i] = model;
 			}
+
+            mCubeInstanced.build();
+
+            GL.BindVertexArray(mCubeInstanced.mVAO);
+
+			int buffer = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, amount * sizeof(float) * 4 * 4, modelMatrices, BufferUsageHint.StaticDraw);
+
+			// Set attribute pointers for matrix (4 times vec4)
+			GL.EnableVertexAttribArray(3);
+			GL.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, sizeof(float) * 4 * 4, (IntPtr)(0 * sizeof(float) * 4));
+
+			GL.EnableVertexAttribArray(4);
+			GL.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, sizeof(float) * 4 * 4, (IntPtr)(1 * sizeof(float) * 4));
+
+			GL.EnableVertexAttribArray(5);
+			GL.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, sizeof(float) * 4 * 4, (IntPtr)(2 * sizeof(float) * 4));
+
+			GL.EnableVertexAttribArray(6);
+			GL.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, sizeof(float) * 4 * 4, (IntPtr)(3 * sizeof(float) * 4));
+
+			GL.VertexAttribDivisor(3, 1);
+			GL.VertexAttribDivisor(4, 1);
+			GL.VertexAttribDivisor(5, 1);
+			GL.VertexAttribDivisor(6, 1);
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindVertexArray(0);
         }
 
 		public override void Update(double dt)
@@ -98,65 +130,53 @@ namespace YH
 			shader.Use();
 
 			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
-			//GL.Uniform1(shader.GetUniformLocation("ratio"), ParseRatio(mRatioIndex));
 
 			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
 			GL.Uniform3(shader.GetUniformLocation("cameraPos"), mCamera.Position);
 
 
-			model = Matrix4.CreateTranslation(0.0f, -2.0f, 0.0f);
+			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
-			mSphere.Draw();
+			//mSphere.Draw();
 
-			model = Matrix4.CreateTranslation(0.0f, 2.0f, 0.0f);
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
-			mCube.Draw();
+			//model = Matrix4.CreateTranslation(0.0f, 2.0f, 0.0f);
+			//GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			//mCube.Draw();
 
-			// Draw skybox as last
-			GL.DepthFunc(DepthFunction.Equal);
-			skyboxShader.Use();
-			var skyView = new Matrix4(new Matrix3(view));
-			GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
-			GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
-			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
-			mSkybox.Draw();
-			GL.DepthFunc(DepthFunction.Less);
+
+            if (true)
+            {
+				// Draw meteorites
+				instanceShader.Use();
+
+				GL.UniformMatrix4(instanceShader.GetUniformLocation("projection"), false, ref projection);
+				GL.UniformMatrix4(instanceShader.GetUniformLocation("view"), false, ref view);
+                mCubeInstanced.DrawInstance(modelMatrices.Length);
+
+            }
+
+            if (false)
+            {
+				// Draw skybox as last
+				GL.DepthFunc(DepthFunction.Equal);
+				skyboxShader.Use();
+				var skyView = new Matrix4(new Matrix3(view));
+				GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
+				GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
+				GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+				mSkybox.Draw();
+				GL.DepthFunc(DepthFunction.Less);
+            }
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-			//if (e.Key == OpenTK.Input.Key.Plus)
-			//{
-			//	++mRatioIndex;
-			//}
-			//else if (e.Key == OpenTK.Input.Key.Minus)
-			//{
-			//	--mRatioIndex;
-			//	mRatioIndex = mRatioIndex >= 0 ? mRatioIndex : 0;
-			//}
-			//else if (e.Key == OpenTK.Input.Key.C)
-			//{
-			//}
 		}
 
-		//float ParseRatio(int index)
-		//{
-		//	float[] ratios = {
-		//		0.0f, //nothing
-  //              //1.00f,//空气
-  //              1.33f,//水
-  //              1.309f,//冰
-  //              1.52f,//玻璃
-  //              2.42f,//宝石
-  //          };
-
-		//	int mod = index % ratios.Length;
-		//	return ratios[mod];
-		//}
-
 		private Cube mCube = null;
+        private Cube mCubeInstanced = null;
 		private Sphere mSphere = null;
 		private Floor mFloor = new Floor();
 		private Camera mCamera = null;
@@ -164,10 +184,9 @@ namespace YH
 		private GLProgram skyboxShader = null;
 		private Skybox mSkybox = null;
 		private GLTextureCube mGLTextureCube = null;
-		private int mRatioIndex = 0;
-        private Matrix4[] modelMatrices = new Matrix4[1000];
+		//private int mRatioIndex = 0;
+        private Matrix4[] modelMatrices = new Matrix4[5];
         private GLProgram instanceShader = null;
-        //Shader instanceShader("instanced_asteroids.vs", "instanced_asteroids.frag");
 	}
 
 }

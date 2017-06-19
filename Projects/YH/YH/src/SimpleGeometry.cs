@@ -18,6 +18,11 @@ namespace YH
 			
 		}
 
+		public virtual void DrawInstance(int amount)
+		{
+
+		} 
+
 		public string mName = "SimpleGeometry";	
 	}
 
@@ -178,7 +183,17 @@ namespace YH
 			}
 		}
 
-		private void build()
+		public override void DrawInstance(int amount)
+		{
+            if (mVAO > 0)
+            {
+				GL.BindVertexArray(mVAO);
+				GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, 36, amount);
+				GL.BindVertexArray(0);
+            }
+		}
+
+		public void build()
 		{
 			float[] vertices = 
 			{
