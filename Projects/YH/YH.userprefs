@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloGeometryShaderExplode.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
       <File FileName="YH/bin/Debug/Resources/explode.frag" Line="10" Column="12" />
       <File FileName="YH/bin/Debug/Resources/explode.gs" Line="10" Column="20" />
       <File FileName="YH/bin/Debug/Resources/explode.vs" Line="11" Column="1" />
-      <File FileName="YH/demo/HelloGeometryShaderExplode.cs" Line="117" Column="5" />
+      <File FileName="YH/demo/HelloGeometryShaderExplode.cs" Line="12" Column="36" />
+      <File FileName="YH/Window.cs" Line="33" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
