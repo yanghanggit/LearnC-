@@ -35,6 +35,11 @@ namespace YH
 				@"Resources/Texture/skybox/back.jpg",
 				@"Resources/Texture/skybox/front.jpg"
 			);
+
+            GL.Viewport(0, 0, wnd.Width, wnd.Height);
+			GL.Enable(EnableCap.DepthTest);
+			GL.DepthFunc(DepthFunction.Less);
+            GL.ClearColor(Color.Gray);
 		}
 
         private void InitModelMatrices()
@@ -82,12 +87,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-			GL.Enable(EnableCap.DepthTest);
-			GL.DepthFunc(DepthFunction.Less);
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
