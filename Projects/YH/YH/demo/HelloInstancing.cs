@@ -1,5 +1,7 @@
-﻿﻿using OpenTK.Graphics.OpenGL;
+﻿using System;
+using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using OpenTK;
 
 namespace YH
 {
@@ -13,13 +15,33 @@ namespace YH
 		public override void Start(Window wnd)
 		{
 			base.Start(wnd);
-			mProgram = new GLProgram(@"Resources/testshader.vert", @"Resources/testshader.frag");
-			mSimpleRectangle = new SimpleRectangle();
+	
+            mProgram = new GLProgram(@"Resources/instancing_test.vs", @"Resources/instancing_test.fs");
 
-			GL.ClearColor(Color.Gray);
-			mTestPosition = wnd.Width / 2;
-			mMoveSpeed = wnd.Width / 10;
+            CreateVAO();
+
+            InitTranslations();
+
+            GL.ClearColor(Color.Black);
 		}
+
+        private void InitTranslations()
+        {
+			//
+			mTranslations = new Vector2[100];
+			int index = 0;
+			float offset = 0.1f;
+			for (int y = -10; y < 10; y += 2)
+			{
+				for (int x = -10; x < 10; x += 2)
+				{
+					Vector2 translation = new Vector2();
+					translation.X = (float)x / 10.0f + offset;
+					translation.Y = (float)y / 10.0f + offset;
+					mTranslations[index++] = translation;
+				}
+			}
+        }
 
 		public override void Update(double dt)
 		{
@@ -32,59 +54,59 @@ namespace YH
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 
 			mProgram.Use();
-			GL.Uniform1(mProgram.GetUniformLocation("point_size"), mPointSize);
-			GL.Uniform1(mProgram.GetUniformLocation("test_frag_coord"), mTestFragCoord ? 1 : 0);
-			GL.Uniform1(mProgram.GetUniformLocation("test_middle"), mTestPosition);
+			for (int i = 0; i < 100; ++i)
+			{
+                var location = mProgram.GetUniformLocation("offsets[" + i + "]");
+                GL.Uniform2(location, mTranslations[i]);
+			}
 
-
-			mSimpleRectangle.Draw();
+            GL.BindVertexArray(mVAO);
+            GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, 6, 100);
+            GL.BindVertexArray(0);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
-			base.OnKeyUp(e);
+            base.OnKeyUp(e);
+		}
 
-			if (e.Key == OpenTK.Input.Key.Plus)
+		private void CreateVAO()
+		{
+			if (mVAO > 0)
 			{
-				mPointSize += 10.0f;
-				mTestPosition += mMoveSpeed;
+				return;
 			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
-				mPointSize -= 10.0f;
-				mPointSize = mPointSize > 20.0f ? mPointSize : 20.0f;
 
-				mTestPosition -= mMoveSpeed;
-				mTestPosition = mTestPosition > 0.0f ? mTestPosition : 0.0f;
-			}
-			else if (e.Key == OpenTK.Input.Key.C)
-			{
-				if (mSimpleRectangle != null)
-				{
-					mSimpleRectangle.mDrawPoints = !mSimpleRectangle.mDrawPoints;
+			float[] vertices = {
+				//  ---位置---   ------颜色-------
+				-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+				0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+				-0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
 
-					if (mSimpleRectangle.mDrawPoints)
-					{
-						GL.Enable(EnableCap.ProgramPointSize);
-					}
-					else
-					{
-						GL.Disable(EnableCap.ProgramPointSize);
-					}
-				}
-			}
-			else if (e.Key == OpenTK.Input.Key.B)
-			{
-				mTestFragCoord = !mTestFragCoord;
-			}
+				-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+				0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+				0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+            };
+
+			mVAO = GL.GenVertexArray();
+			int vbo = GL.GenBuffer();
+
+			GL.BindVertexArray(mVAO);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
+			GL.EnableVertexAttribArray(0);
+			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+			GL.EnableVertexAttribArray(1);
+			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (2 * sizeof(float)));
+
+			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+			GL.BindVertexArray(0);
 		}
 
 		private GLProgram mProgram = null;
-		private SimpleRectangle mSimpleRectangle = null;
-		private float mPointSize = 100.0f;
-		private bool mTestFragCoord = false;
-		private float mTestPosition = 0.0f;
-		private float mMoveSpeed = 0.0f;
-
+        private int mVAO = 0;
+        private Vector2[] mTranslations = null;
 	}
 }
