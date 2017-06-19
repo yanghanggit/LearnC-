@@ -10,14 +10,18 @@ in VS_OUT {
     vec3 normal;
 } gs_in[];
 
-const float MAGNITUDE = 0.2f;
+out vec3 fColor;
 
-void GenerateLine(int index)
+const float MAGNITUDE = 1.0f;
+
+void GenerateLine(int index, vec3 color)
 {
     gl_Position = gl_in[index].gl_Position;
+    fColor = color;
     EmitVertex();
     
     gl_Position = gl_in[index].gl_Position + vec4(gs_in[index].normal, 0.0f) * MAGNITUDE;
+    fColor = color;
     EmitVertex();
     
     EndPrimitive();
@@ -25,7 +29,7 @@ void GenerateLine(int index)
 
 void main()
 {
-    GenerateLine(0); // First vertex normal
-    GenerateLine(1); // Second vertex normal
-    GenerateLine(2); // Third vertex normal
+    GenerateLine(0, vec3(1.0f, 0.0f, 0.0f)); // First vertex normal
+    GenerateLine(1, vec3(0.0f, 1.0f, 0.0f)); // Second vertex normal
+    GenerateLine(2, vec3(0.0f, 0.0f, 1.0f)); // Third vertex normal
 }

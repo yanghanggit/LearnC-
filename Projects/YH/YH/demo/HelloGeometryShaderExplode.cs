@@ -63,7 +63,7 @@ namespace YH
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
-			base.OnKeyUp(e);
+            base.OnKeyUp(e);
 		}
 
 		private Cube mCube = null;
