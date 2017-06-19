@@ -39,7 +39,8 @@ namespace YH
 			//mCurrentApplication = new HelloSkyBox();
             //mCurrentApplication = new HelloUniformBufferObjects();
 			//mCurrentApplication = new HelloGeometryShaderHouse();
-			mCurrentApplication = new HelloGeometryShaderExplode();
+			//mCurrentApplication = new HelloGeometryShaderExplode();
+			mCurrentApplication = new HelloGeometryShaderShowNormal();
 
 			Title = mCurrentApplication.mAppName;
 		}

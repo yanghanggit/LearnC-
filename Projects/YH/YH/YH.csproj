@@ -75,6 +75,7 @@
     <Compile Include="demo\HelloUniformBufferObjects.cs" />
     <Compile Include="demo\HelloGeometryShaderHouse.cs" />
     <Compile Include="demo\HelloGeometryShaderExplode.cs" />
+    <Compile Include="demo\HelloGeometryShaderShowNormal.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
