@@ -2,9 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloInstancing.cs">
     <Files>
-      <File FileName="YH/demo/HelloInstancing.cs" Line="66" Column="4" />
+      <File FileName="YH/demo/HelloInstancing.cs" Line="157" Column="34" />
       <File FileName="YH/bin/Debug/Resources/instancing_test.fs" Line="7" Column="32" />
-      <File FileName="YH/bin/Debug/Resources/instancing_test.vs" Line="8" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/instancing_test.vs" Line="14" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
