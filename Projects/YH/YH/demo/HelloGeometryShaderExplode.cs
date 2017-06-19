@@ -1,6 +1,8 @@
-﻿using System;
+﻿
+using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using OpenTK;
 
 namespace YH
 {
@@ -15,40 +17,16 @@ namespace YH
 		{
 			base.Start(wnd);
 
-			mProgram = new GLProgram(@"Resources/geometry_shader.vs", @"Resources/geometry_shader.frag", @"Resources/geometry_shader.gs");
-			createVAO();
-			GL.ClearColor(Color.Black);
-		}
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+			mCameraController = new CameraController(mAppName, mCamera);
 
-		private void createVAO()
-		{
-			if (mVAO > 0)
-			{
-				return;
-			}
+			mProgram = new GLProgram(@"Resources/explode.vs", @"Resources/explode.frag", @"Resources/explode.gs");
 
-			float[] vertices = {
-			-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-            0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-            -0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // Bottom-left
-            };
+            mCube = new Cube();
 
-			mVAO = GL.GenVertexArray();
-			int vbo = GL.GenBuffer();
+            mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 
-			GL.BindVertexArray(mVAO);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
-
-			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
-
-			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (2 * sizeof(float)));
-
-			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			GL.BindVertexArray(0);
+            GL.ClearColor(Color.Gray);
 		}
 
 		public override void Update(double dt)
@@ -59,12 +37,22 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.Clear(ClearBufferMask.ColorBufferBit);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			mProgram.Use();
-			GL.BindVertexArray(mVAO);
-			GL.DrawArrays(PrimitiveType.Points, 0, 4);
-			GL.BindVertexArray(0);
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+																 (float)wnd.Width / (float)wnd.Height,
+																 0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+
+            mProgram.Use();
+
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
+
+			Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
+            GL.UniformMatrix4(mProgram.GetUniformLocation("model"), false, ref model);
+            GL.Uniform1(mProgram.GetUniformLocation("time"), (float)mTotalRuningTime);
+			mCube.Draw();
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -73,6 +61,8 @@ namespace YH
 		}
 
 		private GLProgram mProgram = null;
-		private int mVAO = 0;
+        private Cube mCube = null;
+		private Camera mCamera = null;
+        private GLTexture2D mDiffuseMap = null;
 	}
 }
