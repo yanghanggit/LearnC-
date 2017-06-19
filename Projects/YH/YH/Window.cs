@@ -30,7 +30,7 @@ namespace YH
 			//mCurrentApplication = new HelloLightingMaps();
 			//mCurrentApplication = new HelloLightCasters();
 			//mCurrentApplication = new HelloMultipleLights();
-			//mCurrentApplication = new HelloDepthTesting1();
+			mCurrentApplication = new HelloDepthTesting1();
 			//mCurrentApplication = new HelloDepthTesting2();
 			//mCurrentApplication = new HelloStencilTesting();
 			//mCurrentApplication = new HelloDiscard();
@@ -39,7 +39,7 @@ namespace YH
 			//mCurrentApplication = new HelloSkyBox();
             //mCurrentApplication = new HelloUniformBufferObjects();
 			//mCurrentApplication = new HelloGeometryShaderHouse();
-			mCurrentApplication = new HelloGeometryShaderExplode();
+			//mCurrentApplication = new HelloGeometryShaderExplode();
 
 			Title = mCurrentApplication.mAppName;
 		}
