@@ -76,6 +76,7 @@
     <Compile Include="demo\HelloGeometryShaderHouse.cs" />
     <Compile Include="demo\HelloGeometryShaderExplode.cs" />
     <Compile Include="demo\HelloGeometryShaderShowNormal.cs" />
+    <Compile Include="demo\HelloInstancing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

@@ -1,11 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/show_normal.gs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/bin/Debug/Resources/show_normal.frag" Line="7" Column="12" />
-      <File FileName="YH/bin/Debug/Resources/show_normal.gs" Line="22" Column="5" />
-      <File FileName="YH/bin/Debug/Resources/show_normal.vs" Line="8" Column="1" />
-      <File FileName="YH/demo/HelloGeometryShaderShowNormal.cs" Line="88" Column="40" />
+      <File FileName="YH/demo/HelloInstancing.cs" Line="8" Column="25" />
+      <File FileName="YH/Window.cs" Line="44" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
