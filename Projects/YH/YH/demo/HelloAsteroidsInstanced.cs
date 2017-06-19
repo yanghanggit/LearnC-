@@ -24,7 +24,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-			shader = new GLProgram(@"Resources/cubemaps.vs", @"Resources/cubemaps.frag");
+			shader = new GLProgram(@"Resources/planet.vs", @"Resources/planet.frag");
 			skyboxShader = new GLProgram(@"Resources/skybox.vs", @"Resources/skybox.frag");
 
 			mGLTextureCube = new GLTextureCube(
