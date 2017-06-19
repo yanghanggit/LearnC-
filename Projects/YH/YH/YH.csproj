@@ -74,6 +74,7 @@
     <Compile Include="src\GLTextureCube.cs" />
     <Compile Include="demo\HelloUniformBufferObjects.cs" />
     <Compile Include="demo\HelloGeometryShaderHouse.cs" />
+    <Compile Include="demo\HelloGeometryShaderExplode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
