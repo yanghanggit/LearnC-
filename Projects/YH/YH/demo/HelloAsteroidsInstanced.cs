@@ -1,8 +1,8 @@
-﻿﻿using System;
+﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
-
+using System.Collections.Generic;
 
 namespace YH
 {
@@ -10,37 +10,70 @@ namespace YH
 	{
 		public HelloAsteroidsInstanced() : base("HelloAsteroidsInstanced")
 		{
-
 		}
 
 		public override void Start(Window wnd)
 		{
 			base.Start(wnd);
 
-			mProgram = new GLProgram(@"Resources/instancing_test.vs", @"Resources/instancing_test.fs");
+			mCube = new Cube();
+			mSphere = new Sphere();
+			mSkybox = new Skybox();
+			mFloor = new Floor();
 
-			InitTranslations();
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+			mCameraController = new CameraController(mAppName, mCamera);
 
-			CreateVAO();
+			shader = new GLProgram(@"Resources/cubemaps.vs", @"Resources/cubemaps.frag");
+			skyboxShader = new GLProgram(@"Resources/skybox.vs", @"Resources/skybox.frag");
 
-			GL.ClearColor(Color.Black);
+			mGLTextureCube = new GLTextureCube(
+				@"Resources/Texture/skybox/right.jpg",
+				@"Resources/Texture/skybox/left.jpg",
+				@"Resources/Texture/skybox/top.jpg",
+				@"Resources/Texture/skybox/bottom.jpg",
+				@"Resources/Texture/skybox/back.jpg",
+				@"Resources/Texture/skybox/front.jpg"
+			);
 		}
 
-		private void InitTranslations()
-		{
-			int index = 0;
-			float offset = 0.1f;
-			for (int y = -10; y < 10; y += 2)
+        private void InitModelMatrices()
+        {
+            var rd = new Random(System.DateTime.Now.Millisecond);
+            const float radius = 150.0f;
+			const float offset = 25.0f;
+            var amount = modelMatrices.Length;
+   
+            for (int i = 0; i < modelMatrices.Length; i++)
 			{
-				for (int x = -10; x < 10; x += 2)
-				{
-					Vector2 translation = new Vector2();
-					translation.X = (float)x / 10.0f + offset;
-					translation.Y = (float)y / 10.0f + offset;
-					mTranslations[index++] = translation;
-				}
+				//glm::mat4 model;
+                Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
+				// 1. Translation: Randomly displace along circle with radius 'radius' in range [-offset, offset]
+				float angle = (float)i / (float)amount * 360.0f;
+
+                float displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+                float x = (float)Math.Sin(angle) * radius + displacement;
+				
+                displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+				float y = -2.5f + displacement * 0.4f; // Keep height of asteroid field smaller compared to width of x and z
+				
+                displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+                float z = (float)Math.Cos(angle) * radius + displacement;
+
+                model = Matrix4.CreateTranslation(x, y, z);//glm::translate(model, glm::vec3(x, y, z));
+
+                // 2. Scale: Scale between 0.05 and 0.25f
+                float scale = ((float)rd.NextDouble() % 20) / 100.0f + 0.05f;
+                model = Matrix4.CreateScale(scale);//glm::scale(model, glm::vec3(scale));
+
+				// 3. Rotation: add random rotation around a (semi)randomly picked rotation axis vector
+                float rotAngle = ((float)rd.NextDouble() % 360);
+                model = Matrix4.CreateFromAxisAngle(new Vector3(0.4f, 0.6f, 0.8f), rotAngle);//glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+				// 4. Now add to list of matrices
+				modelMatrices[i] = model;
 			}
-		}
+        }
 
 		public override void Update(double dt)
 		{
@@ -50,70 +83,88 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.Clear(ClearBufferMask.ColorBufferBit);
+			GL.ClearColor(Color.Gray);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			mProgram.Use();
-			GL.BindVertexArray(mVAO);
-			GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, 6, 100);
-			GL.BindVertexArray(0);
+			GL.Enable(EnableCap.DepthTest);
+			GL.DepthFunc(DepthFunction.Less);
+
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+			Matrix4 model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+
+			// Draw scene as normal
+			shader.Use();
+
+			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			GL.Uniform1(shader.GetUniformLocation("ratio"), ParseRatio(mRatioIndex));
+
+			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+			GL.Uniform3(shader.GetUniformLocation("cameraPos"), mCamera.Position);
+
+
+			model = Matrix4.CreateTranslation(0.0f, -2.0f, 0.0f);
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			mSphere.Draw();
+
+			model = Matrix4.CreateTranslation(0.0f, 2.0f, 0.0f);
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			// Draw skybox as last
+			GL.DepthFunc(DepthFunction.Equal);
+			skyboxShader.Use();
+			var skyView = new Matrix4(new Matrix3(view));
+			GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
+			GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
+			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			mSkybox.Draw();
+			GL.DepthFunc(DepthFunction.Less);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-		}
-
-		private void CreateVAO()
-		{
-			if (mVAO > 0)
+			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				return;
+				++mRatioIndex;
 			}
-
-			int instanceVBO = GL.GenBuffer();
-			GL.BindBuffer(BufferTarget.ArrayBuffer, instanceVBO);
-			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 2 * mTranslations.Length, mTranslations, BufferUsageHint.StaticDraw);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-			float[] vertices = {
-                //  ---位置---   ------颜色-------
-                -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
-				0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
-				-0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
-
-				-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
-				0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
-				0.05f,  0.05f,  0.0f, 1.0f, 1.0f
-			};
-
-			mVAO = GL.GenVertexArray();
-			int vbo = GL.GenBuffer();
-
-			GL.BindVertexArray(mVAO);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
-
-			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
-
-			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (2 * sizeof(float)));
-
-			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-			GL.EnableVertexAttribArray(2);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, instanceVBO);
-			GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), IntPtr.Zero);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-			GL.VertexAttribDivisor(2, 1);
-
-			GL.BindVertexArray(0);
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				--mRatioIndex;
+				mRatioIndex = mRatioIndex >= 0 ? mRatioIndex : 0;
+			}
+			else if (e.Key == OpenTK.Input.Key.C)
+			{
+			}
 		}
 
-		private GLProgram mProgram = null;
-		private int mVAO = 0;
-		private Vector2[] mTranslations = new Vector2[100];
-	}
+		float ParseRatio(int index)
+		{
+			float[] ratios = {
+				0.0f, //nothing
+                //1.00f,//空气
+                1.33f,//水
+                1.309f,//冰
+                1.52f,//玻璃
+                2.42f,//宝石
+            };
 
+			int mod = index % ratios.Length;
+			return ratios[mod];
+		}
+
+		private Cube mCube = null;
+		private Sphere mSphere = null;
+		private Floor mFloor = new Floor();
+		private Camera mCamera = null;
+		private GLProgram shader = null;
+		private GLProgram skyboxShader = null;
+		private Skybox mSkybox = null;
+		private GLTextureCube mGLTextureCube = null;
+		private int mRatioIndex = 0;
+        private Matrix4[] modelMatrices = new Matrix4[1000];
+	}
 
 }

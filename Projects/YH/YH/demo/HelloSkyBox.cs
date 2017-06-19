@@ -125,8 +125,5 @@ namespace YH
         private Skybox mSkybox = null;
         private GLTextureCube mGLTextureCube = null;
         private int mRatioIndex = 0;
-
-
-
 	}
 }
