@@ -49,8 +49,8 @@ namespace YH
         private void InitModelMatrices()
         {
             var rd = new Random(System.DateTime.Now.Millisecond);
-            const float radius = 150.0f;
-            const float offset = 25.0f;
+            const float radius = 150.0f / 10.0f;
+            const float offset = 25.0f / 10.0f;
             var amount = modelMatrices.Length;
    
             for (int i = 0; i < modelMatrices.Length; i++)
@@ -60,24 +60,24 @@ namespace YH
 				// 1. Translation: Randomly displace along circle with radius 'radius' in range [-offset, offset]
 				float angle = (float)i / (float)amount * 360.0f;
 
-                float displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+                float displacement = ((float)rd.NextDouble() % (float)(2 * offset * 100)) / 100.0f - offset;
                 float x = (float)Math.Sin(angle) * radius + displacement;
 				
-                displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+                displacement = ((float)rd.NextDouble() % (float)(2 * offset * 100)) / 100.0f - offset;
 				float y = -2.5f + displacement * 0.4f; // Keep height of asteroid field smaller compared to width of x and z
 				
-                displacement = ((float)rd.NextDouble() % (int)(2 * offset * 100)) / 100.0f - offset;
+                displacement = ((float)rd.NextDouble() % (float)(2 * offset * 100)) / 100.0f - offset;
                 float z = (float)Math.Cos(angle) * radius + displacement;
 
-                model = Matrix4.CreateTranslation(x, y, z);//glm::translate(model, glm::vec3(x, y, z));
+                model = Matrix4.CreateTranslation(x, y, z) * model;//glm::translate(model, glm::vec3(x, y, z));
 
                 // 2. Scale: Scale between 0.05 and 0.25f
-                float scale = ((float)rd.NextDouble() % 20) / 100.0f + 0.05f;
-                model = Matrix4.CreateScale(scale);//glm::scale(model, glm::vec3(scale));
+                float scale = ((float)rd.NextDouble() % 20.0f) / 100.0f + 0.05f;
+                model = Matrix4.CreateScale(scale) * model;//glm::scale(model, glm::vec3(scale));
 
 				// 3. Rotation: add random rotation around a (semi)randomly picked rotation axis vector
-                float rotAngle = ((float)rd.NextDouble() % 360);
-                model = Matrix4.CreateFromAxisAngle(new Vector3(0.4f, 0.6f, 0.8f), rotAngle);//glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+                float rotAngle = ((float)rd.NextDouble() % 360.0f);
+                model = Matrix4.CreateFromAxisAngle(new Vector3(0.4f, 0.6f, 0.8f), rotAngle) * model;//glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
 
 				// 4. Now add to list of matrices
 				modelMatrices[i] = model;
@@ -138,36 +138,25 @@ namespace YH
 
 			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
-			//mSphere.Draw();
+			mSphere.Draw();
 
-			//model = Matrix4.CreateTranslation(0.0f, 2.0f, 0.0f);
-			//GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
-			//mCube.Draw();
+			// Draw meteorites
+			instanceShader.Use();
+            GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			GL.UniformMatrix4(instanceShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(instanceShader.GetUniformLocation("view"), false, ref view);
+			GL.Uniform3(instanceShader.GetUniformLocation("cameraPos"), mCamera.Position);
+			mCubeInstanced.DrawInstance(modelMatrices.Length);
 
-
-            if (true)
-            {
-				// Draw meteorites
-				instanceShader.Use();
-
-				GL.UniformMatrix4(instanceShader.GetUniformLocation("projection"), false, ref projection);
-				GL.UniformMatrix4(instanceShader.GetUniformLocation("view"), false, ref view);
-                mCubeInstanced.DrawInstance(modelMatrices.Length);
-
-            }
-
-            if (false)
-            {
-				// Draw skybox as last
-				GL.DepthFunc(DepthFunction.Equal);
-				skyboxShader.Use();
-				var skyView = new Matrix4(new Matrix3(view));
-				GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
-				GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
-				GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
-				mSkybox.Draw();
-				GL.DepthFunc(DepthFunction.Less);
-            }
+			// Draw skybox as last
+			GL.DepthFunc(DepthFunction.Equal);
+			skyboxShader.Use();
+			var skyView = new Matrix4(new Matrix3(view));
+			GL.UniformMatrix4(skyboxShader.GetUniformLocation("view"), false, ref skyView);
+			GL.UniformMatrix4(skyboxShader.GetUniformLocation("projection"), false, ref projection);
+			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			mSkybox.Draw();
+			GL.DepthFunc(DepthFunction.Less);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -184,8 +173,7 @@ namespace YH
 		private GLProgram skyboxShader = null;
 		private Skybox mSkybox = null;
 		private GLTextureCube mGLTextureCube = null;
-		//private int mRatioIndex = 0;
-        private Matrix4[] modelMatrices = new Matrix4[5];
+        private Matrix4[] modelMatrices = new Matrix4[1000];
         private GLProgram instanceShader = null;
 	}
 
