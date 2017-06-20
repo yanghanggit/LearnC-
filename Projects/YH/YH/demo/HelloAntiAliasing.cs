@@ -32,6 +32,9 @@ namespace YH
             GL.Enable(EnableCap.Multisample);
 
             framebuffer = new GLMSAAFramebuffer(wnd.Width, wnd.Height, 4);
+
+
+            mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
 		}
 
 		public override void Update(double dt)
@@ -61,6 +64,7 @@ namespace YH
                
 			mShader.Use();
 
+			GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
             GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
@@ -91,5 +95,6 @@ namespace YH
         private GLProgram mShader = null;
         private bool mUseMSAA = false;
         private GLMSAAFramebuffer framebuffer = null;
+        private GLTexture2D mCubeTexture = null;
 	}
 }
