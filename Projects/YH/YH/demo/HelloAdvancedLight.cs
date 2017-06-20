@@ -53,7 +53,7 @@ namespace YH
 
             GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPosition);
             GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
-            GL.Uniform1(mShader.GetUniformLocation("blinn"), 1);
+            GL.Uniform1(mShader.GetUniformLocation("blinn"), mUseBlinn ? 1 : 0);
 
             GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
 
@@ -65,7 +65,7 @@ namespace YH
 			base.OnKeyUp(e);
 			if (e.Key == OpenTK.Input.Key.C)
 			{
-				
+                mUseBlinn = !mUseBlinn;
 			}
 		}
 
@@ -74,5 +74,6 @@ namespace YH
         private GLTexture2D mFloorTexture = null;
         private Floor mFloor = null;
         private Vector3 mLightPosition = new Vector3(0, 1, 0);
+        private bool mUseBlinn = true;
 	}
 }
