@@ -1,12 +1,8 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/lamp.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloGammaCorrection.cs">
     <Files>
-      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="139" Column="9" />
-      <File FileName="YH/bin/Debug/Resources/gamma_correction.frag" Line="42" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/gamma_correction.vs" Line="12" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/lamp.frag" Line="4" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/lamp.vs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="87" Column="67" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

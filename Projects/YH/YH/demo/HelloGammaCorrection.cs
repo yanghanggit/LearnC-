@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -25,20 +25,39 @@ namespace YH
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(Color.Gray);
+            GL.ClearColor(Color.Black);
 			GL.Enable(EnableCap.DepthTest);
 
 			// Load textures
-			floorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
-			floorTextureGammaCorrected = new GLTexture2D(@"Resources/Texture/wood.png", true , true);
+			mFloorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
+			mFloorTextureGammaCorrected = new GLTexture2D(@"Resources/Texture/wood.png", true , true);
+
+			//
+			var rd = new Random(System.DateTime.Now.Millisecond);
+			for (var i = 0; i < mLightColors.Length; ++i)
+			{
+				mLightColors[i] = new Vector3((float)rd.NextDouble(), (float)rd.NextDouble(), (float)rd.NextDouble());
+			}
 	    }
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
-
-			//mLightPosition.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			//mLightPosition.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
+			for (var i = 0; i < mLightColors.Length; ++i)
+			{
+                if (i == 0)
+                {
+                    mLightColors[i].X = ((float)Math.Cos((float)mTotalRuningTime));
+                }
+				else if (i == 1)
+				{
+					mLightColors[i].Y = ((float)Math.Cos((float)mTotalRuningTime));
+				}
+				else if (i == 2)
+				{
+					mLightColors[i].Z = ((float)Math.Cos((float)mTotalRuningTime));
+				}
+			}
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -55,27 +74,27 @@ namespace YH
 			mShader.Use();
 
             GL.BindTexture(TextureTarget.Texture2D,
-                           gammaEnabled ? floorTextureGammaCorrected.getTextureId() : floorTexture.getTextureId());
+                           mGammaEnabled ? mFloorTextureGammaCorrected.getTextureId() : mFloorTexture.getTextureId());
 
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
 			// Set light uniforms
-            GL.Uniform3(mShader.GetUniformLocation("lightPositions[0]"), lightPositions[0]);
-            GL.Uniform3(mShader.GetUniformLocation("lightPositions[1]"), lightPositions[1]);
-            GL.Uniform3(mShader.GetUniformLocation("lightPositions[2]"), lightPositions[2]);
-            GL.Uniform3(mShader.GetUniformLocation("lightPositions[3]"), lightPositions[3]);
+            GL.Uniform3(mShader.GetUniformLocation("lightPositions[0]"), mLightPositions[0]);
+            GL.Uniform3(mShader.GetUniformLocation("lightPositions[1]"), mLightPositions[1]);
+            GL.Uniform3(mShader.GetUniformLocation("lightPositions[2]"), mLightPositions[2]);
+            GL.Uniform3(mShader.GetUniformLocation("lightPositions[3]"), mLightPositions[3]);
 
             //
-			GL.Uniform3(mShader.GetUniformLocation("lightColors[0]"), lightColors[0]);
-			GL.Uniform3(mShader.GetUniformLocation("lightColors[1]"), lightColors[1]);
-			GL.Uniform3(mShader.GetUniformLocation("lightColors[2]"), lightColors[2]);
-			GL.Uniform3(mShader.GetUniformLocation("lightColors[3]"), lightColors[3]);
+			GL.Uniform3(mShader.GetUniformLocation("lightColors[0]"), mLightColors[0]);
+			GL.Uniform3(mShader.GetUniformLocation("lightColors[1]"), mLightColors[1]);
+			GL.Uniform3(mShader.GetUniformLocation("lightColors[2]"), mLightColors[2]);
+			GL.Uniform3(mShader.GetUniformLocation("lightColors[3]"), mLightColors[3]);
 
             //
 			GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
-            GL.Uniform1(mShader.GetUniformLocation("gamma"), gammaEnabled ? 1 : 0);
+            GL.Uniform1(mShader.GetUniformLocation("gamma"), mGammaEnabled ? 1 : 0);
             GL.Uniform1(mShader.GetUniformLocation("shinness"), mMaterialShinness);
 
 		    //
@@ -86,14 +105,19 @@ namespace YH
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
 
-            foreach (var p in lightPositions)
+            for (var i = 0; i < mLightPositions.Length; ++i)
             {
-				model = Matrix4.CreateTranslation(p);
-				model = Matrix4.CreateScale(0.2f) * model;
-				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
-				mSphere.Draw();
+                var pos = mLightPositions[i];
+                model = Matrix4.CreateTranslation(pos);
+                model = Matrix4.CreateScale(0.2f) * model;
+                GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+
+                var color = mLightColors[i];
+                GL.Uniform3(mLampShader.GetUniformLocation("set_color"), color);
+         
+                mSphere.Draw();
             }
-		}
+        }
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
@@ -111,7 +135,7 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
-				gammaEnabled = !gammaEnabled;
+				mGammaEnabled = !mGammaEnabled;
 			}
 		}
 
@@ -123,14 +147,14 @@ namespace YH
 		private float mMaterialShinness = 32.0f;
 
 		//Light sources
-		Vector3[] lightPositions = {
+		Vector3[] mLightPositions = {
 			new Vector3(-3.0f, 1.0f, 0.0f),
 			new Vector3(-1.0f, 1.0f, 0.0f),
 			new Vector3( 1.0f, 1.0f, 0.0f),
 			new Vector3( 3.0f, 1.0f, 0.0f)
 	    };
 
-		Vector3[] lightColors = {
+		Vector3[] mLightColors = {
 			new Vector3(0.25f),
 			new Vector3(0.50f),
 			new Vector3(0.75f),
@@ -138,9 +162,9 @@ namespace YH
 	    };
 
 		// Load textures
-        private GLTexture2D floorTexture = null;
-		private GLTexture2D floorTextureGammaCorrected = null;
-		private bool gammaEnabled = true;
+        private GLTexture2D mFloorTexture = null;
+		private GLTexture2D mFloorTextureGammaCorrected = null;
+		private bool mGammaEnabled = true;
 
 	}
 }
