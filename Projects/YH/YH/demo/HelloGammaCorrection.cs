@@ -28,11 +28,9 @@ namespace YH
             GL.ClearColor(Color.Gray);
 			GL.Enable(EnableCap.DepthTest);
 
-			//mFloorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
-
 			// Load textures
-			floorTexture = new GLTexture2D(@"Resources/Texture/wood.png");//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), false);
-			floorTextureGammaCorrected = new GLTexture2D(@"Resources/Texture/wood.png", true , true);//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), true);
+			floorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
+			floorTextureGammaCorrected = new GLTexture2D(@"Resources/Texture/wood.png", true , true);
 	    }
 
 		public override void Update(double dt)
@@ -84,13 +82,17 @@ namespace YH
 			mFloor.Draw();
 
 			//
-			//mLampShader.Use();
-			//GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
-			//GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-			//model = Matrix4.CreateTranslation(mLightPosition);
-			//model = Matrix4.CreateScale(0.2f) * model;
-			//GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
-			//mSphere.Draw();
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+
+            foreach (var p in lightPositions)
+            {
+				model = Matrix4.CreateTranslation(p);
+				model = Matrix4.CreateScale(0.2f) * model;
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+				mSphere.Draw();
+            }
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
