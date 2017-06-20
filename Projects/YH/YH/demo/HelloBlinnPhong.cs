@@ -60,9 +60,9 @@ namespace YH
             GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPosition);
             GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
             GL.Uniform1(mShader.GetUniformLocation("blinn"), mUseBlinn ? 1 : 0);
+            GL.Uniform1(mShader.GetUniformLocation("shinness"), mMaterialShinness);
 
             mFloor.Draw();
-
 
             //
 			mLampShader.Use();
@@ -77,7 +77,18 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-			if (e.Key == OpenTK.Input.Key.C)
+
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+				mMaterialShinness *= 2.0f;
+				mMaterialShinness = mMaterialShinness >= 256.0f ? 256.0f : mMaterialShinness;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				mMaterialShinness /= 2.0f;
+				mMaterialShinness = mMaterialShinness <= 2.0f ? 2.0f : mMaterialShinness;
+			}
+			else if (e.Key == OpenTK.Input.Key.C)
 			{
                 mUseBlinn = !mUseBlinn;
 			}
@@ -91,5 +102,6 @@ namespace YH
         private bool mUseBlinn = true;
         private GLProgram mLampShader = null;
         private Sphere mSphere = null;
+        private float mMaterialShinness = 32.0f;
 	}
 }

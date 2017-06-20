@@ -12,6 +12,7 @@ uniform sampler2D floorTexture;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 uniform bool blinn;
+uniform float shinness;
 
 void main()
 {           
@@ -30,12 +31,12 @@ void main()
     if(blinn)
     {
         vec3 halfwayDir = normalize(lightDir + viewDir);  
-        spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
+        spec = pow(max(dot(normal, halfwayDir), 0.0), shinness);
     }
     else
     {
         vec3 reflectDir = reflect(-lightDir, normal);
-        spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), shinness);
     }
     vec3 specular = vec3(0.3) * spec; // assuming bright white light color
     FragColor = vec4(ambient + diffuse + specular, 1.0f);
