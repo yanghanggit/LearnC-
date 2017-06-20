@@ -42,7 +42,8 @@ namespace YH
 			//mCurrentApplication = new HelloGeometryShaderExplode();
 			//mCurrentApplication = new HelloGeometryShaderShowNormal();
             //mCurrentApplication = new HelloInstancing();
-            mCurrentApplication = new HelloAsteroidsInstanced();
+            //mCurrentApplication = new HelloAsteroidsInstanced();
+			mCurrentApplication = new HelloAntiAliasing();
 
 			Title = mCurrentApplication.mAppName;
 		}

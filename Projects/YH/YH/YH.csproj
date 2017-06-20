@@ -78,6 +78,7 @@
     <Compile Include="demo\HelloGeometryShaderShowNormal.cs" />
     <Compile Include="demo\HelloInstancing.cs" />
     <Compile Include="demo\HelloAsteroidsInstanced.cs" />
+    <Compile Include="demo\HelloAntiAliasing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
