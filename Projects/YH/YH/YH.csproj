@@ -81,6 +81,7 @@
     <Compile Include="demo\HelloAntiAliasing.cs" />
     <Compile Include="src\GLMSAAFramebuffer.cs" />
     <Compile Include="demo\HelloBlinnPhong.cs" />
+    <Compile Include="demo\HelloGammaCorrection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
