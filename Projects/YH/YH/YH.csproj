@@ -80,7 +80,7 @@
     <Compile Include="demo\HelloAsteroidsInstanced.cs" />
     <Compile Include="demo\HelloAntiAliasing.cs" />
     <Compile Include="src\GLMSAAFramebuffer.cs" />
-    <Compile Include="demo\HelloAdvancedLight.cs" />
+    <Compile Include="demo\HelloBlinnPhong.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

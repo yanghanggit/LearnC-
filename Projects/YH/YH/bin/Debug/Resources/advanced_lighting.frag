@@ -25,7 +25,7 @@ void main()
     vec3 diffuse = diff * color;
     // Specular
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
-    vec3 reflectDir = reflect(-lightDir, normal);
+    //vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.0;
     if(blinn)
     {

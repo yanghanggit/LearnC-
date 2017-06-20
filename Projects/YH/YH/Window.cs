@@ -44,7 +44,7 @@ namespace YH
             //mCurrentApplication = new HelloInstancing();
             //mCurrentApplication = new HelloAsteroidsInstanced();
 			//mCurrentApplication = new HelloAntiAliasing();
-			mCurrentApplication = new HelloAdvancedLight();
+			mCurrentApplication = new HelloBlinnPhong();
 
 			Title = mCurrentApplication.mAppName;
 		}

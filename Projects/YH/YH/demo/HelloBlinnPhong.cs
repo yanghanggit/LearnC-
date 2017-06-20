@@ -1,13 +1,13 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
 
 namespace YH
 {
-	public class HelloAdvancedLight : Application
+	public class HelloBlinnPhong : Application
 	{
-		public HelloAdvancedLight() : base("HelloAdvancedLight")
+		public HelloBlinnPhong() : base("HelloBlinnPhong")
 		{
 		}
 
@@ -16,11 +16,13 @@ namespace YH
 			base.Start(wnd);
 
             mFloor = new Floor();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			mShader = new GLProgram(@"Resources/advanced_lighting.vs", @"Resources/advanced_lighting.frag");
+            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.ClearColor(Color.Black);
@@ -32,6 +34,9 @@ namespace YH
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+			mLightPosition.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			mLightPosition.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -47,17 +52,26 @@ namespace YH
 
 			mShader.Use();
 
+            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-
             GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPosition);
             GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
             GL.Uniform1(mShader.GetUniformLocation("blinn"), mUseBlinn ? 1 : 0);
 
-            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
-
             mFloor.Draw();
+
+
+            //
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+            model = Matrix4.CreateTranslation(mLightPosition);
+            model = Matrix4.CreateScale(0.2f) * model;
+            GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+			mSphere.Draw();
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -75,5 +89,7 @@ namespace YH
         private Floor mFloor = null;
         private Vector3 mLightPosition = new Vector3(0, 1, 0);
         private bool mUseBlinn = true;
+        private GLProgram mLampShader = null;
+        private Sphere mSphere = null;
 	}
 }

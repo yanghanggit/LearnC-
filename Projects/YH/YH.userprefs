@@ -1,8 +1,8 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAdvancedLight.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloBlinnPhong.cs">
     <Files>
-      <File FileName="YH/demo/HelloAdvancedLight.cs" Line="77" Column="26" />
+      <File FileName="YH/demo/HelloBlinnPhong.cs" Line="85" Column="50" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
