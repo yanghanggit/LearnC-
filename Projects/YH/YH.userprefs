@@ -1,8 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAntiAliasing.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Program.cs">
     <Files>
-      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="63" Column="5" />
+      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="32" Column="59" />
+      <File FileName="YH/bin/Debug/Resources/anti_aliasing.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/anti_aliasing.vs" Line="8" Column="12" />
+      <File FileName="YH/Window.cs" Line="14" Column="30" />
+      <File FileName="YH/Program.cs" Line="15" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

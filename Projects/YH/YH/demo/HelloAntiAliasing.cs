@@ -19,6 +19,8 @@ namespace YH
 			mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+            mCamera.MovementSpeed /= 2.0f;
+
 			mCameraController = new CameraController(mAppName, mCamera);
 			
             //mLightShader = new GLProgram(@"Resources/colors.vs", @"Resources/colors.frag");
