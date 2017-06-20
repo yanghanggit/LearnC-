@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using OpenTK.Graphics.OpenGL;
-using OpenTK.Graphics;
 
-
-
-namespace YH.src
+namespace YH
 {
     public class GLMSAAFramebuffer
     {
