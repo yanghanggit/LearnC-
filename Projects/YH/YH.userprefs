@@ -2,9 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/gamma_correction.frag">
     <Files>
-      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="31" Column="17" />
-      <File FileName="YH/bin/Debug/Resources/gamma_correction.frag" Line="31" Column="30" />
-      <File FileName="YH/bin/Debug/Resources/gamma_correction.vs" Line="6" Column="1" />
+      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="29" Column="35" />
+      <File FileName="YH/bin/Debug/Resources/gamma_correction.frag" Line="52" Column="7" />
+      <File FileName="YH/bin/Debug/Resources/gamma_correction.vs" Line="12" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
