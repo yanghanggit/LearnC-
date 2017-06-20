@@ -1,10 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAdvancedLight.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTexture2D.cs">
     <Files>
-      <File FileName="YH/demo/HelloAdvancedLight.cs" Line="38" Column="30" />
-      <File FileName="YH/bin/Debug/Resources/advanced_lighting.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/advanced_lighting.vs" Line="1" Column="1" />
+      <File FileName="YH/Window.cs" Line="31" Column="23" />
+      <File FileName="YH/demo/HelloAdvancedLight.cs" Line="52" Column="55" />
+      <File FileName="YH/src/Camera.cs" Line="8" Column="15" />
+      <File FileName="YH/bin/Debug/Resources/advanced_lighting.frag" Line="15" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/advanced_lighting.vs" Line="21" Column="52" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="53" Column="126" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

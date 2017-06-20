@@ -18,7 +18,6 @@ namespace YH
             mCube = new Cube();
             mSphere = new Sphere();
             mSkybox = new Skybox();
-            mFloor = new Floor();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -118,7 +117,6 @@ namespace YH
 
         private Cube mCube = null;
         private Sphere mSphere = null;
-        private Floor mFloor = new Floor();
 		private Camera mCamera = null;
         private GLProgram shader = null;
 		private GLProgram skyboxShader = null;

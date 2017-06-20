@@ -50,8 +50,8 @@ namespace YH
                                 TextureParameterName.TextureWrapT, 
                                 mRepeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
                 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 				
 				GL.BindTexture(TextureTarget.Texture2D, 0);
 			}

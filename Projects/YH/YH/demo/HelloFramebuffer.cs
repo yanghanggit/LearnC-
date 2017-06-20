@@ -60,7 +60,7 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 
             GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
-			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+			model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 

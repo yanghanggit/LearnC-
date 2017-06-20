@@ -67,6 +67,7 @@ namespace YH
 
             GL.StencilMask(0x00000000);
             GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+            model = Matrix4.CreateTranslation(0, -0.5f, 0) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 

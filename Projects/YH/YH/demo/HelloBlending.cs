@@ -87,7 +87,7 @@ namespace YH
 			mCube.Draw();
 
 			GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
-			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+			model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mFloor.Draw();
 

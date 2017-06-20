@@ -63,7 +63,7 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
-			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+			model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mFloor.Draw();
 		}

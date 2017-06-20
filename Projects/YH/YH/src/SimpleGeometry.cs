@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿
+﻿﻿﻿﻿﻿﻿﻿
 using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -295,13 +295,14 @@ namespace YH
 		{
 			float[] vertices =
 			{
-				5.0f,  -0.5f,  5.0f,  2.0f, 0.0f,
-				-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-				-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+				// Positions          // Texture Coords  // Normals         
+				8.0f, 0.0f,  8.0f,  5.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+				-8.0f, 0.0f,  8.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+				-8.0f, 0.0f, -8.0f,  0.0f, 5.0f, 0.0f, 1.0f, 0.0f,
 
-				5.0f,  -0.5f,  5.0f,  2.0f, 0.0f,
-				-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-				5.0f,  -0.5f, -5.0f,  2.0f, 2.0f
+				8.0f, 0.0f,  8.0f,  5.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+				-8.0f, 0.0f, -8.0f,  0.0f, 5.0f, 0.0f, 1.0f, 0.0f,
+				8.0f, 0.0f, -8.0f,  5.0f, 5.0f, 0.0f, 1.0f, 0.0f,
 			};
 
 			mVAO = GL.GenVertexArray();
@@ -314,11 +315,15 @@ namespace YH
 
 			// Position attribute
 			GL.EnableVertexAttribArray(0);
-			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+			GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
 
 			// Color attribute
 			GL.EnableVertexAttribArray(1);
-			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (3 * sizeof(float)));
+			GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), (3 * sizeof(float)));
+
+
+			GL.EnableVertexAttribArray(2);
+			GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), (5 * sizeof(float)));
 
 			//
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);

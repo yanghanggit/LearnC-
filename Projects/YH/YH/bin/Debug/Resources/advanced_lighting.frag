@@ -1,4 +1,5 @@
 #version 330 core
+
 out vec4 FragColor;
 
 in VS_OUT {
@@ -38,4 +39,5 @@ void main()
     }
     vec3 specular = vec3(0.3) * spec; // assuming bright white light color
     FragColor = vec4(ambient + diffuse + specular, 1.0f);
+    //FragColor = vec4(1, 0, 0, 1);
 }
