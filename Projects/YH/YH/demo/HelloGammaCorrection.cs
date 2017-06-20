@@ -21,7 +21,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-			mShader = new GLProgram(@"Resources/advanced_lighting.vs", @"Resources/advanced_lighting.frag");
+			mShader = new GLProgram(@"Resources/gamma_correction.vs", @"Resources/gamma_correction.frag");
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
@@ -29,7 +29,11 @@ namespace YH
 			GL.Enable(EnableCap.DepthTest);
 
 			mFloorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
-		}
+
+			// Load textures
+			floorTexture = new GLTexture2D(@"Resources/Texture/wood.png");//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), false);
+			floorTextureGammaCorrected = new GLTexture2D(@"Resources/Texture/wood.png", true , true);//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), true);
+	    }
 
 		public override void Update(double dt)
 		{
@@ -52,26 +56,30 @@ namespace YH
 
 			mShader.Use();
 
-			GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+            GL.BindTexture(TextureTarget.Texture2D,
+                           gammaEnabled ? floorTextureGammaCorrected.getTextureId() : floorTexture.getTextureId());
 
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-			GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPosition);
-			GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
-			GL.Uniform1(mShader.GetUniformLocation("blinn"), mUseBlinn ? 1 : 0);
-			GL.Uniform1(mShader.GetUniformLocation("shinness"), mMaterialShinness);
 
+			// Set light uniforms
+			GL.Uniform3(mShader.GetUniformLocation("lightPositions"), ref lightPositions[0]);
+			GL.Uniform3(mShader.GetUniformLocation("lightColors"), ref lightColors[0]);
+			GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
+            GL.Uniform1(mShader.GetUniformLocation("gamma"), gammaEnabled ? 1 : 0);
+
+		
 			mFloor.Draw();
 
 			//
-			mLampShader.Use();
-			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-			model = Matrix4.CreateTranslation(mLightPosition);
-			model = Matrix4.CreateScale(0.2f) * model;
-			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
-			mSphere.Draw();
+			//mLampShader.Use();
+			//GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			//GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+			//model = Matrix4.CreateTranslation(mLightPosition);
+			//model = Matrix4.CreateScale(0.2f) * model;
+			//GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+			//mSphere.Draw();
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -103,5 +111,26 @@ namespace YH
 		private GLProgram mLampShader = null;
 		private Sphere mSphere = null;
 		private float mMaterialShinness = 32.0f;
+
+		// Light sources
+		Vector3[] lightPositions = {
+			new Vector3(-3.0f, 0.0f, 0.0f),
+			new Vector3(-1.0f, 0.0f, 0.0f),
+			new Vector3( 1.0f, 0.0f, 0.0f),
+			new Vector3( 3.0f, 0.0f, 0.0f)
+	    };
+
+		Vector3[] lightColors = {
+			new Vector3(0.25f),
+			new Vector3(0.50f),
+			new Vector3(0.75f),
+			new Vector3(1.00f)
+	    };
+
+		// Load textures
+        private GLTexture2D floorTexture = null;//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), false);
+		private GLTexture2D floorTextureGammaCorrected = null;//loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str(), true);
+		private bool gammaEnabled = false;
+
 	}
 }

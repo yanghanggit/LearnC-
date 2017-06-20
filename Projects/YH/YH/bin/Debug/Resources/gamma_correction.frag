@@ -30,6 +30,7 @@ vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor)
     // Simple attenuation
     float max_distance = 1.5;
     float distance = length(lightPos - fragPos);
+
     float attenuation = 1.0 / (gamma ? distance * distance : distance);
     
     diffuse *= attenuation;
@@ -48,4 +49,5 @@ void main()
     if(gamma)
         color = pow(color, vec3(1.0/2.2));
     FragColor = vec4(color, 1.0f);
+    FragColor = vec4(1.0f, 0, 0, 1.0f);
 }
