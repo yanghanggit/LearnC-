@@ -2,12 +2,14 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAntiAliasing.cs">
     <Files>
-      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="16" Column="20" />
+      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="63" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloAntiAliasing.cs" relfile="YH/demo/HelloAntiAliasing.cs" line="64" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
