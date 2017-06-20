@@ -79,6 +79,7 @@
     <Compile Include="demo\HelloInstancing.cs" />
     <Compile Include="demo\HelloAsteroidsInstanced.cs" />
     <Compile Include="demo\HelloAntiAliasing.cs" />
+    <Compile Include="src\GLMSAAFramebuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

@@ -1,18 +1,15 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLMSAAFramebuffer.cs">
     <Files>
-      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="32" Column="59" />
-      <File FileName="YH/bin/Debug/Resources/anti_aliasing.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/anti_aliasing.vs" Line="8" Column="12" />
-      <File FileName="YH/Window.cs" Line="14" Column="30" />
-      <File FileName="YH/Program.cs" Line="15" Column="1" />
+      <File FileName="YH/src/GLMSAAFramebuffer.cs" Line="64" Column="15" />
+      <File FileName="YH/src/GLFramebuffer.cs" Line="57" Column="18" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloAntiAliasing.cs" relfile="YH/demo/HelloAntiAliasing.cs" line="64" column="1" />
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloAntiAliasing.cs" relfile="YH/demo/HelloAntiAliasing.cs" line="66" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
