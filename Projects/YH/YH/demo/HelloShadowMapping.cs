@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -30,10 +30,10 @@ namespace YH
 			GL.DepthFunc(DepthFunction.Less);
             GL.ClearColor(Color.Black);
 
-            depthMapFBO = new GLDepthMapFramebuffer(1024, 1024, new Vector4(1, 1, 1, 1));
+            mDepthFramebuffer = new GLDepthMapFramebuffer(1024, 1024, new Vector4(1, 1, 1, 1));
 
-            simpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
-			debugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
+            mSimpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
+			mDebugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
             mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 		}
 
@@ -41,7 +41,7 @@ namespace YH
 		{
 			base.Update(dt);
 
-            lightPos.Z = (float)Math.Cos((float)mTotalRuningTime);// * 2.0f;
+            mLightPos.Z = (float)Math.Cos((float)mTotalRuningTime);// * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -55,17 +55,17 @@ namespace YH
 
 			var view = mCamera.GetViewMatrix();
 			
-            Matrix4 lightView = useCameraViewAsLightView ? 
-                view : Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
+            Matrix4 lightView = mUseCameraViewAsLightView ? 
+                view : Matrix4.LookAt(mLightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
 
             //
             Matrix4 lightSpaceMatrix = lightView * projection;
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO.depthMapFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.depthMapFBO);
             GL.Clear(ClearBufferMask.DepthBufferBit);
-            GL.Viewport(0, 0, depthMapFBO.width, depthMapFBO.height);
-            simpleDepthShader.Use();
-			GL.UniformMatrix4(simpleDepthShader.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
-            RenderScene(simpleDepthShader, false);
+            GL.Viewport(0, 0, mDepthFramebuffer.width, mDepthFramebuffer.height);
+            mSimpleDepthShader.Use();
+			GL.UniformMatrix4(mSimpleDepthShader.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
+            RenderScene(mSimpleDepthShader, false);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             //
@@ -80,19 +80,19 @@ namespace YH
 			mLampShader.Use();
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-			Matrix4 model = Matrix4.CreateTranslation(lightPos);
+			Matrix4 model = Matrix4.CreateTranslation(mLightPos);
 			model = Matrix4.CreateScale(0.2f) * model;
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
 			mSphere.Draw();
 			
-            if (showDepthMap)
+            if (mShowDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
-                debugDepthQuad.Use();
+                mDebugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
-                GL.Uniform1(debugDepthQuad.GetUniformLocation("near_plane"), near_plane);
-                GL.Uniform1(debugDepthQuad.GetUniformLocation("far_plane"), far_plane);
+                GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.depthMap);
+                GL.Uniform1(mDebugDepthQuad.GetUniformLocation("near_plane"), near_plane);
+                GL.Uniform1(mDebugDepthQuad.GetUniformLocation("far_plane"), far_plane);
 
 				mQuad.Draw();
             }
@@ -104,11 +104,11 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.C)
 			{
-				showDepthMap = !showDepthMap;
+				mShowDepthMap = !mShowDepthMap;
 			}
             else if (e.Key == OpenTK.Input.Key.U)
 			{
-				useCameraViewAsLightView = !useCameraViewAsLightView;
+				mUseCameraViewAsLightView = !mUseCameraViewAsLightView;
 			}
 		}
 
@@ -148,14 +148,14 @@ namespace YH
 		private GLProgram mShader = null;
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
-        private GLDepthMapFramebuffer depthMapFBO = null;
-        private Vector3 lightPos = new Vector3(-2.0f, 4.0f * 2, -1.0f);
+        private GLDepthMapFramebuffer mDepthFramebuffer = null;
+        private Vector3 mLightPos = new Vector3(-2.0f, 4.0f * 2, -1.0f);
 
-        private bool showDepthMap = false;
-        private bool useCameraViewAsLightView = false;
+        private bool mShowDepthMap = false;
+        private bool mUseCameraViewAsLightView = false;
 
-        private GLProgram simpleDepthShader = null;
-		private GLProgram debugDepthQuad = null;
+        private GLProgram mSimpleDepthShader = null;
+		private GLProgram mDebugDepthQuad = null;
         private GLProgram mLampShader = null;
 	}
 }
