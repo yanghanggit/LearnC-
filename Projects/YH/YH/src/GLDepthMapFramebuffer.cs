@@ -25,12 +25,12 @@ namespace YH
                           PixelFormat.DepthComponent, 
                           PixelType.Float,
                           IntPtr.Zero);
-            
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToBorder);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToBorder);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
+			
             float[] color = { borderColor.X, borderColor.Y, borderColor.Z, borderColor.W };
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBorderColor, color);                    
 			GL.BindTexture(TextureTarget.Texture2D, 0);

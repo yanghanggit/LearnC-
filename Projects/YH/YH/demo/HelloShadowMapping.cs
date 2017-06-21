@@ -84,7 +84,7 @@ namespace YH
 
                 debugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
+                GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
                 GL.Uniform1(debugDepthQuad.GetUniformLocation("near_plane"), near_plane);
                 GL.Uniform1(debugDepthQuad.GetUniformLocation("far_plane"), far_plane);
 
