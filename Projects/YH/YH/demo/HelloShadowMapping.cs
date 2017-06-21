@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -46,9 +46,18 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-			//=================================================
 			const float near_plane = 0.1f;
-            const float far_plane = 100.0f;
+			const float far_plane = 100.0f;
+
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+																	  (float)wnd.Width / (float)wnd.Height,
+																	  near_plane, far_plane);
+
+			var view = mCamera.GetViewMatrix();
+
+
+			//=================================================
+			
             Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
             (float)wnd.Width / (float)wnd.Height,
             near_plane, far_plane);
@@ -56,7 +65,7 @@ namespace YH
             //Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
             
             Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
-            Matrix4 lightSpaceMatrix = lightProjection * lightView;
+            Matrix4 lightSpaceMatrix = lightProjection * view;
 			
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO.depthMapFBO);
             GL.Clear(ClearBufferMask.DepthBufferBit);
@@ -72,12 +81,6 @@ namespace YH
             if (true)
             {
 				GL.Viewport(0, 0, wnd.Width, wnd.Height);
-
-				var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
-																	  (float)wnd.Width / (float)wnd.Height,
-																	  0.1f, 100.0f);
-
-				var view = mCamera.GetViewMatrix();
 
 				mShader.Use();
 				GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
