@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -65,7 +65,7 @@ namespace YH
             //Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
             
             Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
-            Matrix4 lightSpaceMatrix = view * lightProjection;
+            Matrix4 lightSpaceMatrix = view * projection;
 			
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO.depthMapFBO);
             GL.Clear(ClearBufferMask.DepthBufferBit);
@@ -166,7 +166,7 @@ namespace YH
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer depthMapFBO = null;
-        private Vector3 lightPos = new Vector3(0.0f, 10.0f, 0.0f);
+        private Vector3 lightPos = new Vector3(-2.0f, 4.0f, -1.0f);
 
         private bool showDepthMap = false;
 
@@ -174,7 +174,5 @@ namespace YH
         private GLProgram simpleDepthShader = null;
 		private GLProgram debugDepthQuad = null;
         private GLProgram mLampShader = null;
-		
-
 	}
 }
