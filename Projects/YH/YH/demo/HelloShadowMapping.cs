@@ -41,17 +41,19 @@ namespace YH
 		{
 			base.Update(dt);
 
-            lightPos.Z = (float)Math.Cos((float)mTotalRuningTime) * 2.0f;
+            lightPos.Z = (float)Math.Cos((float)mTotalRuningTime);// * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
 		{
 			//=================================================
-			const float near_plane = 1.0f;
-            const float far_plane = 7.5f;
-			Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
-																	  (float)wnd.Width / (float)wnd.Height,
-																	  0.1f, 100.0f);
+			const float near_plane = 0.1f;
+            const float far_plane = 100.0f;
+            Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+            (float)wnd.Width / (float)wnd.Height,
+            near_plane, far_plane);
+
+            //Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
             
             Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
             Matrix4 lightSpaceMatrix = lightProjection * lightView;
@@ -61,7 +63,7 @@ namespace YH
             GL.Viewport(0, 0, depthMapFBO.width, depthMapFBO.height);
             simpleDepthShader.Use();
 			GL.UniformMatrix4(simpleDepthShader.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
-            RenderScene(simpleDepthShader);
+            RenderScene(simpleDepthShader, false);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
@@ -80,8 +82,7 @@ namespace YH
 				mShader.Use();
 				GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 				GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
-                RenderScene(mShader);
-
+                RenderScene(mShader, true);
 
                 //
 				mLampShader.Use();
@@ -96,7 +97,7 @@ namespace YH
             if (showDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
-
+                //GL.Viewport(0, 0, wnd.Width, wnd.Height);
                 debugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
@@ -117,17 +118,23 @@ namespace YH
 			}
 		}
 
-        void RenderScene(GLProgram shader)
+        void RenderScene(GLProgram shader, bool useTexture)
 		{
             Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 
-            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+            if (useTexture)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
+            }
 
             model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 
-            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+            if (useTexture)
+            {
+                GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+            }
 
 			model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
@@ -156,7 +163,7 @@ namespace YH
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer depthMapFBO = null;
-        private Vector3 lightPos = new Vector3(-2.0f, 4.0f, -1.0f);
+        private Vector3 lightPos = new Vector3(0.0f, 10.0f, 0.0f);
 
         private bool showDepthMap = false;
 
