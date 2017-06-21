@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloShadowMapping.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloGammaCorrection.cs">
     <Files>
       <File FileName="YH/src/GLDepthMapFramebuffer.cs" Line="12" Column="23" />
-      <File FileName="YH/demo/HelloShadowMapping.cs" Line="98" Column="5" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="25" Column="63" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="204" Column="73" />
+      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
