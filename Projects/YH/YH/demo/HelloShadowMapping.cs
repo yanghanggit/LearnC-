@@ -55,16 +55,11 @@ namespace YH
 
 			var view = mCamera.GetViewMatrix();
 			
-			
-            //Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
-            //(float)wnd.Width / (float)wnd.Height,
-            //near_plane, far_plane);
+            Matrix4 lightView = useCameraViewAsLightView ? 
+                view : Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
 
-            //Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
-            
-            //Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
-            Matrix4 lightSpaceMatrix = view * projection;
-			
+            //
+            Matrix4 lightSpaceMatrix = lightView * projection;
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO.depthMapFBO);
             GL.Clear(ClearBufferMask.DepthBufferBit);
             GL.Viewport(0, 0, depthMapFBO.width, depthMapFBO.height);
@@ -111,6 +106,10 @@ namespace YH
 			{
 				showDepthMap = !showDepthMap;
 			}
+            else if (e.Key == OpenTK.Input.Key.U)
+			{
+				useCameraViewAsLightView = !useCameraViewAsLightView;
+			}
 		}
 
         void RenderScene(GLProgram shader, bool useTexture)
@@ -150,10 +149,10 @@ namespace YH
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer depthMapFBO = null;
-        private Vector3 lightPos = new Vector3(-2.0f, 4.0f, -1.0f);
+        private Vector3 lightPos = new Vector3(-2.0f, 4.0f * 2, -1.0f);
 
         private bool showDepthMap = false;
-
+        private bool useCameraViewAsLightView = false;
 
         private GLProgram simpleDepthShader = null;
 		private GLProgram debugDepthQuad = null;
