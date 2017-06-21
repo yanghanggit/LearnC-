@@ -1,12 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/debug_quad_depth.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloShadowMapping.cs">
     <Files>
-      <File FileName="YH/demo/HelloShadowMapping.cs" Line="85" Column="38" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="88" Column="38" />
       <File FileName="YH/bin/Debug/Resources/shadow_mapping_depth.frag" Line="7" Column="2" />
       <File FileName="YH/bin/Debug/Resources/shadow_mapping_depth.vs" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/debug_quad_depth.frag" Line="14" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/debug_quad_depth.frag" Line="20" Column="2" />
       <File FileName="YH/bin/Debug/Resources/debug_quad.vs" Line="9" Column="40" />
+      <File FileName="YH/demo/HelloColors.cs" Line="91" Column="39" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

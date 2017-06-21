@@ -18,6 +18,7 @@ namespace YH
 			mCube = new Cube();
 			mFloor = new Floor();
             mQuad = new Quad();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -33,13 +34,14 @@ namespace YH
 
             simpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
 			debugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
+            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 		}
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
 
-            //lightPos.Z = (float)Math.Cos((float)mTotalRuningTime) * 2.0f;
+            lightPos.Z = (float)Math.Cos((float)mTotalRuningTime) * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -47,7 +49,10 @@ namespace YH
 			//=================================================
 			const float near_plane = 1.0f;
             const float far_plane = 7.5f;
-            Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
+			Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+																	  (float)wnd.Width / (float)wnd.Height,
+																	  0.1f, 100.0f);
+            
             Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
             Matrix4 lightSpaceMatrix = lightProjection * lightView;
 			
@@ -76,15 +81,25 @@ namespace YH
 				GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 				GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
                 RenderScene(mShader);
-            }
+
+
+                //
+				mLampShader.Use();
+                GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+                Matrix4 model = Matrix4.CreateTranslation(lightPos);
+				model = Matrix4.CreateScale(0.2f) * model;
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+				mSphere.Draw();
+			}
 			
             if (showDepthMap)
             {
-                GL.Viewport(0, 0, wnd.Width / 2, wnd.Height / 2);
+                GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
 
                 debugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+                GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
                 GL.Uniform1(debugDepthQuad.GetUniformLocation("near_plane"), near_plane);
                 GL.Uniform1(debugDepthQuad.GetUniformLocation("far_plane"), far_plane);
 
@@ -134,6 +149,8 @@ namespace YH
 		private Cube mCube = null;
 		private Floor mFloor = null;
         private Quad mQuad = null;
+        private Sphere mSphere = null;
+
 		private Camera mCamera = null;
 		private GLProgram mShader = null;
 		private GLTexture2D mCubeTexture = null;
@@ -146,8 +163,7 @@ namespace YH
 
         private GLProgram simpleDepthShader = null;
 		private GLProgram debugDepthQuad = null;
-
-
+        private GLProgram mLampShader = null;
 		
 
 	}
