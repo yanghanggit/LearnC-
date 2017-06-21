@@ -17,6 +17,7 @@ namespace YH
 
 			mCube = new Cube();
 			mFloor = new Floor();
+            mQuad = new Quad();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -31,6 +32,7 @@ namespace YH
             depthMapFBO = new GLDepthMapFramebuffer(1024, 1024, new Vector4(1, 1, 1, 1));
 
             simpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
+			debugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
 		}
 
 		public override void Update(double dt)
@@ -71,11 +73,25 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
             RenderScene(mShader);
+
+            if (showDepthMap)
+            {
+                GL.Viewport(0, 0, wnd.Width / 2, wnd.Height / 2);
+
+                debugDepthQuad.Use();
+                GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
+				mQuad.Draw();
+            }
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
+
+			if (e.Key == OpenTK.Input.Key.C)
+			{
+				showDepthMap = !showDepthMap;
+			}
 		}
 
         void RenderScene(GLProgram shader)
@@ -109,12 +125,22 @@ namespace YH
 
 		private Cube mCube = null;
 		private Floor mFloor = null;
+        private Quad mQuad = null;
 		private Camera mCamera = null;
 		private GLProgram mShader = null;
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer depthMapFBO = null;
         private Vector3 lightPos = new Vector3(-2.0f, 4.0f, -1.0f);
+
+        private bool showDepthMap = false;
+
+
         private GLProgram simpleDepthShader = null;
+		private GLProgram debugDepthQuad = null;
+
+
+		
+
 	}
 }
