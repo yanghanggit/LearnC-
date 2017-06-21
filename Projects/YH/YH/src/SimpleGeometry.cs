@@ -197,6 +197,51 @@ namespace YH
 		{
 			float[] vertices = 
 			{
+                // Back face
+				-1.0f, -1.0f, -1.0f,    0.0f, 0.0f,             0.0f, 0.0f, -1.0f,             // Bottom-left
+				1.0f, 1.0f, -1.0f,      1.0f, 1.0f,             0.0f, 0.0f, -1.0f,             // top-right
+				1.0f, -1.0f, -1.0f,     1.0f, 0.0f,             0.0f, 0.0f, -1.0f,             // bottom-right
+				1.0f, 1.0f, -1.0f,      1.0f, 1.0f,             0.0f, 0.0f, -1.0f,             // top-right
+				-1.0f, -1.0f, -1.0f,    0.0f, 0.0f,             0.0f, 0.0f, -1.0f,             // bottom-left
+				-1.0f, 1.0f, -1.0f,     0.0f, 1.0f,             0.0f, 0.0f, -1.0f,             // top-left
+				// Front face
+				-1.0f, -1.0f, 1.0f,     0.0f, 0.0f,             0.0f, 0.0f, 1.0f,              // bottom-left
+				1.0f, -1.0f, 1.0f,      1.0f, 0.0f,             0.0f, 0.0f, 1.0f,              // bottom-right
+				1.0f, 1.0f, 1.0f,       1.0f, 1.0f,             0.0f, 0.0f, 1.0f,              // top-right
+				1.0f, 1.0f, 1.0f,       1.0f, 1.0f,             0.0f, 0.0f, 1.0f,              // top-right
+				-1.0f, 1.0f, 1.0f,      0.0f, 1.0f,             0.0f, 0.0f, 1.0f,              // top-left
+				-1.0f, -1.0f, 1.0f,     0.0f, 0.0f,             0.0f, 0.0f, 1.0f,              // bottom-left
+				// Left face
+				-1.0f, 1.0f, 1.0f,      1.0f, 0.0f,             -1.0f, 0.0f, 0.0f,             // top-right
+				-1.0f, 1.0f, -1.0f,     1.0f, 1.0f,             -1.0f, 0.0f, 0.0f,             // top-left
+				-1.0f, -1.0f, -1.0f,    0.0f, 1.0f,             -1.0f, 0.0f, 0.0f,             // bottom-left
+				-1.0f, -1.0f, -1.0f,    0.0f, 1.0f,             -1.0f, 0.0f, 0.0f,             // bottom-left
+				-1.0f, -1.0f, 1.0f,     0.0f, 0.0f,             -1.0f, 0.0f, 0.0f,             // bottom-right
+				-1.0f, 1.0f, 1.0f,      1.0f, 0.0f,             -1.0f, 0.0f, 0.0f,             // top-right
+				// Right face
+				1.0f, 1.0f, 1.0f,       1.0f, 0.0f,             1.0f, 0.0f, 0.0f,              // top-left
+				1.0f, -1.0f, -1.0f,     0.0f, 1.0f,             1.0f, 0.0f, 0.0f,              // bottom-right
+				1.0f, 1.0f, -1.0f,      1.0f, 1.0f,             1.0f, 0.0f, 0.0f,              // top-right
+				1.0f, -1.0f, -1.0f,     0.0f, 1.0f,             1.0f, 0.0f, 0.0f,              // bottom-right
+				1.0f, 1.0f, 1.0f,       1.0f, 0.0f,             1.0f, 0.0f, 0.0f,              // top-left
+				1.0f, -1.0f, 1.0f,      0.0f, 0.0f,             1.0f, 0.0f, 0.0f,              // bottom-left
+				// Bottom face
+				-1.0f, -1.0f, -1.0f,    0.0f, 1.0f,             0.0f, -1.0f, 0.0f,             // top-right
+				1.0f, -1.0f, -1.0f,     1.0f, 1.0f,             0.0f, -1.0f, 0.0f,             // top-leftå
+				1.0f, -1.0f, 1.0f,      1.0f, 0.0f,             0.0f, -1.0f, 0.0f,             // bottom-left
+				1.0f, -1.0f, 1.0f,      1.0f, 0.0f,             0.0f, -1.0f, 0.0f,             // bottom-left
+				-1.0f, -1.0f, 1.0f,     0.0f, 0.0f,             0.0f, -1.0f, 0.0f,             // bottom-right
+				-1.0f, -1.0f, -1.0f,    0.0f, 1.0f,             0.0f, -1.0f, 0.0f,             // top-right
+				// Top face
+				-1.0f, 1.0f, -1.0f,     0.0f, 1.0f,             0.0f, 1.0f, 0.0f,              // top-leftå
+				1.0f, 1.0f, 1.0f,       1.0f, 0.0f,             0.0f, 1.0f, 0.0f,              // bottom-right
+				1.0f, 1.0f, -1.0f,      1.0f, 1.0f,             0.0f, 1.0f, 0.0f,              // top-right
+				1.0f, 1.0f, 1.0f,       1.0f, 0.0f,             0.0f, 1.0f, 0.0f,              // bottom-right
+				-1.0f, 1.0f, -1.0f,     0.0f, 1.0f,             0.0f, 1.0f, 0.0f,              // top-left
+				-1.0f, 1.0f, 1.0f,      0.0f, 0.0f,             0.0f, 1.0f, 0.0f,              // bottom-left
+
+
+                /*
 				-1.0f, -1.0f, -1.0f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
 				 1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
 				 1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
@@ -238,6 +283,7 @@ namespace YH
 				 1.0f,  1.0f,  1.0f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
 				-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
                 -1.0f,  1.0f,  1.0f,  0.0f, 0.0f,  0.0f,  1.0f,  0.0f
+                */
 			};
 
 			mVAO = GL.GenVertexArray();

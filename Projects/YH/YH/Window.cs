@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK;
 using OpenTK.Graphics;
 
@@ -45,7 +45,8 @@ namespace YH
             //mCurrentApplication = new HelloAsteroidsInstanced();
 			//mCurrentApplication = new HelloAntiAliasing();
 			//mCurrentApplication = new HelloBlinnPhong();
-            mCurrentApplication = new HelloGammaCorrection();
+            //mCurrentApplication = new HelloGammaCorrection();
+            mCurrentApplication = new HelloShadowMapping();
 
 			Title = mCurrentApplication.mAppName;
 		}
