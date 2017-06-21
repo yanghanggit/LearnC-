@@ -1,13 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloDepthTesting1.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLMSAAFramebuffer.cs">
     <Files>
-      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="1" Column="1" />
-      <File FileName="YH/Window.cs" Line="83" Column="5" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="204" Column="73" />
-      <File FileName="YH/src/GLTextureCube.cs" Line="1" Column="1" />
-      <File FileName="YH/demo/HelloShadowMapping.cs" Line="5" Column="1" />
-      <File FileName="YH/demo/HelloDepthTesting1.cs" Line="14" Column="9" />
+      <File FileName="YH/src/GLDepthMapFramebuffer.cs" Line="49" Column="34" />
+      <File FileName="YH/src/GLMSAAFramebuffer.cs" Line="70" Column="3" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="66" Column="119" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
