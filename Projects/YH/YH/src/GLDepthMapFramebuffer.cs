@@ -40,6 +40,16 @@ namespace YH
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthMap, 0);
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
+
+			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("ERROR::FRAMEBUFFER:: GLDepthMapFramebuffer is not complete!");
+			}
+			else
+			{
+				
+			}
+
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 		}
 
