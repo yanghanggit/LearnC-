@@ -54,17 +54,15 @@ namespace YH
 																	  near_plane, far_plane);
 
 			var view = mCamera.GetViewMatrix();
-
-
-			//=================================================
 			
-            Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
-            (float)wnd.Width / (float)wnd.Height,
-            near_plane, far_plane);
+			
+            //Matrix4 lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+            //(float)wnd.Width / (float)wnd.Height,
+            //near_plane, far_plane);
 
             //Matrix4 lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
             
-            Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
+            //Matrix4 lightView = Matrix4.LookAt(lightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
             Matrix4 lightSpaceMatrix = view * projection;
 			
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO.depthMapFBO);
@@ -75,32 +73,26 @@ namespace YH
             RenderScene(simpleDepthShader, false);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-
+            //
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            //=================================================
-            if (true)
-            {
-				GL.Viewport(0, 0, wnd.Width, wnd.Height);
+			mShader.Use();
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
+			RenderScene(mShader, true);
 
-				mShader.Use();
-				GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
-				GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
-                RenderScene(mShader, true);
-
-                //
-				mLampShader.Use();
-                GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
-				GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-                Matrix4 model = Matrix4.CreateTranslation(lightPos);
-				model = Matrix4.CreateScale(0.2f) * model;
-				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
-				mSphere.Draw();
-			}
+			//
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+			Matrix4 model = Matrix4.CreateTranslation(lightPos);
+			model = Matrix4.CreateScale(0.2f) * model;
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+			mSphere.Draw();
 			
             if (showDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
-                //GL.Viewport(0, 0, wnd.Width, wnd.Height);
                 debugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, depthMapFBO.depthMap);
@@ -125,20 +117,12 @@ namespace YH
 		{
             Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 
-            if (useTexture)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
-            }
-
+            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
             model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 
-            if (useTexture)
-            {
-                GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
-            }
-
+            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
