@@ -35,6 +35,7 @@ namespace YH
             mSimpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
 			mDebugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
             mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+            mShadowMapping = new GLProgram(@"Resources/shadow_mapping.vs", @"Resources/shadow_mapping.frag");
 		}
 
 		public override void Update(double dt)
@@ -71,10 +72,49 @@ namespace YH
             //
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			mShader.Use();
-			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
-			RenderScene(mShader, true);
+            mShadowMapping.Use();
+			GL.UniformMatrix4(mShadowMapping.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShadowMapping.GetUniformLocation("view"), false, ref view);
+            GL.Uniform3(mShadowMapping.GetUniformLocation("lightPos"), mLightPos);
+            GL.Uniform3(mShadowMapping.GetUniformLocation("viewPos"), mCamera.Position);
+            GL.UniformMatrix4(mShadowMapping.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
+            GL.Uniform1(mShadowMapping.GetUniformLocation("shadows"), 1);
+
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
+
+			RenderScene(mShadowMapping, true);
+
+			// 2. Render scene as normal
+			//glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			//shader.Use();
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			//// Set light uniforms
+			//glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
+			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+			//// Enable/Disable shadows by pressing 'SPACE'
+			//glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, woodTexture);
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, depthMap);
+			//RenderScene(shader);
+
+
+
+
+
+
+
+
+
+
+
 
 			//
 			mLampShader.Use();
@@ -116,6 +156,7 @@ namespace YH
 		{
             Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
 
+            GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
             model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
@@ -149,7 +190,7 @@ namespace YH
 		private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer mDepthFramebuffer = null;
-        private Vector3 mLightPos = new Vector3(-2.0f, 4.0f * 2, -1.0f);
+        private Vector3 mLightPos = new Vector3(-2.0f, 4.0f, -1.0f);
 
         private bool mShowDepthMap = false;
         private bool mUseCameraViewAsLightView = false;
@@ -157,5 +198,9 @@ namespace YH
         private GLProgram mSimpleDepthShader = null;
 		private GLProgram mDebugDepthQuad = null;
         private GLProgram mLampShader = null;
+		private GLProgram mShadowMapping = null;
+
+		
+
 	}
 }
