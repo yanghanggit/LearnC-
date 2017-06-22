@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -50,8 +50,8 @@ namespace YH
 			const float near_plane = 0.1f;
             const float far_plane = 7.5f;
 
-            var lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
-			lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, near_plane, far_plane);
+            var lightProjection = Matrix4.CreateOrthographic(10, 10, near_plane, far_plane);
+			//lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, near_plane, far_plane);
 			var lightView = Matrix4.LookAt(mLightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
             var lightSpaceMatrix = lightView  * lightProjection;
 
@@ -107,6 +107,8 @@ namespace YH
             if (mShowDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
+                //GL.Enable(EnableCap.ScissorTest);
+                //GL.Scissor(0, 0, wnd.Width / 2, wnd.Height / 2);
                 mDebugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
@@ -138,18 +140,15 @@ namespace YH
             mFloor.Draw();
 
 			model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
-			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 1.0f);
-			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(-1.0f, 0.3f, 2.0f);
             model = Matrix4.CreateFromAxisAngle(new Vector3(1.0f, 0.0f, 1.0f), 60.0f) * model;
-            //model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 		}

@@ -2,9 +2,10 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloShadowMapping.cs" Line="54" Column="44" />
-      <File FileName="YH/bin/Debug/Resources/shadow_mapping.frag" Line="66" Column="16" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="116" Column="14" />
+      <File FileName="YH/bin/Debug/Resources/shadow_mapping.frag" Line="59" Column="33" />
       <File FileName="YH/bin/Debug/Resources/shadow_mapping.vs" Line="17" Column="19" />
+      <File FileName="YH/src/GLDepthMapFramebuffer.cs" Line="40" Column="105" />
       <File FileName="YH/Window.cs" Line="49" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
