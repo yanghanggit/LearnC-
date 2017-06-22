@@ -48,7 +48,7 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			const float near_plane = 0.1f;
-			const float far_plane = 100.0f;
+            const float far_plane = 30.0f;
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																	  (float)wnd.Width / (float)wnd.Height,
@@ -87,27 +87,10 @@ namespace YH
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
 
-			RenderScene(mShadowMapping, true);
+			GL.Uniform1(mShadowMapping.GetUniformLocation("diffuseTexture"), 0);
+			GL.Uniform1(mShadowMapping.GetUniformLocation("shadowMap"), 1);
 
-			// 2. Render scene as normal
-			//glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			//shader.Use();
-			//glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			//glm::mat4 view = camera.GetViewMatrix();
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-			//// Set light uniforms
-			//glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
-			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-			//// Enable/Disable shadows by pressing 'SPACE'
-			//glUniform1i(glGetUniformLocation(shader.Program, "shadows"), shadows);
-			//glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, woodTexture);
-			//glActiveTexture(GL_TEXTURE1);
-			//glBindTexture(GL_TEXTURE_2D, depthMap);
-			//RenderScene(shader);
+			RenderScene(mShadowMapping, true);
 
 			//
 			mLampShader.Use();
@@ -118,6 +101,7 @@ namespace YH
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
 			mSphere.Draw();
 			
+            //
             if (mShowDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
