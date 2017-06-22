@@ -107,14 +107,15 @@ namespace YH
             if (mShowDepthMap)
             {
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
-                //GL.Enable(EnableCap.ScissorTest);
-                //GL.Scissor(0, 0, wnd.Width / 2, wnd.Height / 2);
+                GL.Enable(EnableCap.ScissorTest);
+                GL.Scissor(0, 0, wnd.Width / 2, wnd.Height / 2);
                 mDebugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
                 GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("near_plane"), near_plane);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("far_plane"), far_plane);
 				mQuad.Draw();
+                GL.Disable(EnableCap.ScissorTest);
             }
 		}
 
