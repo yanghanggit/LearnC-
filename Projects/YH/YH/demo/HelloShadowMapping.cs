@@ -42,26 +42,28 @@ namespace YH
 		{
 			base.Update(dt);
 
-            mLightPos.Z = (float)Math.Cos((float)mTotalRuningTime);// * 2.0f;
+            mLightPos.Z = (float)Math.Cos((float)mTotalRuningTime) * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
 		{
 			const float near_plane = 0.1f;
-            const float far_plane = 30.0f;
+            const float far_plane = 7.5f;
 
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
-																	  (float)wnd.Width / (float)wnd.Height,
-																	  near_plane, far_plane);
+            var lightProjection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
+			lightProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, near_plane, far_plane);
+			var lightView = Matrix4.LookAt(mLightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
+            var lightSpaceMatrix = lightView  * lightProjection;
 
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
-			
-            Matrix4 lightView = mUseCameraViewAsLightView ? 
-                view : Matrix4.LookAt(mLightPos, new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f));
 
-            //
-            Matrix4 lightSpaceMatrix = lightView * projection;
+            if (mUseCameraViewAsLightView)
+            {
+                lightSpaceMatrix = view * projection;
+            }
 
+		    //
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.mDepthMapFramebufferId);
             GL.Clear(ClearBufferMask.DepthBufferBit);
             GL.Viewport(0, 0, mDepthFramebuffer.mWidth, mDepthFramebuffer.mHeight);
@@ -70,7 +72,7 @@ namespace YH
             RenderScene(mSimpleDepthShader, false);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
-            //
+			//
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             mShadowMapping.Use();
@@ -110,7 +112,6 @@ namespace YH
                 GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("near_plane"), near_plane);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("far_plane"), far_plane);
-
 				mQuad.Draw();
             }
 		}
@@ -136,20 +137,19 @@ namespace YH
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 
-            //GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 1.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(-1.0f, 0.3f, 2.0f);
             model = Matrix4.CreateFromAxisAngle(new Vector3(1.0f, 0.0f, 1.0f), 60.0f) * model;
-            model = Matrix4.CreateScale(0.5f) * model;
+            //model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 		}
@@ -161,7 +161,6 @@ namespace YH
 
 		private Camera mCamera = null;
 		private GLProgram mShader = null;
-		//private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer mDepthFramebuffer = null;
         private Vector3 mLightPos = new Vector3(-2.0f, 4.0f, -1.0f);
@@ -173,8 +172,5 @@ namespace YH
 		private GLProgram mDebugDepthQuad = null;
         private GLProgram mLampShader = null;
 		private GLProgram mShadowMapping = null;
-
-		
-
 	}
 }

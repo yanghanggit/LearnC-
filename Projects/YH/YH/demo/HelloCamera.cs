@@ -70,7 +70,7 @@ namespace YH
 			for (int i = 0; i < mPositions.Length; ++i)
 			{
 				Matrix4 model = Matrix4.CreateTranslation(mPositions[i]);
-				model = Matrix4.CreateScale(0.2f) * model;
+				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mModelLoc, false, ref model);
 
 				mCube.Draw();

@@ -96,7 +96,7 @@ namespace YH
 				GL.Uniform1(mLocMaterialShininess, mMaterialShinness);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				model = Matrix4.CreateScale(0.5f) * model;
+				//model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLightModel, false, ref model);
 
 				mCube.Draw();
@@ -111,7 +111,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
                 Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
-				model = Matrix4.CreateScale(0.2f) * model;
+				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
 				mCube.Draw();

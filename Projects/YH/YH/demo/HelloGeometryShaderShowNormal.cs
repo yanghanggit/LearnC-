@@ -51,7 +51,7 @@ namespace YH
             {
 				Vector3 axis = new Vector3(1.0f, 0.3f, 0.5f);
 				float angle = (float)mTotalRuningTime;
-				model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
+				model = model  * Matrix4.CreateFromAxisAngle(axis, angle);
             }
 
             //

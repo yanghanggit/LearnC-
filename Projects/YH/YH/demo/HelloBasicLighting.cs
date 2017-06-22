@@ -44,7 +44,7 @@ namespace YH
 
 			//
 			mCubeModel = Matrix4.CreateTranslation(0, 0, 0);
-			mCubeModel = Matrix4.CreateScale(0.5f) * mCubeModel;
+			//mCubeModel = Matrix4.CreateScale(0.5f) * mCubeModel;
 		}
 
 		public override void Update(double dt)

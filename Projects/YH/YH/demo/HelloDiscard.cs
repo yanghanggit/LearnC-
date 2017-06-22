@@ -58,12 +58,12 @@ namespace YH
 
             GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
             GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 

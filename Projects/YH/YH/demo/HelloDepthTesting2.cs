@@ -22,13 +22,6 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 			mShader = new GLProgram(@"Resources/depth_testing.vs", @"Resources/depth_testing.frag");
-			//mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
-			//mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
-
-			////
-			//mDepthFunction.Add(DepthFunction.Less);
-			//mDepthFunction.Add(DepthFunction.Always);
-			//mDepthFunction.Add(DepthFunction.Never);
 		}
 
 		public override void Update(double dt)
@@ -54,12 +47,12 @@ namespace YH
 			GL.Uniform1(mShader.GetUniformLocation("linearize_depth"), mLinearizeDepth ? 1 : 0);
 			
 			Matrix4 model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.0f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 

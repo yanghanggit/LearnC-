@@ -72,25 +72,25 @@ namespace YH
 
 			mShaderRed.Use();
             model = Matrix4.CreateTranslation(-0.75f, 0.75f, 0.0f);
-            model = Matrix4.CreateScale(0.5f) * model;
+            //model = Matrix4.CreateScale(0.5f) * model;
             GL.UniformMatrix4(mShaderRed.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			mShaderGreen.Use();
 			model = Matrix4.CreateTranslation(0.75f, 0.75f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShaderGreen.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			mShaderBlue.Use();
 			model = Matrix4.CreateTranslation(-0.75f, -0.75f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShaderBlue.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			mShaderYellow.Use();
 			model = Matrix4.CreateTranslation(0.75f, -0.75f, 0.0f);
-			model = Matrix4.CreateScale(0.5f) * model;
+			//model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShaderYellow.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 		}

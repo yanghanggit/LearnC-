@@ -69,8 +69,6 @@ namespace YH
 
 				float angle = (i + 1) * (float)mTotalRuningTime;
 				model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
-
-				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mModelLoc, false, ref model);
 
 				mCube.Draw();

@@ -78,12 +78,12 @@ namespace YH
 			GL.StencilMask(0xFFFFFFFF);
 
             model = Matrix4.CreateTranslation(-1.0f, 0.01f, -1.0f);
-            model = Matrix4.CreateScale(0.5f) * model;
+            //model = Matrix4.CreateScale(0.5f) * model;
             GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			model = Matrix4.CreateTranslation(2.0f, 0.01f, 0.0f);
-            model = Matrix4.CreateScale(0.5f) * model;
+            //model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
@@ -101,12 +101,12 @@ namespace YH
 				GL.UniformMatrix4(mShaderSingleColor.GetUniformLocation("view"), false, ref view);
 
 				model = Matrix4.CreateTranslation(-1.0f, 0.0f, -1.0f);
-				model = Matrix4.CreateScale(scale * 0.5f) * model;
+				model = Matrix4.CreateScale(scale) * model;
 				GL.UniformMatrix4(mShaderSingleColor.GetUniformLocation("model"), false, ref model);
 				mCube.Draw();
 
 				model = Matrix4.CreateTranslation(2.0f, 0.01f, 0.0f);
-				model = Matrix4.CreateScale(scale * 0.5f) * model;
+				model = Matrix4.CreateScale(scale) * model;
 				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 				mCube.Draw();
 

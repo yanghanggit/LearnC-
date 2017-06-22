@@ -121,7 +121,7 @@ namespace YH
 				{
 					Matrix4 model = Matrix4.CreateTranslation(mCubePositions[i]);
 					float angle = 20.0f * i;
-					model = Matrix4.CreateScale(0.5f) * model;
+					//model = Matrix4.CreateScale(0.5f) * model;
 					model = Matrix4.CreateFromAxisAngle(axis, angle) * model;
 					GL.UniformMatrix4(mLightShader.GetUniformLocation("model"), false, ref model);
 					mCube.Draw();
@@ -150,7 +150,7 @@ namespace YH
                     }
 
                     Matrix4 model = Matrix4.CreateTranslation(pointLightPositions[i]);
-                    model = Matrix4.CreateScale(0.2f) * model;
+                    model = Matrix4.CreateScale(0.5f) * model;
                     GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
                     mCube.Draw();
                 }

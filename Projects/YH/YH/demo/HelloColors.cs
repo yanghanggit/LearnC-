@@ -62,7 +62,6 @@ namespace YH
 				GL.Uniform3(mLocLightColor, 1.0f, 0.5f, 1.0f);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLightModel, false, ref model);
 
                 mCube.Draw();
@@ -78,7 +77,7 @@ namespace YH
 				GL.UniformMatrix4(mLocLampView, false, ref view);
 
 				Matrix4 model = Matrix4.CreateTranslation(1.2f, 1.0f, 2.0f);
-				model = Matrix4.CreateScale(0.2f) * model;
+				model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mLocLampModel, false, ref model);
 
                 mSphere.Draw();//mCube.Draw();
