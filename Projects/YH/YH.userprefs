@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAntiAliasing.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/Window.cs" Line="46" Column="43" />
-      <File FileName="YH/demo/HelloGeometryShaderShowNormal.cs" Line="54" Column="62" />
-      <File FileName="YH/demo/HelloAsteroidsInstanced.cs" Line="9" Column="15" />
-      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="17" Column="13" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="54" Column="44" />
+      <File FileName="YH/bin/Debug/Resources/shadow_mapping.frag" Line="66" Column="16" />
+      <File FileName="YH/bin/Debug/Resources/shadow_mapping.vs" Line="17" Column="19" />
+      <File FileName="YH/Window.cs" Line="49" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
