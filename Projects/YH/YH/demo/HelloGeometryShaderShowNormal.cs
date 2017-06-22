@@ -15,7 +15,8 @@ namespace YH
 		{
 			base.Start(wnd);
 
-			mCube = new Cube();
+			//mCube = new Cube();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -56,18 +57,21 @@ namespace YH
 
             //
 			mShader.Use();
-			GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+			//GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-			mCube.Draw();
+            mSphere.Draw();//mCube.Draw();
 
             //
-			mShowNormalShader.Use();
-            GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("view"), false, ref view);
-			GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("model"), false, ref model);
-			mCube.Draw();
+            if (mDrawNormal)
+            {
+				mShowNormalShader.Use();
+				GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("projection"), false, ref projection);
+				GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("view"), false, ref view);
+				GL.UniformMatrix4(mShowNormalShader.GetUniformLocation("model"), false, ref model);
+				mSphere.Draw();//mCube.Draw();     
+			}
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -78,14 +82,20 @@ namespace YH
 			{
 				mRotation = !mRotation;
 			}
+			else if (e.Key == OpenTK.Input.Key.B)
+			{
+				mDrawNormal = !mDrawNormal;
+			}
 		}
 
-		private Cube mCube = null;
+		//private Cube mCube = null;
+        private Sphere mSphere = null;
 		private Camera mCamera = null;
 		private GLTexture2D mCubeTexture = null;
 		private GLProgram mShader = null;
         private GLProgram mShowNormalShader = null;
         private bool mRotation = false;
+        private bool mDrawNormal = true;
 	}
 
 }
