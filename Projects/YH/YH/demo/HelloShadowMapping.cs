@@ -23,7 +23,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 			mShader = new GLProgram(@"Resources/advanced.vs", @"Resources/advanced.frag");
-            mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
+            //mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
 			mFloorTexture = new GLTexture2D(@"Resources/Texture/wood.png");
 
 			GL.Enable(EnableCap.DepthTest);
@@ -48,7 +48,7 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			const float near_plane = 0.1f;
-			const float far_plane = 30.0f;
+			const float far_plane = 100.0f;
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																	  (float)wnd.Width / (float)wnd.Height,
@@ -61,6 +61,7 @@ namespace YH
 
             //
             Matrix4 lightSpaceMatrix = lightView * projection;
+
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.mDepthMapFramebufferId);
             GL.Clear(ClearBufferMask.DepthBufferBit);
             GL.Viewport(0, 0, mDepthFramebuffer.mWidth, mDepthFramebuffer.mHeight);
@@ -79,6 +80,9 @@ namespace YH
             GL.Uniform3(mShadowMapping.GetUniformLocation("viewPos"), mCamera.Position);
             GL.UniformMatrix4(mShadowMapping.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
             GL.Uniform1(mShadowMapping.GetUniformLocation("shadows"), 1);
+
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
 
             GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
@@ -104,17 +108,6 @@ namespace YH
 			//glActiveTexture(GL_TEXTURE1);
 			//glBindTexture(GL_TEXTURE_2D, depthMap);
 			//RenderScene(shader);
-
-
-
-
-
-
-
-
-
-
-
 
 			//
 			mLampShader.Use();
@@ -155,14 +148,11 @@ namespace YH
         void RenderScene(GLProgram shader, bool useTexture)
 		{
             Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, mFloorTexture.getTextureId());
             model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
             mFloor.Draw();
 
-            GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
+            //GL.BindTexture(TextureTarget.Texture2D, mCubeTexture.getTextureId());
 			model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
 			model = Matrix4.CreateScale(0.5f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
@@ -187,7 +177,7 @@ namespace YH
 
 		private Camera mCamera = null;
 		private GLProgram mShader = null;
-		private GLTexture2D mCubeTexture = null;
+		//private GLTexture2D mCubeTexture = null;
 		private GLTexture2D mFloorTexture = null;
         private GLDepthMapFramebuffer mDepthFramebuffer = null;
         private Vector3 mLightPos = new Vector3(-2.0f, 4.0f, -1.0f);
