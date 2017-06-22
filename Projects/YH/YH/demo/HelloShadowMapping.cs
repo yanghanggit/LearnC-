@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -47,7 +47,7 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			const float near_plane = 0.1f;
-			const float far_plane = 100.0f;
+			const float far_plane = 30.0f;
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																	  (float)wnd.Width / (float)wnd.Height,
@@ -60,9 +60,9 @@ namespace YH
 
             //
             Matrix4 lightSpaceMatrix = lightView * projection;
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.depthMapFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.mDepthMapFramebufferId);
             GL.Clear(ClearBufferMask.DepthBufferBit);
-            GL.Viewport(0, 0, mDepthFramebuffer.width, mDepthFramebuffer.height);
+            GL.Viewport(0, 0, mDepthFramebuffer.mWidth, mDepthFramebuffer.mHeight);
             mSimpleDepthShader.Use();
 			GL.UniformMatrix4(mSimpleDepthShader.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
             RenderScene(mSimpleDepthShader, false);
@@ -90,7 +90,7 @@ namespace YH
                 GL.Viewport(0, 0, wnd.Width/2, wnd.Height/2);
                 mDebugDepthQuad.Use();
                 GL.ActiveTexture(TextureUnit.Texture0);
-                GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.depthMap);
+                GL.BindTexture(TextureTarget.Texture2D, mDepthFramebuffer.mDepthMap);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("near_plane"), near_plane);
                 GL.Uniform1(mDebugDepthQuad.GetUniformLocation("far_plane"), far_plane);
 

@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -9,13 +9,13 @@ namespace YH
 	{
         public GLDepthMapFramebuffer(int w, int h, Vector4 borderColor)
 		{
-            width = w;
-            height = h;
+            mWidth = w;
+            mHeight = h;
 
-            depthMapFBO = GL.GenFramebuffer();
+            mDepthMapFramebufferId = GL.GenFramebuffer();
 
-            depthMap = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, depthMap);
+            mDepthMap = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, mDepthMap);
 
             GL.TexImage2D(TextureTarget.Texture2D,
                           0, 
@@ -36,8 +36,8 @@ namespace YH
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 
             //
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, depthMapFBO);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, depthMap, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthMapFramebufferId);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, TextureTarget.Texture2D, mDepthMap, 0);
             GL.DrawBuffer(DrawBufferMode.None);
             GL.ReadBuffer(ReadBufferMode.None);
 
@@ -53,9 +53,9 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 		}
 
-        public readonly int depthMapFBO = 0;
-        public readonly int depthMap = 0;
-        public readonly int width = 0;
-		public readonly int height = 0;
+        public readonly int mDepthMapFramebufferId = 0;
+        public readonly int mDepthMap = 0;
+        public readonly int mWidth = 0;
+		public readonly int mHeight = 0;
 	}
 }
