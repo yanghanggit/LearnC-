@@ -1,14 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/shadow_mapping.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLDepthMapFramebuffer.cs">
     <Files>
-      <File FileName="YH/demo/HelloShadowMapping.cs" Line="177" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/debug_quad_depth.frag" Line="15" Column="12" />
-      <File FileName="YH/bin/Debug/Resources/debug_quad.vs" Line="12" Column="2" />
-      <File FileName="YH/bin/Debug/Resources/shadow_mapping_depth.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/shadow_mapping_depth.vs" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/shadow_mapping.frag" Line="68" Column="20" />
-      <File FileName="YH/bin/Debug/Resources/shadow_mapping.vs" Line="17" Column="19" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="82" Column="87" />
+      <File FileName="YH/src/GLDepthMapFramebuffer.cs" Line="17" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

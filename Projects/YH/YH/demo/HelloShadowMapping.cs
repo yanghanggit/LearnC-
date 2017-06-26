@@ -30,7 +30,7 @@ namespace YH
 			GL.DepthFunc(DepthFunction.Less);
             GL.ClearColor(Color.Black);
 
-            mDepthFramebuffer = new GLDepthMapFramebuffer(1024, 1024, new Vector4(1, 1, 1, 1));
+            mDepthFramebuffer = new GLDepthMapFramebuffer(1024, 1024, new Vector4(1, 1, 1, 1), GLDepthMapFramebuffer.Type.TEXTURE_2D);
 
             mSimpleDepthShader = new GLProgram(@"Resources/shadow_mapping_depth.vs", @"Resources/shadow_mapping_depth.frag");
 			mDebugDepthQuad = new GLProgram(@"Resources/debug_quad.vs", @"Resources/debug_quad_depth.frag");
@@ -64,12 +64,17 @@ namespace YH
             }
 
 		    //
+
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthFramebuffer.mDepthMapFramebufferId);
             GL.Clear(ClearBufferMask.DepthBufferBit);
             GL.Viewport(0, 0, mDepthFramebuffer.mWidth, mDepthFramebuffer.mHeight);
             mSimpleDepthShader.Use();
 			GL.UniformMatrix4(mSimpleDepthShader.GetUniformLocation("lightSpaceMatrix"), false, ref lightSpaceMatrix);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
             RenderScene(mSimpleDepthShader, false);
+            GL.CullFace(CullFaceMode.Front);
+            GL.Disable(EnableCap.CullFace);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 			//
