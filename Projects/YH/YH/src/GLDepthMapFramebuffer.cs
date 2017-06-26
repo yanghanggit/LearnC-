@@ -1,6 +1,5 @@
 ﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
 using OpenTK;
 
 namespace YH
@@ -19,7 +18,7 @@ namespace YH
             {
                 build2D(w, h, borderColor);
             }
-			else if (type == Type.TEXTURE_2D)
+            else if (type == Type.TEXTURE_CUBE)
 			{
 				buildCube(w, h, borderColor);
 			}
