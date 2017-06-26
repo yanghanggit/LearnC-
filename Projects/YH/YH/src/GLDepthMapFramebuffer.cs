@@ -19,7 +19,58 @@ namespace YH
             {
                 build2D(w, h, borderColor);
             }
+			else if (type == Type.TEXTURE_2D)
+			{
+				buildCube(w, h, borderColor);
+			}
 		}
+
+        private void buildCube(int w, int h, Vector4 borderColor)
+        {
+			mWidth = w;
+			mHeight = h;
+
+			mDepthMapFramebufferId = GL.GenFramebuffer();
+
+            mDepthMap = GL.GenTexture();
+            GL.BindTexture(TextureTarget.TextureCubeMap, mDepthMap);
+
+			for (int i = 0; i < 6; ++i)
+            {
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
+                              0, 
+                              PixelInternalFormat.DepthComponent,
+                              w, h, 
+                              0,
+                              PixelFormat.DepthComponent,
+                              PixelType.Float,
+                              IntPtr.Zero);
+
+            }
+			
+
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+			GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mDepthMapFramebufferId);
+            GL.FramebufferTexture(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, mDepthMap, 0);
+			GL.DrawBuffer(DrawBufferMode.None);
+			GL.ReadBuffer(ReadBufferMode.None);
+			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("ERROR::FRAMEBUFFER:: GLDepthMapFramebuffer is not complete!");
+			}
+			else
+			{
+
+			}
+
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
 
         private void build2D(int w, int h, Vector4 borderColor)
         {
