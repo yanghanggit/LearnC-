@@ -1,8 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloPointShadows.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/point_shadows_depth.vs">
     <Files>
-      <File FileName="YH/demo/HelloPointShadows.cs" Line="15" Column="26" />
+      <File FileName="YH/demo/HelloPointShadows.cs" Line="206" Column="29" />
+      <File FileName="YH/bin/Debug/Resources/point_shadows_depth.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/point_shadows_depth.gs" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/point_shadows_depth.vs" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/point_shadows.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/point_shadows.vs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
