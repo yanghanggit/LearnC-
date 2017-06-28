@@ -53,9 +53,12 @@ namespace YH
 		{
 			base.Update(dt);
 
-			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime);
-			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f);
-            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
+            if (mLightMove)
+            {
+				mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime);
+				mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f);
+				mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
+            }
 		}
 
         void DrawDepthMap(double dt, Window wnd)
@@ -185,6 +188,11 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
+
+			if (e.Key == OpenTK.Input.Key.C)
+			{
+				mLightMove = !mLightMove;
+			}
 		}
 
 		private Cube mCube = null;
@@ -200,5 +208,6 @@ namespace YH
 		private const float mNear = 1.0f;
 		private const float mFar = 25.0f;
         private Matrix4 mShadowProj = Matrix4.Zero;
+        private bool mLightMove = false;
 	}
 }

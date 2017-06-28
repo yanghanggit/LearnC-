@@ -2,8 +2,10 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloPointShadows.cs">
     <Files>
-      <File FileName="YH/demo/HelloPointShadows.cs" Line="32" Column="43" />
-      <File FileName="YH/demo/HelloMaterials.cs" Line="55" Column="73" />
+      <File FileName="YH/demo/HelloPointShadows.cs" Line="57" Column="12" />
+      <File FileName="YH/demo/HelloMaterials.cs" Line="61" Column="30" />
+      <File FileName="YH/demo/HelloFramebuffer.cs" Line="103" Column="2" />
+      <File FileName="YH/demo/Application.cs" Line="25" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
