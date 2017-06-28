@@ -107,7 +107,8 @@ namespace YH
 			var skyView = new Matrix4(new Matrix3(view));
 			GL.UniformMatrix4(mSkyboxShader.GetUniformLocation("view"), false, ref skyView);
 			GL.UniformMatrix4(mSkyboxShader.GetUniformLocation("projection"), false, ref projection);
-			GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+			//GL.BindTexture(TextureTarget.TextureCubeMap, mGLTextureCube.mTextureCubeId);
+            GL.BindTexture(TextureTarget.TextureCubeMap, mGLDepthMapFramebuffer.mDepthMap);
 			mSkybox.Draw();
 			GL.DepthFunc(DepthFunction.Less);
 		}
