@@ -34,7 +34,9 @@ namespace YH
 			shader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
             woodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
 
-            shader.Use();
+			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+
+			shader.Use();
             GL.Uniform1(shader.GetUniformLocation("diffuseTexture"), 0);
             GL.Uniform1(shader.GetUniformLocation("depthMap"), 1);
 
@@ -100,6 +102,18 @@ namespace YH
             GL.BindTexture(TextureTarget.TextureCubeMap, mGLDepthMapFramebuffer.mDepthMap);
 
 			RenderScene(shader);
+
+			do
+			{
+				mLampShader.Use();
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+				Matrix4 m = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
+				m = Matrix4.CreateScale(0.1f) * m;
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref m);
+                mSphere.Draw();
+			}
+			while (false);
 		}
 
         List<Matrix4> BuildShadowTransforms(Vector3 lightPos, int shadowWidth, int shadowHeight)
@@ -159,5 +173,6 @@ namespace YH
         private GLProgram simpleDepthShader = null;
 		private GLProgram shader = null;
 		private GLTexture2D woodTexture = null;
+        private GLProgram mLampShader = null;
 	}
 }
