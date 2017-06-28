@@ -18,7 +18,6 @@ namespace YH
 
 			mCube = new Cube();
 			mSphere = new Sphere();
-			mSkybox = new Skybox();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -27,8 +26,13 @@ namespace YH
             mGLDepthMapFramebuffer = new GLDepthMapFramebuffer(1024, 1024, 
                                                                new Vector4(1, 1, 1, 1),
                                                                GLDepthMapFramebuffer.Type.TEXTURE_CUBE);
+             
+			//
+			float aspect = (float)1024 / (float)1024;
+			mShadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), aspect, mNear, mFar);
 
-            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024);
+            //
+            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
 
             mSimpleDepthShader = new GLProgram(@"Resources/point_shadows_depth.vs", @"Resources/point_shadows_depth.frag", @"Resources/point_shadows_depth.gs");
 			mShader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
@@ -48,6 +52,10 @@ namespace YH
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime);
+			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f);
+            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
 		}
 
         void DrawDepthMap(double dt, Window wnd)
@@ -116,15 +124,12 @@ namespace YH
 			while (false);
 		}
 
-        List<Matrix4> CalcShadowTransforms(Vector3 lightPos, int shadowWidth, int shadowHeight)
+        List<Matrix4> CalcShadowTransforms(Vector3 lightPos, int shadowWidth, int shadowHeight, Matrix4 shadowProj)
         {
             if (shadowWidth == 0 || shadowHeight == 0)
             {
                 return new List<Matrix4>();
             }
-
-            float aspect = (float)shadowWidth / (float)shadowHeight;
-			var shadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), aspect, mNear, mFar);
 
 			List<Matrix4> shadowTransforms = new List<Matrix4>();
             shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
@@ -185,7 +190,6 @@ namespace YH
 		private Cube mCube = null;
 		private Sphere mSphere = null;
 		private Camera mCamera = null;
-		private Skybox mSkybox = null;
         private List<Matrix4> mShadowTransforms = new List<Matrix4>();
         private GLDepthMapFramebuffer mGLDepthMapFramebuffer = null;
         private Vector3 mLightPos = new Vector3(0, 0, 0);
@@ -195,5 +199,6 @@ namespace YH
         private GLProgram mLampShader = null;
 		private const float mNear = 1.0f;
 		private const float mFar = 25.0f;
+        private Matrix4 mShadowProj = Matrix4.Zero;
 	}
 }
