@@ -46,7 +46,8 @@ namespace YH
 			//mCurrentApplication = new HelloAntiAliasing();
 			//mCurrentApplication = new HelloBlinnPhong();
             //mCurrentApplication = new HelloGammaCorrection();
-            mCurrentApplication = new HelloShadowMapping();
+            //mCurrentApplication = new HelloShadowMapping();
+			mCurrentApplication = new HelloPointShadows();
 
 			Title = mCurrentApplication.mAppName;
 		}
