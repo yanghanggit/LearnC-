@@ -108,9 +108,9 @@ namespace YH
 				mLampShader.Use();
 				GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
 				GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
-				Matrix4 m = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
-				m = Matrix4.CreateScale(0.1f) * m;
-				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref m);
+				model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
+				model = Matrix4.CreateScale(0.1f) * model;
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
                 mSphere.Draw();
 			}
 			while (false);
@@ -140,10 +140,44 @@ namespace YH
             return shadowTransforms;
 		}
 
-        void RenderScene(GLProgram shader)
+        void RenderScene(GLProgram sh)
         {
-            Matrix4 model = Matrix4.CreateTranslation(0.0f, 0.5f, 0.0f);
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
+
+            model = Matrix4.CreateScale(10.0f);
+            GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
+            GL.Disable(EnableCap.CullFace);
+			GL.Uniform1(sh.GetUniformLocation("reverse_normals"), 1);
+            mCube.Draw();
+			GL.Uniform1(sh.GetUniformLocation("reverse_normals"), 0);
+            GL.Enable(EnableCap.CullFace);
+
+            //
+            model = Matrix4.CreateTranslation(4.0f, -3.5f, 0.0f);
+            GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
+
+            //
+			model = Matrix4.CreateTranslation(2.0f, 3.0f, 1.0f);
+            model = Matrix4.CreateScale(1.5f) * model;
+			GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			//
+			model = Matrix4.CreateTranslation(-3.0f, -1.0f, 0.0f);
+			GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			//
+			model = Matrix4.CreateTranslation(-1.5f, 1.0f, 1.5f);
+			GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+            //
+            model = Matrix4.CreateTranslation(-1.5f, 2.0f, -3.0f);
+            model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 60.0f) * model;
+            model = Matrix4.CreateScale(1.5f) * model;
+			GL.UniformMatrix4(sh.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
         }
 
