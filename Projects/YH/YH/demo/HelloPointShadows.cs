@@ -28,7 +28,7 @@ namespace YH
                                                                new Vector4(1, 1, 1, 1),
                                                                GLDepthMapFramebuffer.Type.TEXTURE_CUBE);
 
-            mShadowTransforms = BuildShadowTransforms(mLightPos, 1024, 1024);
+            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024);
 
             simpleDepthShader = new GLProgram(@"Resources/point_shadows_depth.vs", @"Resources/point_shadows_depth.frag", @"Resources/point_shadows_depth.gs");
 			shader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
@@ -42,7 +42,7 @@ namespace YH
 
 			GL.Enable(EnableCap.DepthTest);
 			GL.DepthFunc(DepthFunction.Less);
-            GL.ClearColor(Color.Gray);
+            GL.ClearColor(Color.Black);
 		}
 
 		public override void Update(double dt)
@@ -116,7 +116,7 @@ namespace YH
 			while (false);
 		}
 
-        List<Matrix4> BuildShadowTransforms(Vector3 lightPos, int shadowWidth, int shadowHeight)
+        List<Matrix4> CalcShadowTransforms(Vector3 lightPos, int shadowWidth, int shadowHeight)
         {
             if (shadowWidth == 0 || shadowHeight == 0)
             {
@@ -131,12 +131,12 @@ namespace YH
 
 
 			List<Matrix4> shadowTransforms = new List<Matrix4>();
-            shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)));
-			shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)));
-			shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-			shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f)));
-			shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f)));
-			shadowTransforms.Add(shadowProj * Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f)));
+            shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
+			shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
+			shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 0.0f, 1.0f)) * shadowProj);
+			shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 0.0f, -1.0f)) * shadowProj);
+			shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
+			shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
             return shadowTransforms;
 		}
 
@@ -194,6 +194,7 @@ namespace YH
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
+                
 			}
 		}
 
