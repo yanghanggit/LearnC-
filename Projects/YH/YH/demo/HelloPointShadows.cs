@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -30,15 +30,15 @@ namespace YH
 
             mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024);
 
-            simpleDepthShader = new GLProgram(@"Resources/point_shadows_depth.vs", @"Resources/point_shadows_depth.frag", @"Resources/point_shadows_depth.gs");
-			shader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
-            woodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
+            mSimpleDepthShader = new GLProgram(@"Resources/point_shadows_depth.vs", @"Resources/point_shadows_depth.frag", @"Resources/point_shadows_depth.gs");
+			mShader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
+            mWoodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
 
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 
-			shader.Use();
-            GL.Uniform1(shader.GetUniformLocation("diffuseTexture"), 0);
-            GL.Uniform1(shader.GetUniformLocation("depthMap"), 1);
+			mShader.Use();
+            GL.Uniform1(mShader.GetUniformLocation("diffuseTexture"), 0);
+            GL.Uniform1(mShader.GetUniformLocation("depthMap"), 1);
 
 			GL.Enable(EnableCap.DepthTest);
 			GL.DepthFunc(DepthFunction.Less);
@@ -56,20 +56,20 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, mGLDepthMapFramebuffer.mDepthMapFramebufferId);
             GL.Clear(ClearBufferMask.DepthBufferBit);
 
-			simpleDepthShader.Use();
+			mSimpleDepthShader.Use();
             for (int i = 0; i < mShadowTransforms.Count; ++i)
             {
                 Matrix4 mat = mShadowTransforms[i];
                 string location = "shadowTransforms[" + i + "]";
-				GL.UniformMatrix4(simpleDepthShader.GetUniformLocation(location),
+				GL.UniformMatrix4(mSimpleDepthShader.GetUniformLocation(location),
                                   false, 
                                   ref mat);
 			}
 			
-            const float far = 25.0f;
-			GL.Uniform1(simpleDepthShader.GetUniformLocation("far_plane"), far);
-            GL.Uniform3(simpleDepthShader.GetUniformLocation("lightPos"), mLightPos);
-			RenderScene(simpleDepthShader);
+            //
+			GL.Uniform1(mSimpleDepthShader.GetUniformLocation("far_plane"), mFar);
+            GL.Uniform3(mSimpleDepthShader.GetUniformLocation("lightPos"), mLightPos);
+			RenderScene(mSimpleDepthShader);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 
@@ -80,28 +80,28 @@ namespace YH
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			shader.Use();
+			mShader.Use();
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
                                                                   (float)wnd.Width / (float)wnd.Height,
                                                                   0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 			Matrix4 model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
 
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
-			GL.Uniform3(shader.GetUniformLocation("lightPos"), mLightPos);
-            GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
+			GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPos);
+            GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
 
-			const float far = 25.0f;
-			GL.Uniform1(shader.GetUniformLocation("far_plane"), far);
-			GL.Uniform1(shader.GetUniformLocation("shadows"), 1);
+			//const float mFar = 25.0f;
+			GL.Uniform1(mShader.GetUniformLocation("far_plane"), mFar);
+			GL.Uniform1(mShader.GetUniformLocation("shadows"), 1);
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
+            GL.BindTexture(TextureTarget.Texture2D, mWoodTexture.getTextureId());
 			GL.ActiveTexture(TextureUnit.Texture1);
             GL.BindTexture(TextureTarget.TextureCubeMap, mGLDepthMapFramebuffer.mDepthMap);
 
-			RenderScene(shader);
+			RenderScene(mShader);
 
 			do
 			{
@@ -124,11 +124,7 @@ namespace YH
             }
 
             float aspect = (float)shadowWidth / (float)shadowHeight;
-			const float near = 1.0f;
-			const float far = 25.0f;
-
-			var shadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), aspect, near, far);
-
+			var shadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), aspect, mNear, mFar);
 
 			List<Matrix4> shadowTransforms = new List<Matrix4>();
             shadowTransforms.Add(Matrix4.LookAt(lightPos, lightPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f, 0.0f)) * shadowProj);
@@ -184,18 +180,6 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
-			if (e.Key == OpenTK.Input.Key.Plus)
-			{
-
-			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
-				
-			}
-			else if (e.Key == OpenTK.Input.Key.C)
-			{
-                
-			}
 		}
 
 		private Cube mCube = null;
@@ -205,9 +189,11 @@ namespace YH
         private List<Matrix4> mShadowTransforms = new List<Matrix4>();
         private GLDepthMapFramebuffer mGLDepthMapFramebuffer = null;
         private Vector3 mLightPos = new Vector3(0, 0, 0);
-        private GLProgram simpleDepthShader = null;
-		private GLProgram shader = null;
-		private GLTexture2D woodTexture = null;
+        private GLProgram mSimpleDepthShader = null;
+		private GLProgram mShader = null;
+		private GLTexture2D mWoodTexture = null;
         private GLProgram mLampShader = null;
+		private const float mNear = 1.0f;
+		private const float mFar = 25.0f;
 	}
 }
