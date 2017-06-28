@@ -23,16 +23,16 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
             //
-            mGLDepthMapFramebuffer = new GLDepthMapFramebuffer(1024, 1024, 
+            mGLDepthMapFramebuffer = new GLDepthMapFramebuffer(mShadowWidth, mShadowHeight, 
                                                                new Vector4(1, 1, 1, 1),
                                                                GLDepthMapFramebuffer.Type.TEXTURE_CUBE);
              
 			//
-			float aspect = (float)1024 / (float)1024;
+			float aspect = (float)mShadowWidth / (float)mShadowHeight;
 			mShadowProj = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), aspect, mNear, mFar);
 
             //
-            mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
+            mShadowTransforms = CalcShadowTransforms(mLightPos, mShadowWidth, mShadowHeight, mShadowProj);
 
             mSimpleDepthShader = new GLProgram(@"Resources/point_shadows_depth.vs", @"Resources/point_shadows_depth.frag", @"Resources/point_shadows_depth.gs");
 			mShader = new GLProgram(@"Resources/point_shadows.vs", @"Resources/point_shadows.frag");
@@ -57,7 +57,7 @@ namespace YH
             {
 				mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime);
 				mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f);
-				mShadowTransforms = CalcShadowTransforms(mLightPos, 1024, 1024, mShadowProj);
+                mShadowTransforms = CalcShadowTransforms(mLightPos, mShadowWidth, mShadowHeight, mShadowProj);
             }
 		}
 
@@ -208,6 +208,8 @@ namespace YH
 		private const float mNear = 1.0f;
 		private const float mFar = 25.0f;
         private Matrix4 mShadowProj = Matrix4.Zero;
-        private bool mLightMove = false;
+        private bool mLightMove = true;
+        private readonly int mShadowWidth = 1024;
+		private readonly int mShadowHeight = 1024;
 	}
 }
