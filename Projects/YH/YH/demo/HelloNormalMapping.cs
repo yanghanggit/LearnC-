@@ -40,11 +40,17 @@ namespace YH
 				mDiffuseMap = new GLTexture2D(@"Resources/Texture/couch.jpg");
 				mNormalMap = new GLTexture2D(@"Resources/Texture/counch_norm.jpg");
             }
+
+            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+            mSphere = new Sphere();
 		}
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -73,11 +79,14 @@ namespace YH
 
 			RenderQuad();
 
-
-            model = Matrix4.CreateTranslation(mLightPos);
-            model = Matrix4.CreateScale(0.1f) * model;									  
-            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-			RenderQuad();
+			//
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+			model = Matrix4.CreateTranslation(mLightPos);
+			model = Matrix4.CreateScale(0.1f) * model;
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+			mSphere.Draw();
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -192,5 +201,7 @@ namespace YH
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mNormalMap = null;
         private Vector3 mLightPos = new Vector3(0.5f, 1.0f, 0.3f);
+        private GLProgram mLampShader = null;
+        private Sphere mSphere = null;
 	}
 }

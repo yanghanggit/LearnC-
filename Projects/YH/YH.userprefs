@@ -1,11 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloNormalMapping.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloShadowMapping.cs">
     <Files>
-      <File FileName="YH/src/SimpleGeometry.cs" Line="19" Column="10" />
-      <File FileName="YH/demo/HelloPointShadows.cs" Line="83" Column="45" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="26" Column="1" />
-      <File FileName="YH/demo/HelloNormalMapping.cs" Line="141" Column="33" />
+      <File FileName="YH/demo/HelloNormalMapping.cs" Line="44" Column="87" />
+      <File FileName="YH/demo/HelloMaterials.cs" Line="44" Column="78" />
+      <File FileName="YH/demo/HelloShadowMapping.cs" Line="109" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
