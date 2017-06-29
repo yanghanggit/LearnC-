@@ -22,24 +22,15 @@ namespace YH
 			GL.DepthFunc(DepthFunction.Less);
 			GL.ClearColor(Color.Gray);
 
-			//
-			mShader = new GLProgram(@"Resources/normal_mapping.vs", @"Resources/normal_mapping.frag");
+			mShader = new GLProgram(@"Resources/parallax_mapping.vs", @"Resources/parallax_mapping.frag");
 			mShader.Use();
 			GL.Uniform1(mShader.GetUniformLocation("diffuseMap"), 0);
 			GL.Uniform1(mShader.GetUniformLocation("normalMap"), 1);
+			GL.Uniform1(mShader.GetUniformLocation("depthMap"), 2);
 
-			//11867， 11868
-			//11869， 11870
-			if (false)
-			{
-				mDiffuseMap = new GLTexture2D(@"Resources/Texture/11867.jpg");
-				mNormalMap = new GLTexture2D(@"Resources/Texture/11868.jpg");
-			}
-			else
-			{
-				mDiffuseMap = new GLTexture2D(@"Resources/Texture/couch.jpg");
-				mNormalMap = new GLTexture2D(@"Resources/Texture/counch_norm.jpg");
-			}
+			mDiffuseMap = new GLTexture2D(@"Resources/Texture/bricks2.jpg");
+			mNormalMap = new GLTexture2D(@"Resources/Texture/bricks2_normal.jpg");
+			mHeightMap = new GLTexture2D(@"Resources/Texture/bricks2_disp.jpg");
 
 			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 			mSphere = new Sphere();
@@ -71,11 +62,17 @@ namespace YH
 			GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPos);
 			GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
 
+			GL.Uniform1(mShader.GetUniformLocation("height_scale"), mHeightScale);
+			GL.Uniform1(mShader.GetUniformLocation("parallax"), mParallax ? 1 : 0);
+
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
 
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, mNormalMap.getTextureId());
+
+			GL.ActiveTexture(TextureUnit.Texture2);
+			GL.BindTexture(TextureTarget.Texture2D, mHeightMap.getTextureId());
 
 			RenderQuad();
 
@@ -87,11 +84,6 @@ namespace YH
 			model = Matrix4.CreateScale(0.1f) * model;
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
 			mSphere.Draw();
-		}
-
-		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
-		{
-			base.OnKeyUp(e);
 		}
 
 		private void RenderQuad()
@@ -194,14 +186,36 @@ namespace YH
 			GL.BindVertexArray(0);
 		}
 
+		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyUp(e);
+
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+				//++mPostProcessing;
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				//--mPostProcessing;
+				//mPostProcessing = mPostProcessing >= 0 ? mPostProcessing : 0;
+			}
+			else if (e.Key == OpenTK.Input.Key.C)
+			{
+				//mUseFramebuffer = !mUseFramebuffer;
+			}
+		}
+
 		private Camera mCamera = null;
 		private int mQuadVAO = 0;
 		private int mQuadVBO = 0;
 		private GLProgram mShader = null;
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mNormalMap = null;
+		private GLTexture2D mHeightMap = null;
 		private Vector3 mLightPos = new Vector3(0.5f, 1.0f, 0.3f);
 		private GLProgram mLampShader = null;
 		private Sphere mSphere = null;
+        private float mHeightScale = 0.1f;
+        private bool mParallax = true;
 	}
 }
