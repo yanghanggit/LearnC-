@@ -37,17 +37,18 @@ namespace YH
 			//mCurrentApplication = new HelloBlending();
 			//mCurrentApplication = new HelloFramebuffer();
 			//mCurrentApplication = new HelloSkyBox();
-            //mCurrentApplication = new HelloUniformBufferObjects();
+			//mCurrentApplication = new HelloUniformBufferObjects();
 			//mCurrentApplication = new HelloGeometryShaderHouse();
 			//mCurrentApplication = new HelloGeometryShaderExplode();
 			//mCurrentApplication = new HelloGeometryShaderShowNormal();
-            //mCurrentApplication = new HelloInstancing();
-            //mCurrentApplication = new HelloAsteroidsInstanced();
+			//mCurrentApplication = new HelloInstancing();
+			//mCurrentApplication = new HelloAsteroidsInstanced();
 			//mCurrentApplication = new HelloAntiAliasing();
 			//mCurrentApplication = new HelloBlinnPhong();
-            //mCurrentApplication = new HelloGammaCorrection();
-            //mCurrentApplication = new HelloShadowMapping();
-			mCurrentApplication = new HelloPointShadows();
+			//mCurrentApplication = new HelloGammaCorrection();
+			//mCurrentApplication = new HelloShadowMapping();
+			//mCurrentApplication = new HelloPointShadows();
+			mCurrentApplication = new HelloNormalMapping();
 
 			Title = mCurrentApplication.mAppName;
 		}

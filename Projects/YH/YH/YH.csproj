@@ -85,6 +85,7 @@
     <Compile Include="demo\HelloShadowMapping.cs" />
     <Compile Include="src\GLDepthMapFramebuffer.cs" />
     <Compile Include="demo\HelloPointShadows.cs" />
+    <Compile Include="demo\HelloNormalMapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
