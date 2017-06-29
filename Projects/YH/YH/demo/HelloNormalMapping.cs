@@ -23,10 +23,10 @@ namespace YH
             GL.ClearColor(Color.Gray);
 
             //
-            shader = new GLProgram(@"Resources/normal_mapping.vs", @"Resources/normal_mapping.frag");
-			shader.Use();
-			GL.Uniform1(shader.GetUniformLocation("diffuseMap"), 0);
-			GL.Uniform1(shader.GetUniformLocation("normalMap"), 1);
+            mShader = new GLProgram(@"Resources/normal_mapping.vs", @"Resources/normal_mapping.frag");
+			mShader.Use();
+			GL.Uniform1(mShader.GetUniformLocation("diffuseMap"), 0);
+			GL.Uniform1(mShader.GetUniformLocation("normalMap"), 1);
 
             //
 			diffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
@@ -42,19 +42,19 @@ namespace YH
 		{
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			shader.Use();
+            mShader.Use();
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
 
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 
             Matrix4 model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), (float)mTotalRuningTime * -0.1f);//glm::rotate(model, (GLfloat)glfwGetTime() * -0.1f, glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // Rotates the quad to show normal mapping works in all directions
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
-			GL.Uniform3(shader.GetUniformLocation("lightPos"), mLightPos);
-            GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+			GL.Uniform3(mShader.GetUniformLocation("lightPos"), mLightPos);
+            GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, diffuseMap.getTextureId());
@@ -67,7 +67,7 @@ namespace YH
 
             model = Matrix4.CreateTranslation(mLightPos);
             model = Matrix4.CreateScale(0.1f) * model;									  
-            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			RenderQuad();
 		}
 
@@ -179,7 +179,7 @@ namespace YH
 		private Camera mCamera = null;
 		private int quadVAO = 0;
 		private int quadVBO = 0;
-        private GLProgram shader = null;
+        private GLProgram mShader = null;
 		private GLTexture2D diffuseMap = null;
 		private GLTexture2D normalMap = null;
         private Vector3 mLightPos = new Vector3(0.5f, 1.0f, 0.3f);
