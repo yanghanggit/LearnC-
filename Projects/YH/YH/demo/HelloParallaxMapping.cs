@@ -40,8 +40,8 @@ namespace YH
 		{
 			base.Update(dt);
 
-			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
+			//mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			//mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -192,16 +192,30 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				//++mPostProcessing;
+				
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				//--mPostProcessing;
-				//mPostProcessing = mPostProcessing >= 0 ? mPostProcessing : 0;
+				
 			}
 			else if (e.Key == OpenTK.Input.Key.C)
 			{
-				//mUseFramebuffer = !mUseFramebuffer;
+				mParallax = !mParallax;
+			}
+		}
+
+		public override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+            base.OnKeyDown(e);
+
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+                mHeightScale += (float)(0.5 * mDeltaTime);
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				mHeightScale -= (float)(0.5 * mDeltaTime);
+                mHeightScale = mHeightScale >= 0.1f ? mHeightScale : 0.1f;
 			}
 		}
 

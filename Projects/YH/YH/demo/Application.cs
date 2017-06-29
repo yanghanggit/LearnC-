@@ -24,6 +24,7 @@ namespace YH
 
 		public virtual void Update(double dt)
 		{
+            mDeltaTime = dt;
 			mTotalRuningTime += dt;
 			if (mCameraController != null)
 			{
@@ -71,6 +72,7 @@ namespace YH
 		private bool mStarted = false;
 		public readonly string mAppName = "Application";
 		protected double mTotalRuningTime = 0;
+        protected double mDeltaTime = 0;
 		protected CameraController mCameraController = null;
 	}
 }
