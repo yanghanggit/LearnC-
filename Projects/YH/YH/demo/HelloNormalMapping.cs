@@ -28,9 +28,18 @@ namespace YH
 			GL.Uniform1(mShader.GetUniformLocation("diffuseMap"), 0);
 			GL.Uniform1(mShader.GetUniformLocation("normalMap"), 1);
 
-            //
-			mDiffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
-			mNormalMap = new GLTexture2D(@"Resources/Texture/11870.jpg");
+            //11867， 11868
+            //11869， 11870
+            if (false)
+            {
+				mDiffuseMap = new GLTexture2D(@"Resources/Texture/11867.jpg");
+				mNormalMap = new GLTexture2D(@"Resources/Texture/11868.jpg");
+            }
+            else 
+            {
+				mDiffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
+				mNormalMap = new GLTexture2D(@"Resources/Texture/11870.jpg");
+            }
 		}
 
 		public override void Update(double dt)
