@@ -29,8 +29,8 @@ namespace YH
 			GL.Uniform1(mShader.GetUniformLocation("normalMap"), 1);
 
             //
-			diffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
-			normalMap = new GLTexture2D(@"Resources/Texture/11870.jpg");
+			mDiffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
+			mNormalMap = new GLTexture2D(@"Resources/Texture/11870.jpg");
 		}
 
 		public override void Update(double dt)
@@ -57,10 +57,10 @@ namespace YH
             GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, diffuseMap.getTextureId());
+            GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
 
 			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, normalMap.getTextureId());
+			GL.BindTexture(TextureTarget.Texture2D, mNormalMap.getTextureId());
 
 			RenderQuad();
 
@@ -78,7 +78,7 @@ namespace YH
 
 		private void RenderQuad()
 		{
-			if (quadVAO == 0)
+			if (mQuadVAO == 0)
 			{
 				// positions
                 Vector3 pos1 = new Vector3(-1.0f, 1.0f, 0.0f);
@@ -145,12 +145,12 @@ namespace YH
 					pos4.X, pos4.Y, pos4.Z, nm.X, nm.Y, nm.Z, uv4.X, uv4.Y, tangent2.X, tangent2.Y, tangent2.Z, bitangent2.X, bitangent2.Y, bitangent2.Z
 				};
 
-				quadVAO = GL.GenVertexArray();
-				quadVBO = GL.GenBuffer();
+				mQuadVAO = GL.GenVertexArray();
+				mQuadVBO = GL.GenBuffer();
 
 				//
-				GL.BindVertexArray(quadVAO);
-				GL.BindBuffer(BufferTarget.ArrayBuffer, quadVBO);
+				GL.BindVertexArray(mQuadVAO);
+				GL.BindBuffer(BufferTarget.ArrayBuffer, mQuadVBO);
 				GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * quadVertices.Length, quadVertices, BufferUsageHint.StaticDraw);
 
 				GL.EnableVertexAttribArray(0);
@@ -171,17 +171,17 @@ namespace YH
 				GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 				GL.BindVertexArray(0); // Unbind VAO
 			}
-			GL.BindVertexArray(quadVAO);			
+			GL.BindVertexArray(mQuadVAO);			
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
             GL.BindVertexArray(0);
 		}
 
 		private Camera mCamera = null;
-		private int quadVAO = 0;
-		private int quadVBO = 0;
+		private int mQuadVAO = 0;
+		private int mQuadVBO = 0;
         private GLProgram mShader = null;
-		private GLTexture2D diffuseMap = null;
-		private GLTexture2D normalMap = null;
+		private GLTexture2D mDiffuseMap = null;
+		private GLTexture2D mNormalMap = null;
         private Vector3 mLightPos = new Vector3(0.5f, 1.0f, 0.3f);
 	}
 }
