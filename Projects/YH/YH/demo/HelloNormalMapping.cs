@@ -38,7 +38,7 @@ namespace YH
             else 
             {
 				mDiffuseMap = new GLTexture2D(@"Resources/Texture/11869.jpg");
-				mNormalMap = new GLTexture2D(@"Resources/Texture/11870.jpg");
+				mNormalMap = new GLTexture2D(@"Resources/Texture/173621sm14wvzmgh2j0j7n.png");
             }
 		}
 
