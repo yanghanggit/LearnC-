@@ -16,7 +16,7 @@ namespace YH
 		public virtual void Draw()
 		{
 			
-		}
+        }
 
 		public virtual void DrawInstance(int amount)
 		{

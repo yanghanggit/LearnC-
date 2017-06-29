@@ -80,7 +80,7 @@ namespace YH
             //
 			GL.Uniform1(mSimpleDepthShader.GetUniformLocation("far_plane"), mFar);
             GL.Uniform3(mSimpleDepthShader.GetUniformLocation("lightPos"), mLightPos);
-			RenderScene(mSimpleDepthShader);
+            RenderScene(mSimpleDepthShader);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 

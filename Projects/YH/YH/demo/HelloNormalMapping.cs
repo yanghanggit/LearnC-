@@ -16,14 +16,14 @@ namespace YH
 		{
 			base.Start(wnd);
 
-			mCube = new Cube();
-			mFloor = new Floor();
+			//mCube = new Cube();
+			//mFloor = new Floor();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
-			mShader = new GLProgram(@"Resources/advanced.vs", @"Resources/advanced.frag");
-			mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
-			mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
+			//mShader = new GLProgram(@"Resources/advanced.vs", @"Resources/advanced.frag");
+			//mCubeTexture = new GLTexture2D(@"Resources/Texture/wall.jpg");
+			//mFloorTexture = new GLTexture2D(@"Resources/Texture/metal.png");
 
 			//
 			//mDepthFunction.Add(DepthFunction.Less);
@@ -52,6 +52,64 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			// Clear the colorbuffer
+			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			// Configure view/projection matrices
+			shader.Use();
+
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+
+
+
+			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+
+			// Render normal-mapped quad
+			//glm::mat4 model;
+            Matrix4 model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), (float)mTotalRuningTime * -0.1f);//glm::rotate(model, (GLfloat)glfwGetTime() * -0.1f, glm::normalize(glm::vec3(1.0, 0.0, 1.0))); // Rotates the quad to show normal mapping works in all directions
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+
+			//glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
+			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
+
+			GL.Uniform3(shader.GetUniformLocation("lightPos"), mLightPos);
+            GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+
+
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, diffuseMap);
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, diffuseMap.getTextureId());
+
+
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, normalMap);
+
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, normalMap.getTextureId());
+
+			RenderQuad();
+
+			// render light source (simply re-renders a smaller plane at the light's position for debugging/visualization)
+			//model = glm::mat4();
+            model = Matrix4.CreateTranslation(mLightPos);//glm::translate(model, lightPos);
+            model = Matrix4.CreateScale(0.1f) * model;//glm::scale(model, glm::vec3(0.1f));
+													  //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+
+			RenderQuad();
+
+
+
+
+
+
+            /*
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
@@ -90,6 +148,7 @@ namespace YH
 			model = Matrix4.CreateTranslation(0.0f, -0.5f, 0.0f);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mFloor.Draw();
+			*/
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -216,12 +275,12 @@ namespace YH
             GL.BindVertexArray(0);
 		}
 
-		private Cube mCube = null;
-		private Floor mFloor = null;
+		//private Cube mCube = null;
+		//private Floor mFloor = null;
 		private Camera mCamera = null;
-		private GLProgram mShader = null;
-		private GLTexture2D mCubeTexture = null;
-		private GLTexture2D mFloorTexture = null;
+		//private GLProgram mShader = null;
+		//private GLTexture2D mCubeTexture = null;
+		//private GLTexture2D mFloorTexture = null;
 		//private bool mUseDepthTest = true;
 		//private int mDepthFuncIndex = 0;
 		//private List<DepthFunction> mDepthFunction = new List<DepthFunction>();
@@ -233,7 +292,7 @@ namespace YH
 
 		private GLTexture2D diffuseMap = null;
 		private GLTexture2D normalMap = null;
-		
+        private Vector3 mLightPos = new Vector3(0.5f, 1.0f, 0.3f);
 
 
 	}
