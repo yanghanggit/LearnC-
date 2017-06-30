@@ -87,6 +87,7 @@
     <Compile Include="demo\HelloPointShadows.cs" />
     <Compile Include="demo\HelloNormalMapping.cs" />
     <Compile Include="demo\HelloParallaxMapping.cs" />
+    <Compile Include="demo\HelloHDR.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
