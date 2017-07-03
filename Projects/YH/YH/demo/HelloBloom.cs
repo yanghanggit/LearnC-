@@ -64,6 +64,9 @@ namespace YH
             //
             BuildHDRFramebuffer(wnd.Width, wnd.Height);
 
+            //
+            BuildPingPongFramebuffer(wnd.Width, wnd.Height);
+
 			/*
 			mCube = new Cube();
 			mQuad = new Quad();
@@ -162,10 +165,60 @@ namespace YH
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
 			{
-				Console.WriteLine("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+				Console.WriteLine("ERROR::FRAMEBUFFER:: BuildHDRFramebuffer is not complete!");
 			}
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 		}
+
+        private void BuildPingPongFramebuffer(int w, int h)
+        {
+			// Ping pong framebuffer for blurring
+			//GLuint pingpongFBO[2];
+			//GLuint pingpongColorbuffers[2];
+			//glGenFramebuffers(2, pingpongFBO);
+			//glGenTextures(2, pingpongColorbuffers);
+
+            GL.GenFramebuffers(2, pingpongFBO);
+            GL.GenTextures(2, pingpongColorbuffers);
+
+
+            for (var i = 0; i < pingpongFBO.Length; i++)
+			{
+				//glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, pingpongFBO[i]);
+				//glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[i]);
+                GL.BindTexture(TextureTarget.Texture2D, pingpongColorbuffers[i]);
+
+
+				//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+
+
+
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // We clamp to the edge as the blur filter would otherwise sample repeated texture values!
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+
+                //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongColorbuffers[i], 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, pingpongColorbuffers[i], 0);
+
+
+				// Also check if framebuffers are complete (no need for depth buffer)
+				//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+				//std::cout << "Framebuffer not complete!" << std::endl;
+
+				if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+				{
+					Console.WriteLine("ERROR::FRAMEBUFFER:: BuildPingPongFramebuffer is not complete!");
+				}
+			}
+        }
 
 		public override void Update(double dt)
 		{
@@ -289,5 +342,7 @@ namespace YH
         //private GLProgram mLampShader = null;
 
         private int hdrFBO = 0;
+        private int[] pingpongFBO = {0, 0};
+		private int[] pingpongColorbuffers = { 0, 0 };
 	}
 }
