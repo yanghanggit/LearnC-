@@ -18,6 +18,7 @@ namespace YH
 		{
 			base.Start(wnd);
 
+            /*
 			mCube = new Cube();
 			mQuad = new Quad();
 			mSphere = new Sphere();
@@ -56,6 +57,7 @@ namespace YH
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 			GL.Enable(EnableCap.DepthTest);
+			*/
 		}
 
 		public override void Update(double dt)
@@ -65,6 +67,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+            /*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO.mHDRFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
@@ -124,6 +127,7 @@ namespace YH
 			GL.Uniform1(mHDRShader.GetUniformLocation("hdr"), mUseHDR ? 1 : 0);
 			GL.Uniform1(mHDRShader.GetUniformLocation("exposure"), mExposure);
 			mQuad.Draw();
+			*/
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -132,7 +136,7 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.H)
 			{
-				mUseHDR = !mUseHDR;
+				//mUseHDR = !mUseHDR;
 			}
 		}
 
@@ -142,28 +146,28 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				mExposure += (float)(2.0 * mDeltaTime);
+				//mExposure += (float)(2.0 * mDeltaTime);
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				mExposure -= (float)(2.0 * mDeltaTime);
-				mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
+				//mExposure -= (float)(2.0 * mDeltaTime);
+				//mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
 			}
 		}
 
 		//
-		private Cube mCube = null;
-		private Quad mQuad = null;
-		private Sphere mSphere = null;
-		private Camera mCamera = null;
-		private GLHDRFramebuffer mHDRFBO = null;
-		private GLProgram mLightingShader = null;
-		private GLProgram mHDRShader = null;
-		private GLTexture2D mWoodTexture = null;
-		private List<Vector3> mLightPositions = new List<Vector3>();
-		private List<Vector3> mLightColors = new List<Vector3>();
-		private float mExposure = 1.0f;
-		private bool mUseHDR = true;
-		private GLProgram mLampShader = null;
+		//private Cube mCube = null;
+		//private Quad mQuad = null;
+		//private Sphere mSphere = null;
+		//private Camera mCamera = null;
+		//private GLHDRFramebuffer mHDRFBO = null;
+		//private GLProgram mLightingShader = null;
+		//private GLProgram mHDRShader = null;
+		//private GLTexture2D mWoodTexture = null;
+		//private List<Vector3> mLightPositions = new List<Vector3>();
+		//private List<Vector3> mLightColors = new List<Vector3>();
+		//private float mExposure = 1.0f;
+		//private bool mUseHDR = true;
+		//private GLProgram mLampShader = null;
 	}
 }
