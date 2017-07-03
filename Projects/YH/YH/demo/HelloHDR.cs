@@ -2,6 +2,8 @@
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
+using System.Collections.Generic;
+
 
 namespace YH
 {
@@ -17,6 +19,7 @@ namespace YH
 			base.Start(wnd);
 
 			mCube = new Cube();
+            mQuad = new Quad();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -45,6 +48,31 @@ namespace YH
 			mLocLampModel = mLampShader.GetUniformLocation("model");
 			mLocLampView = mLampShader.GetUniformLocation("view");
 			mLocLampProjection = mLampShader.GetUniformLocation("projection");
+
+
+            //
+			shader = new GLProgram(@"Resources/lighting.vs", @"Resources/lighting.frag");
+			hdrShader = new GLProgram(@"Resources/hdr.vs", @"Resources/hdr.frag");
+
+			//
+			woodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
+
+            //
+            lightPositions.Add(new Vector3(0.0f, 0.0f, 49.5f)); // back light
+			lightPositions.Add(new Vector3(-1.4f, -1.9f, 9.0f));
+			lightPositions.Add(new Vector3(0.0f, -1.8f, 4.0f));
+			lightPositions.Add(new Vector3(0.8f, -1.7f, 6.0f));
+		
+            //
+			lightColors.Add(new Vector3(200.0f, 200.0f, 200.0f));
+			lightColors.Add(new Vector3(0.1f, 0.0f, 0.0f));
+			lightColors.Add(new Vector3(0.0f, 0.0f, 0.2f));
+			lightColors.Add(new Vector3(0.0f, 0.1f, 0.0f));
+
+            //
+            GL.Viewport(0, 0, wnd.Width, wnd.Height);
+			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+			GL.Enable(EnableCap.DepthTest);
 		}
 
 		public override void Update(double dt)
@@ -57,10 +85,9 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.ClearColor(Color.Gray);
+			//GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			GL.Enable(EnableCap.DepthTest);
+			//GL.Enable(EnableCap.DepthTest);
 
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
 			var view = mCamera.GetViewMatrix();
@@ -137,6 +164,7 @@ namespace YH
 
 		//
 		private Cube mCube = null;
+        private Quad mQuad = null;
 		private Camera mCamera = null;
 
 		//
@@ -168,5 +196,16 @@ namespace YH
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
 		private float mMaterialShinness = 32.0f;
+
+
+        private GLProgram shader = null;
+        private GLProgram hdrShader = null;
+
+		private GLTexture2D woodTexture = null;
+
+        private List<Vector3> lightPositions = new List<Vector3>();
+		private List<Vector3> lightColors = new List<Vector3>();
+
+
 	}
 }
