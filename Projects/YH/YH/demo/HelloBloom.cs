@@ -18,7 +18,51 @@ namespace YH
 		{
 			base.Start(wnd);
 
-            /*
+            //
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
+			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+			GL.Enable(EnableCap.DepthTest);
+
+            //
+			mCube = new Cube();
+			mSphere = new Sphere();
+
+            //
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), 90.0f, Camera.PITCH);
+			mCameraController = new CameraController(mAppName, mCamera);
+
+            //
+            shader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
+            shaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
+            shaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
+            shaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
+
+			// Set samplers
+			shaderBloomFinal.Use();
+            GL.Uniform1(shaderBloomFinal.GetUniformLocation("scene"), 0);
+            GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
+
+			//
+			// Light sources
+			// - Positions
+			//std::vector<glm::vec3> lightPositions;
+			mLightPositions.Add(new Vector3(0.0f, 0.5f, 1.5f)); // back light
+			mLightPositions.Add(new Vector3(-4.0f, 0.5f, -3.0f));
+			mLightPositions.Add(new Vector3(3.0f, 0.5f, 1.0f));
+			mLightPositions.Add(new Vector3(-.8f, 2.4f, -1.0f));
+			// - Colors
+			//std::vector<glm::vec3> lightColors;
+			mLightColors.Add(new Vector3(5.0f, 5.0f, 5.0f));
+			mLightColors.Add(new Vector3(5.5f, 0.0f, 0.0f));
+			mLightColors.Add(new Vector3(0.0f, 0.0f, 15.0f));
+			mLightColors.Add(new Vector3(0.0f, 1.5f, 0.0f));
+
+			// Load textures
+			woodTexture = new GLTexture2D(@"Resources/Texture/wood.png"); //loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str());
+			containerTexture = new GLTexture2D(@"Resources/Texture/container2.png"); //loadTexture(FileSystem::getPath("resources/textures/container2.png").c_str());
+
+
+			/*
 			mCube = new Cube();
 			mQuad = new Quad();
 			mSphere = new Sphere();
@@ -155,17 +199,28 @@ namespace YH
 			}
 		}
 
+		private Camera mCamera = null;
+		private Cube mCube = null;
+		private Sphere mSphere = null;
+		private GLProgram shader = null;//("bloom.vs", "bloom.frag");
+		private GLProgram shaderLight = null;//("bloom.vs", "light_box.frag");
+		private GLProgram shaderBlur = null;//("blur.vs", "blur.frag");
+		private GLProgram shaderBloomFinal = null;//("bloom_final.vs", "bloom_final.frag");
+        private GLTexture2D woodTexture = null;
+        private GLTexture2D containerTexture = null;
+		
+
+
+
 		//
-		//private Cube mCube = null;
-		//private Quad mQuad = null;
-		//private Sphere mSphere = null;
+
 		//private Camera mCamera = null;
 		//private GLHDRFramebuffer mHDRFBO = null;
 		//private GLProgram mLightingShader = null;
 		//private GLProgram mHDRShader = null;
 		//private GLTexture2D mWoodTexture = null;
-		//private List<Vector3> mLightPositions = new List<Vector3>();
-		//private List<Vector3> mLightColors = new List<Vector3>();
+		private List<Vector3> mLightPositions = new List<Vector3>();
+		private List<Vector3> mLightColors = new List<Vector3>();
 		//private float mExposure = 1.0f;
 		//private bool mUseHDR = true;
 		//private GLProgram mLampShader = null;
