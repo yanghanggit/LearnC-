@@ -51,6 +51,9 @@ namespace YH
 
 
             //
+            hdrFBO = new GLHDRFramebuffer(wnd.Width, wnd.Height);
+
+            //
 			shader = new GLProgram(@"Resources/lighting.vs", @"Resources/lighting.frag");
 			hdrShader = new GLProgram(@"Resources/hdr.vs", @"Resources/hdr.frag");
 
@@ -71,7 +74,8 @@ namespace YH
 
             //
             GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+			//GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+            GL.ClearColor(Color.Gray);
 			GL.Enable(EnableCap.DepthTest);
 		}
 
@@ -84,6 +88,94 @@ namespace YH
 		}
 
 		public override void Draw(double dt, Window wnd)
+		{
+            //OldDraw(dt, wnd);
+            // 1. Render scene into floating point framebuffer
+            //glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO.mHDRFBO);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glm::mat4 model;
+            var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+                                                                  (float)wnd.Width / (float)wnd.Height,
+                                                                  0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+
+            var model = Matrix4.CreateTranslation(0, 0, 0);
+
+
+
+			shader.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+
+
+
+
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_2D, woodTexture);
+
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
+
+			//// - set lighting uniforms
+            for (var i = 0; i < lightPositions.Count; ++i)
+			{
+                GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Position"), lightPositions[i]);
+                GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Color"), lightColors[i]);
+				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &lightPositions[i][0]);
+				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &lightColors[i][0]);
+			}
+			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
+            GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+
+            //// - render tunnel
+            //model = glm::mat4();
+            //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 25.0));
+            //model = glm::scale(model, glm::vec3(5.0f, 5.0f, 55.0f));
+            model = Matrix4.CreateTranslation(0.0f, 0.0f, 25.0f);
+            model = Matrix4.CreateScale(5.0f, 5.0f, 55.0f) * model;
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//glUniform1i(glGetUniformLocation(shader.Program, "inverse_normals"), GL_TRUE);
+			GL.Uniform1(shader.GetUniformLocation("inverse_normals"), 1);
+			//RenderCube();
+			mCube.Draw();
+
+			GL.BindTexture(TextureTarget.Texture2D, 0);
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+
+			//
+
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			hdrShader.Use();
+
+			GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, hdrFBO.mColorBuffer);
+
+   //         glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, colorBuffer);
+
+			//glUniform1i(glGetUniformLocation(hdrShader.Program, "hdr"), hdr);
+			//glUniform1f(glGetUniformLocation(hdrShader.Program, "exposure"), exposure);
+			GL.Uniform1(hdrShader.GetUniformLocation("hdr"), 1);
+			GL.Uniform1(hdrShader.GetUniformLocation("exposure"), 1.0f);
+
+			//RenderQuad();
+			mQuad.Draw();
+            //GL.BindTexture(TextureTarget.Texture2D, 0);
+
+		}
+
+        private void OldDraw(double dt, Window wnd)
 		{
 			//GL.ClearColor(Color.Gray);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -198,6 +290,7 @@ namespace YH
 		private float mMaterialShinness = 32.0f;
 
 
+        private GLHDRFramebuffer hdrFBO = null;
         private GLProgram shader = null;
         private GLProgram hdrShader = null;
 
