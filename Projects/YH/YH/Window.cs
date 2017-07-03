@@ -49,7 +49,8 @@ namespace YH
 			//mCurrentApplication = new HelloShadowMapping();
 			//mCurrentApplication = new HelloPointShadows();
 			//mCurrentApplication = new HelloNormalMapping();
-			mCurrentApplication = new HelloParallaxMapping();
+			//mCurrentApplication = new HelloParallaxMapping();
+			mCurrentApplication = new HelloHDR();
 
 			Title = mCurrentApplication.mAppName;
 		}

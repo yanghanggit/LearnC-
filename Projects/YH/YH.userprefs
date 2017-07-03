@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloHDR.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloParallaxMapping.cs" Line="223" Column="28" />
-      <File FileName="YH/demo/HelloHDR.cs" Line="11" Column="1" />
+      <File FileName="YH/demo/HelloHDR.cs" Line="8" Column="23" />
+      <File FileName="YH/Window.cs" Line="52" Column="53" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
