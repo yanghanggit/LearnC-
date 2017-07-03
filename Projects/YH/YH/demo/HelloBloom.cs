@@ -61,6 +61,8 @@ namespace YH
 			woodTexture = new GLTexture2D(@"Resources/Texture/wood.png"); //loadTexture(FileSystem::getPath("resources/textures/wood.png").c_str());
 			containerTexture = new GLTexture2D(@"Resources/Texture/container2.png"); //loadTexture(FileSystem::getPath("resources/textures/container2.png").c_str());
 
+            //
+            BuildHDRFramebuffer(wnd.Width, wnd.Height);
 
 			/*
 			mCube = new Cube();
@@ -102,6 +104,67 @@ namespace YH
 			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 			GL.Enable(EnableCap.DepthTest);
 			*/
+		}
+
+        private void BuildHDRFramebuffer(int w, int h)
+        {
+            // Set up floating point framebuffer to render scene to
+            //GLuint hdrFBO;
+            //glGenFramebuffers(1, &hdrFBO);
+            hdrFBO = GL.GenFramebuffer();
+			//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO);
+			// - Create 2 floating point color buffers (1 for normal rendering, other for brightness treshold values)
+			//GLuint colorBuffers[2];
+			//glGenTextures(2, colorBuffers);
+            int[] colorBuffers = {0, 0};
+            GL.GenTextures(2, colorBuffers);
+
+            for (var i = 0; i < colorBuffers.Length; i++)
+			{
+				//glBindTexture(GL_TEXTURE_2D, colorBuffers[i]);
+                GL.BindTexture(TextureTarget.Texture2D, colorBuffers[i]);
+                //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);  // We clamp to the edge as the blur filter would otherwise sample repeated texture values!
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+                // attach texture to framebuffer
+				//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorBuffers[i], 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, TextureTarget.Texture2D, colorBuffers[i], 0);
+			}
+
+			// - Create and attach depth buffer (renderbuffer)
+			//GLuint rboDepth;
+			//glGenRenderbuffers(1, &rboDepth);
+            int rboDepth = GL.GenRenderbuffer();
+			//glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+			//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_HEIGHT);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
+			//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+
+			// - Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering 
+			//GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+            DrawBuffersEnum[] attachments = {DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1};
+            //glDrawBuffers(2, attachments);
+            GL.DrawBuffers(2, attachments);
+
+			// - Finally check if framebuffer is complete
+			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			//	std::cout << "Framebuffer not complete!" << std::endl;
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+			}
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 		}
 
 		public override void Update(double dt)
@@ -221,8 +284,10 @@ namespace YH
 		//private GLTexture2D mWoodTexture = null;
 		private List<Vector3> mLightPositions = new List<Vector3>();
 		private List<Vector3> mLightColors = new List<Vector3>();
-		//private float mExposure = 1.0f;
-		//private bool mUseHDR = true;
-		//private GLProgram mLampShader = null;
+        //private float mExposure = 1.0f;
+        //private bool mUseHDR = true;
+        //private GLProgram mLampShader = null;
+
+        private int hdrFBO = 0;
 	}
 }
