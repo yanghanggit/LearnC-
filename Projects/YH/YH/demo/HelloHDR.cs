@@ -24,32 +24,6 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-			//
-			mLightShader = new GLProgram(@"Resources/materials.vs", @"Resources/materials.frag");
-
-			mLocLightModel = mLightShader.GetUniformLocation("model");
-			mLocLightView = mLightShader.GetUniformLocation("view");
-			mLocLightProjection = mLightShader.GetUniformLocation("projection");
-
-			mLocLightPos = mLightShader.GetUniformLocation("light.position");
-			mLocLightViewPos = mLightShader.GetUniformLocation("viewPos");
-
-			mLocLightAmbient = mLightShader.GetUniformLocation("light.ambient");
-			mLocLightDiffuse = mLightShader.GetUniformLocation("light.diffuse");
-			mLocLightSpecular = mLightShader.GetUniformLocation("light.specular");
-
-			mLocMaterialAmbient = mLightShader.GetUniformLocation("material.ambient");
-			mLocMaterialDiffuse = mLightShader.GetUniformLocation("material.diffuse");
-			mLocMaterialSpecular = mLightShader.GetUniformLocation("material.specular");
-			mLocMaterialShininess = mLightShader.GetUniformLocation("material.shininess");
-
-			//
-			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
-			mLocLampModel = mLampShader.GetUniformLocation("model");
-			mLocLampView = mLampShader.GetUniformLocation("view");
-			mLocLampProjection = mLampShader.GetUniformLocation("projection");
-
-
             //
             hdrFBO = new GLHDRFramebuffer(wnd.Width, wnd.Height);
 
@@ -61,7 +35,7 @@ namespace YH
 			woodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
 
             //
-            lightPositions.Add(new Vector3(0.0f, 0.0f, 49.5f)); // back light
+            lightPositions.Add(new Vector3(0.0f, 0.0f, 49.5f));
 			lightPositions.Add(new Vector3(-1.4f, -1.9f, 9.0f));
 			lightPositions.Add(new Vector3(0.0f, -1.8f, 4.0f));
 			lightPositions.Add(new Vector3(0.8f, -1.7f, 6.0f));
@@ -74,7 +48,6 @@ namespace YH
 
             //
             GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			//GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
             GL.ClearColor(Color.Gray);
 			GL.Enable(EnableCap.DepthTest);
 		}
@@ -82,22 +55,12 @@ namespace YH
 		public override void Update(double dt)
 		{
 			base.Update(dt);
-
-			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
 		{
-            //OldDraw(dt, wnd);
-            // 1. Render scene into floating point framebuffer
-            //glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO.mHDRFBO);
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-			//glm::mat4 view = camera.GetViewMatrix();
-			//glm::mat4 model;
             var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
                                                                   (float)wnd.Width / (float)wnd.Height,
                                                                   0.1f, 100.0f);
@@ -105,137 +68,38 @@ namespace YH
 
             var model = Matrix4.CreateTranslation(0, 0, 0);
 
-
-
 			shader.Use();
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
-
-
-
-
-            //glActiveTexture(GL_TEXTURE0);
-            //glBindTexture(GL_TEXTURE_2D, woodTexture);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
 
-			//// - set lighting uniforms
             for (var i = 0; i < lightPositions.Count; ++i)
 			{
                 GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Position"), lightPositions[i]);
                 GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Color"), lightColors[i]);
-				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &lightPositions[i][0]);
-				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &lightColors[i][0]);
 			}
-			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
             GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
-
-            //// - render tunnel
-            //model = glm::mat4();
-            //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 25.0));
-            //model = glm::scale(model, glm::vec3(5.0f, 5.0f, 55.0f));
             model = Matrix4.CreateTranslation(0.0f, 0.0f, 25.0f);
             model = Matrix4.CreateScale(5.0f, 5.0f, 55.0f) * model;
 			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
-
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-			//glUniform1i(glGetUniformLocation(shader.Program, "inverse_normals"), GL_TRUE);
 			GL.Uniform1(shader.GetUniformLocation("inverse_normals"), 1);
-			//RenderCube();
 			mCube.Draw();
 
 			GL.BindTexture(TextureTarget.Texture2D, 0);
-			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
 			//
-
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			hdrShader.Use();
 
 			GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, hdrFBO.mColorBuffer);
-
-   //         glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, colorBuffer);
-
-			//glUniform1i(glGetUniformLocation(hdrShader.Program, "hdr"), hdr);
-			//glUniform1f(glGetUniformLocation(hdrShader.Program, "exposure"), exposure);
 			GL.Uniform1(hdrShader.GetUniformLocation("hdr"), 1);
 			GL.Uniform1(hdrShader.GetUniformLocation("exposure"), 1.0f);
-
-			//RenderQuad();
 			mQuad.Draw();
-            //GL.BindTexture(TextureTarget.Texture2D, 0);
-
-		}
-
-        private void OldDraw(double dt, Window wnd)
-		{
-			//GL.ClearColor(Color.Gray);
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			//GL.Enable(EnableCap.DepthTest);
-
-			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), (float)wnd.Width / (float)wnd.Height, 0.1f, 100.0f);
-			var view = mCamera.GetViewMatrix();
-
-			do
-			{
-				mLightShader.Use();
-
-				GL.UniformMatrix4(mLocLightProjection, false, ref projection);
-				GL.UniformMatrix4(mLocLightView, false, ref view);
-
-				GL.Uniform3(mLocLightPos, mLightPos.X, mLightPos.Y, mLightPos.Z);
-				GL.Uniform3(mLocLightViewPos, mCamera.Position.X, mCamera.Position.Y, mCamera.Position.Z);
-
-				Vector3 lightColor = new Vector3(0.0f, 0.0f, 0.0f);
-				lightColor.X = (float)Math.Sin(mTotalRuningTime * 2.0);
-				lightColor.Y = (float)Math.Sin(mTotalRuningTime * 0.7);
-				lightColor.Z = (float)Math.Sin(mTotalRuningTime * 1.3);
-
-				Vector3 diffuseColor = new Vector3(0.0f, 0.0f, 0.0f);
-				diffuseColor = lightColor * (new Vector3(0.5f, 0.5f, 0.5f));
-
-				Vector3 ambientColor = new Vector3(0.0f, 0.0f, 0.0f);
-				ambientColor = diffuseColor * (new Vector3(0.2f, 0.2f, 0.2f));
-
-				GL.Uniform3(mLocLightAmbient, ambientColor.X, ambientColor.Y, ambientColor.Z);
-				GL.Uniform3(mLocLightDiffuse, diffuseColor.X, diffuseColor.Y, diffuseColor.Z);
-				GL.Uniform3(mLocLightSpecular, 1.0f, 1.0f, 1.0f);
-
-				GL.Uniform3(mLocMaterialAmbient, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocMaterialDiffuse, 1.0f, 0.5f, 0.31f);
-				GL.Uniform3(mLocMaterialSpecular, 0.5f, 0.5f, 0.5f); // Specular doesn't have full effect on this object's material
-				GL.Uniform1(mLocMaterialShininess, mMaterialShinness);
-
-				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				//model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mLocLightModel, false, ref model);
-
-				mCube.Draw();
-			}
-			while (false);
-
-			do
-			{
-				mLampShader.Use();
-
-				GL.UniformMatrix4(mLocLampProjection, false, ref projection);
-				GL.UniformMatrix4(mLocLampView, false, ref view);
-
-				Matrix4 model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
-				model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mLocLampModel, false, ref model);
-
-				mCube.Draw();
-			}
-			while (false);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -244,13 +108,11 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				mMaterialShinness *= 2.0f;
-				mMaterialShinness = mMaterialShinness >= 256.0f ? 256.0f : mMaterialShinness;
+				
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				mMaterialShinness /= 2.0f;
-				mMaterialShinness = mMaterialShinness <= 2.0f ? 2.0f : mMaterialShinness;
+				
 			}
 		}
 
@@ -258,47 +120,11 @@ namespace YH
 		private Cube mCube = null;
         private Quad mQuad = null;
 		private Camera mCamera = null;
-
-		//
-		private GLProgram mLightShader = null;
-
-		private int mLocLightModel = -1;
-		private int mLocLightView = -1;
-		private int mLocLightProjection = -1;
-
-		private int mLocLightPos = -1;
-		private int mLocLightViewPos = -1;
-
-		private int mLocLightAmbient = -1;
-		private int mLocLightDiffuse = -1;
-		private int mLocLightSpecular = -1;
-
-		private int mLocMaterialAmbient = -1;
-		private int mLocMaterialDiffuse = -1;
-		private int mLocMaterialSpecular = -1;
-		private int mLocMaterialShininess = -1;
-
-		//
-		private GLProgram mLampShader = null;
-		private int mLocLampModel = -1;
-		private int mLocLampView = -1;
-		private int mLocLampProjection = -1;
-
-		//
-		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
-
-		private float mMaterialShinness = 32.0f;
-
-
         private GLHDRFramebuffer hdrFBO = null;
         private GLProgram shader = null;
         private GLProgram hdrShader = null;
-
 		private GLTexture2D woodTexture = null;
-
         private List<Vector3> lightPositions = new List<Vector3>();
-		private List<Vector3> lightColors = new List<Vector3>();
-
-
+        private List<Vector3> lightColors = new List<Vector3>();
 	}
 }
