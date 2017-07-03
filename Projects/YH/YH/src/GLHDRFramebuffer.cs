@@ -22,18 +22,14 @@ namespace YH
 							IntPtr.Zero);
 			
 
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 
             mRboDepth = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, mRboDepth);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
 			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
-
-
-
-
 
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
