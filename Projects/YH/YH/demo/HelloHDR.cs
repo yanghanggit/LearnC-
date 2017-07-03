@@ -1,4 +1,4 @@
-﻿﻿﻿using System;
+﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
@@ -20,6 +20,7 @@ namespace YH
 
 			mCube = new Cube();
             mQuad = new Quad();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), 90.0f, Camera.PITCH);
             mCamera.MovementSpeed *= 2.0f;
@@ -48,9 +49,12 @@ namespace YH
 			mLightColors.Add(new Vector3(0.0f, 0.0f, 0.2f));
 			mLightColors.Add(new Vector3(0.0f, 0.1f, 0.0f));
 
+			//
+			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+
             //
-            GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(Color.Gray);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
+            GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
 			GL.Enable(EnableCap.DepthTest);
 		}
 
@@ -89,9 +93,27 @@ namespace YH
 			GL.Uniform1(mLightingShader.GetUniformLocation("inverse_normals"), 1);
 			mCube.Draw();
 
+
+			//
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+
+            for (var i = 0; i < mLightPositions.Count; ++i)
+			{
+				var pos = mLightPositions[i];
+				model = Matrix4.CreateTranslation(pos);
+				model = Matrix4.CreateScale(0.1f) * model;
+				GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+
+				var color = mLightColors[i];
+				GL.Uniform3(mLampShader.GetUniformLocation("set_color"), color);
+
+				mSphere.Draw();
+			}
+
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-
 
 			//
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -132,6 +154,7 @@ namespace YH
 		//
 		private Cube mCube = null;
         private Quad mQuad = null;
+        private Sphere mSphere = null;
 		private Camera mCamera = null;
         private GLHDRFramebuffer mHDRFBO = null;
         private GLProgram mLightingShader = null;
@@ -141,5 +164,6 @@ namespace YH
         private List<Vector3> mLightColors = new List<Vector3>();
         private float mExposure = 1.0f;
         private bool mUseHDR = true;
+		private GLProgram mLampShader = null;
 	}
 }
