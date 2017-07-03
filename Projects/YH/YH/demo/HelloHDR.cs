@@ -21,7 +21,9 @@ namespace YH
 			mCube = new Cube();
             mQuad = new Quad();
 
-			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), 90.0f, Camera.PITCH);
+            mCamera.MovementSpeed *= 2.0f;
+
 			mCameraController = new CameraController(mAppName, mCamera);
 
             //
@@ -98,7 +100,7 @@ namespace YH
 			GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, hdrFBO.mColorBuffer);
 			GL.Uniform1(hdrShader.GetUniformLocation("hdr"), 1);
-			GL.Uniform1(hdrShader.GetUniformLocation("exposure"), 1.0f);
+			GL.Uniform1(hdrShader.GetUniformLocation("exposure"), mExposure);
 			mQuad.Draw();
 		}
 
@@ -116,6 +118,21 @@ namespace YH
 			}
 		}
 
+		public override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+
+			if (e.Key == OpenTK.Input.Key.Plus)
+			{
+				mExposure += (float)(2.0 * mDeltaTime);
+			}
+			else if (e.Key == OpenTK.Input.Key.Minus)
+			{
+				mExposure -= (float)(2.0 * mDeltaTime);
+				mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
+			}
+		}
+
 		//
 		private Cube mCube = null;
         private Quad mQuad = null;
@@ -126,5 +143,6 @@ namespace YH
 		private GLTexture2D woodTexture = null;
         private List<Vector3> lightPositions = new List<Vector3>();
         private List<Vector3> lightColors = new List<Vector3>();
+        private float mExposure = 1.0f;
 	}
 }
