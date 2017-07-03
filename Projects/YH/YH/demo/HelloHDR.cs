@@ -99,7 +99,7 @@ namespace YH
 
 			GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, mHDRFBO.mColorBuffer);
-			GL.Uniform1(mHDRShader.GetUniformLocation("hdr"), 1);
+			GL.Uniform1(mHDRShader.GetUniformLocation("hdr"), mUseHDR ? 1 : 0);
 			GL.Uniform1(mHDRShader.GetUniformLocation("exposure"), mExposure);
 			mQuad.Draw();
 		}
@@ -108,13 +108,9 @@ namespace YH
 		{
 			base.OnKeyUp(e);
 
-			if (e.Key == OpenTK.Input.Key.Plus)
+            if (e.Key == OpenTK.Input.Key.H)
 			{
-				
-			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
-				
+                mUseHDR = !mUseHDR;
 			}
 		}
 
@@ -144,5 +140,6 @@ namespace YH
         private List<Vector3> mLightPositions = new List<Vector3>();
         private List<Vector3> mLightColors = new List<Vector3>();
         private float mExposure = 1.0f;
+        private bool mUseHDR = true;
 	}
 }
