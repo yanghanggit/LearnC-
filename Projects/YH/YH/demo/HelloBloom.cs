@@ -26,6 +26,7 @@ namespace YH
             //
 			mCube = new Cube();
 			mSphere = new Sphere();
+            mQuad = new Quad();
 
             //
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), 90.0f, Camera.PITCH);
@@ -318,6 +319,7 @@ namespace YH
 		private Camera mCamera = null;
 		private Cube mCube = null;
 		private Sphere mSphere = null;
+        private Quad mQuad = null;
 		private GLProgram shader = null;//("bloom.vs", "bloom.frag");
 		private GLProgram shaderLight = null;//("bloom.vs", "light_box.frag");
 		private GLProgram shaderBlur = null;//("blur.vs", "blur.frag");
