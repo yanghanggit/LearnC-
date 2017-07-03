@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloGammaCorrection.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloHDR.cs" Line="116" Column="9" />
-      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="25" Column="17" />
+      <File FileName="YH/demo/HelloHDR.cs" Line="168" Column="3" />
+      <File FileName="YH/demo/HelloGammaCorrection.cs" Line="119" Column="14" />
+      <File FileName="YH/demo/HelloBloom.cs" Line="5" Column="25" />
+      <File FileName="YH/Window.cs" Line="57" Column="13" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

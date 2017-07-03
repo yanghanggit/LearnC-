@@ -89,6 +89,7 @@
     <Compile Include="demo\HelloParallaxMapping.cs" />
     <Compile Include="demo\HelloHDR.cs" />
     <Compile Include="src\GLHDRFramebuffer.cs" />
+    <Compile Include="demo\HelloBloom.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
