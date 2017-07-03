@@ -228,7 +228,152 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-            /*
+            //===============================================================================================
+			// 1. Render scene into floating point framebuffer
+			//glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO);
+            GL.Viewport(0, 0, wnd.Width, wnd.Height);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glm::mat4 model;
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+																  (float)wnd.Width / (float)wnd.Height,
+																  0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+
+			var model = Matrix4.CreateTranslation(0, 0, 0);
+
+			shader.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+
+			//glActiveTexture(GL_TEXTURE0);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            //glBindTexture(GL_TEXTURE_2D, woodTexture);
+            GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
+			// - set lighting uniforms
+            for (int i = 0; i < mLightPositions.Count; i++)
+			{
+				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &lightPositions[i][0]);
+				//glUniform3fv(glGetUniformLocation(shader.Program, ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &lightColors[i][0]);
+           		GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Position"), mLightPositions[i]);
+                GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Color"), mLightColors[i]);
+			}
+			//glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
+			GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+
+            // - create one large cube that acts as the floor
+			//model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0));
+			//model = glm::scale(model, glm::vec3(25.0f, 1.0f, 25.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+            model = Matrix4.CreateTranslation(0.0f, -1.0f, 0.0f);
+            model = Matrix4.CreateScale(25.0f, 1.0f, 25.0f) * model;
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
+
+            // - then create multiple cubes as the scenery
+			//glBindTexture(GL_TEXTURE_2D, containerTexture);
+            GL.BindTexture(TextureTarget.Texture2D, containerTexture.getTextureId());
+
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+            model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
+            //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+			
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
+            model = Matrix4.CreateTranslation(2.0f, 0.0f, 1.0f);
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(-1.0f, -1.0f, 2.0));
+            model = Matrix4.CreateTranslation(-1.0f, -1.0f, 2.0f);
+			//model = glm::rotate(model, 60.0f, glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+            model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 60.0f) * model;
+			//model = glm::scale(model, glm::vec3(2.0));
+            model = Matrix4.CreateScale(2.0f) * model;
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            //RenderCube();
+            mCube.Draw();
+			
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 2.7f, 4.0));
+			model = Matrix4.CreateTranslation(0.0f, 2.7f, 4.0f);
+            //model = glm::rotate(model, 23.0f, glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+            model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 23.0f) * model;
+			//model = glm::scale(model, glm::vec3(2.5));
+            model = Matrix4.CreateScale(2.5f) * model;
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			//RenderCube();
+			mCube.Draw();
+
+
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(-2.0f, 1.0f, -3.0));
+			model = Matrix4.CreateTranslation(-2.0f, 1.0f, -3.0f);
+            //model = glm::rotate(model, 124.0f, glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+			model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 124.0f) * model;
+            //model = glm::scale(model, glm::vec3(2.0));
+			model = Matrix4.CreateScale(2.0f) * model;
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
+            //RenderCube();
+			//RenderCube();
+			
+            //model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(-3.0f, 0.0f, 0.0));
+			model = Matrix4.CreateTranslation(-3.0f, 0.0f, 0.0f);
+            //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			//RenderCube();
+			mCube.Draw();
+
+            // - finally show all the light sources as bright cubes
+			shaderLight.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shaderLight.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderLight.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shaderLight.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shaderLight.GetUniformLocation("view"), false, ref view);
+
+            for (int i = 0; i < mLightPositions.Count; i++)
+			{
+				//model = glm::mat4();
+				//model = glm::translate(model, glm::vec3(lightPositions[i]));
+                model = Matrix4.CreateTranslation(mLightPositions[i]);
+				//model = glm::scale(model, glm::vec3(0.5f));
+				model = Matrix4.CreateScale(0.5f) * model;
+                //glUniformMatrix4fv(glGetUniformLocation(shaderLight.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+                GL.UniformMatrix4(shaderLight.GetUniformLocation("model"), false, ref model);
+
+
+				//glUniform3fv(glGetUniformLocation(shaderLight.Program, "lightColor"), 1, &lightColors[i][0]);
+                GL.Uniform3(shaderLight.GetUniformLocation("lightColor"), mLightColors[i]);
+
+                //RenderCube();
+                mCube.Draw();
+			}
+            //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+			//===============================================================================================
+
+
+
+
+			/*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO.mHDRFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
