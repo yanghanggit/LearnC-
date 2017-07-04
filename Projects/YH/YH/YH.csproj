@@ -90,6 +90,7 @@
     <Compile Include="demo\HelloHDR.cs" />
     <Compile Include="src\GLHDRFramebuffer.cs" />
     <Compile Include="demo\HelloBloom.cs" />
+    <Compile Include="demo\HelloDeferredShading.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
