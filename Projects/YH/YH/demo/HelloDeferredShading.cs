@@ -138,11 +138,6 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-			// 1. Geometry Pass: render scene's geometry/color data into gbuffer
-			GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																  (float)wnd.Width / (float)wnd.Height,
 																  0.1f, 100.0f);
@@ -151,78 +146,89 @@ namespace YH
 			var model = Matrix4.CreateTranslation(0, 0, 0);
 
 
-			shaderGeometryPass.Use();
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
+            if (true)
+            {
+                // 1. Geometry Pass: render scene's geometry/color data into gbuffer
+                GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			//
-			GL.ActiveTexture(TextureUnit.Texture0);
-			GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
-			GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_diffuse1"), 0);
+                //
+                shaderGeometryPass.Use();
+                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
+                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
 
-			GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
-			GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_specular1"), 1);
+                //
+                GL.ActiveTexture(TextureUnit.Texture0);
+                GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
+                GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_diffuse1"), 0);
 
-            //
-            for (var i = 0; i < objectPositions.Count; i++)
-			{
-                model = Matrix4.CreateTranslation(objectPositions[i]);
-                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
-                mCube.Draw();
-			}
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+                GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_specular1"), 1);
 
-
-			// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			shaderLightingPass.Use();
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, gPosition);
-
-			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, gNormal);
-
-			GL.ActiveTexture(TextureUnit.Texture2);
-			GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
-
-
-            // Also send light relevant uniforms
-            const float constant = 1.0f; // Note that we don't send this to the shader, we assume it is always 1.0 (in our case)
-            const float linear = 0.7f;
-            const float quadratic = 1.8f;
-            const float lightThreshold = 5.0f; // 5 / 256
-
-			for (var i = 0; i < lightPositions.Count; i++)
-			{
-				GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Position"), lightPositions[i]);
-				GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Color"), lightColors[i]);
-                GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Linear"), linear);
-                GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Quadratic"), quadratic);
-
-
-                float maxBrightness = Math.Max(Math.Max(lightColors[i].X, lightColors[i].Y), lightColors[i].Z); 
-                float radius = (-linear + (float)(Math.Sqrt(linear * linear - 4 * quadratic * (constant - (256.0 / lightThreshold) * maxBrightness)))) / (2 * quadratic);
-			    GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Radius"), radius);
+                //
+                for (var i = 0; i < objectPositions.Count; i++)
+                {
+                    model = Matrix4.CreateTranslation(objectPositions[i]);
+                    GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+                    mCube.Draw();
+                }
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             }
-			GL.Uniform3(shaderLightingPass.GetUniformLocation("viewPos"), mCamera.Position);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
-            mQuad.Draw();
+
+            if (true)
+            {
+				// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
+				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+				shaderLightingPass.Use();
+				GL.ActiveTexture(TextureUnit.Texture0);
+				GL.BindTexture(TextureTarget.Texture2D, gPosition);
+
+				GL.ActiveTexture(TextureUnit.Texture1);
+				GL.BindTexture(TextureTarget.Texture2D, gNormal);
+
+				GL.ActiveTexture(TextureUnit.Texture2);
+				GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
 
 
+				// Also send light relevant uniforms
+				const float constant = 1.0f; // Note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+				const float linear = 0.7f;
+				const float quadratic = 1.8f;
+				const float lightThreshold = 5.0f; // 5 / 256
 
-			// 2.5. Copy content of geometry's depth buffer to default framebuffer's depth buffer
-            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, gBuffer);
-            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-													   
-			GL.BlitFramebuffer( 0, 0, wnd.Width, wnd.Height,
-							    0, 0, wnd.Width, wnd.Height,
-                                ClearBufferMask.DepthBufferBit,
-                               BlitFramebufferFilter.Nearest);
-            
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+				for (var i = 0; i < lightPositions.Count; i++)
+				{
+					GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Position"), lightPositions[i]);
+					GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Color"), lightColors[i]);
+					GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Linear"), linear);
+					GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Quadratic"), quadratic);
 
+
+					float maxBrightness = Math.Max(Math.Max(lightColors[i].X, lightColors[i].Y), lightColors[i].Z);
+					float radius = (-linear + (float)(Math.Sqrt(linear * linear - 4 * quadratic * (constant - (256.0 / lightThreshold) * maxBrightness)))) / (2 * quadratic);
+					GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Radius"), radius);
+				}
+				GL.Uniform3(shaderLightingPass.GetUniformLocation("viewPos"), mCamera.Position);
+				GL.Uniform1(shaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
+				mQuad.Draw();
+            }
+
+            if (true)
+            {
+				// 2.5. Copy content of geometry's depth buffer to default framebuffer's depth buffer
+				GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, gBuffer);
+				GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+
+				GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
+									0, 0, wnd.Width, wnd.Height,
+									ClearBufferMask.DepthBufferBit,
+								   BlitFramebufferFilter.Nearest);
+
+				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            }
 
 			// 3. Render lights on top of scene, by blitting
 			shaderLightBox.Use();
