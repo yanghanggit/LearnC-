@@ -61,19 +61,21 @@ namespace YH
 			// - Colors
 			const int NR_LIGHTS = 32;
             var rd = new Random(13);
+            //rd.Next();
+            var a = rd.NextDouble();
 			for (var i = 0; i < NR_LIGHTS; i++)
 			{
                 // Calculate slightly random offsets
-                float xPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
-                float yPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 4.0);
-                float zPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
+                float xPos = (float)(((rd.Next() % 100.0) / 100.0) * 6.0 - 3.0);
+                float yPos = (float)(((rd.Next() % 100.0) / 100.0) * 6.0 - 4.0);
+                float zPos = (float)(((rd.Next() % 100.0) / 100.0) * 6.0 - 3.0);
                 lightPositions.Add(new Vector3(xPos, yPos, zPos));
                 //lightPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
 
 				// Also calculate random color
-				float rColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
-				float gColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
-				float bColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				float rColor = (float)(((rd.Next() % 100.0) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				float gColor = (float)(((rd.Next() % 100.0) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				float bColor = (float)(((rd.Next() % 100.0) / 200.0f) + 0.5); // Between 0.5 and 1.0
 				lightColors.Add(new Vector3(rColor, gColor, bColor));
                 //lightColors.Add(new Vector3(1, 0, 0));
 			}
@@ -233,7 +235,7 @@ namespace YH
                                    ClearBufferMask.DepthBufferBit,
 								   BlitFramebufferFilter.Nearest);
 
-				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+				//GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
 
             GL.Enable(EnableCap.DepthTest);
