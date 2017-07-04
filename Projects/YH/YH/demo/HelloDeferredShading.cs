@@ -136,7 +136,7 @@ namespace YH
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
-            int gPosition = GL.GenTexture();
+            gPosition = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, gPosition);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
@@ -150,7 +150,7 @@ namespace YH
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
-			int gNormal = GL.GenTexture();
+			gNormal = GL.GenTexture();
 			GL.BindTexture(TextureTarget.Texture2D, gNormal);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
@@ -164,7 +164,7 @@ namespace YH
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
-            int gAlbedoSpec = GL.GenTexture();
+            gAlbedoSpec = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
@@ -264,11 +264,12 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+			// 1. Geometry Pass: render scene's geometry/color data into gbuffer
 			//glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
-            GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
+			GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
 			// 1. Geometry Pass: render scene's geometry/color data into gbuffer
 			//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
 			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
@@ -314,6 +315,72 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+
+
+
+
+
+			// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			shaderLightingPass.Use();
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, gPosition);
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, gNormal);
+			//glActiveTexture(GL_TEXTURE2);
+			//glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			GL.ActiveTexture(TextureUnit.Texture2);
+			GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
+
+
+            // Also send light relevant uniforms
+            const float constant = 1.0f; // Note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+            const float linear = 0.7f;
+            const float quadratic = 1.8f;
+            const float lightThreshold = 5.0f; // 5 / 256
+
+			for (var i = 0; i < lightPositions.Count; i++)
+			{
+				//glUniform3fv(glGetUniformLocation(shaderLightingPass.Program, ("lights[" + std::to_string(i) + "].Position").c_str()), 1, &lightPositions[i][0]);
+				//glUniform3fv(glGetUniformLocation(shaderLightingPass.Program, ("lights[" + std::to_string(i) + "].Color").c_str()), 1, &lightColors[i][0]);
+				// Update attenuation parameters and calculate radius
+				GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Position"), lightPositions[i]);
+				GL.Uniform3(shaderLightingPass.GetUniformLocation("lights[" + i + "].Color"), lightColors[i]);
+
+				//glUniform1f(glGetUniformLocation(shaderLightingPass.Program, ("lights[" + std::to_string(i) + "].Linear").c_str()), linear);
+				//glUniform1f(glGetUniformLocation(shaderLightingPass.Program, ("lights[" + std::to_string(i) + "].Quadratic").c_str()), quadratic);
+                GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Linear"), linear);
+                GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Quadratic"), quadratic);
+
+                // Then calculate radius of light volume/sphere
+                //const GLfloat maxBrightness = std::fmaxf(std::fmaxf(lightColors[i].r, lightColors[i].g), lightColors[i].b);
+                float maxBrightness = Math.Max(Math.Max(lightColors[i].X, lightColors[i].Y), lightColors[i].Z); 
+                //GLfloat radius = (-linear + static_cast<float>(std::sqrt(linear * linear - 4 * quadratic * (constant - (256.0 / lightThreshold) * maxBrightness)))) / (2 * quadratic);
+                float radius = (-linear + (float)(Math.Sqrt(linear * linear - 4 * quadratic * (constant - (256.0 / lightThreshold) * maxBrightness)))) / (2 * quadratic);
+				//glUniform1f(glGetUniformLocation(shaderLightingPass.Program, ("lights[" + std::to_string(i) + "].Radius").c_str()), radius);
+			    GL.Uniform1(shaderLightingPass.GetUniformLocation("lights[" + i + "].Radius"), radius);
+            }
+			//glUniform3fv(glGetUniformLocation(shaderLightingPass.Program, "viewPos"), 1, &camera.Position[0]);
+			GL.Uniform3(shaderLightingPass.GetUniformLocation("viewPos"), mCamera.Position);
+            //glUniform1i(glGetUniformLocation(shaderLightingPass.Program, "draw_mode"), draw_mode);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
+            //RenderQuad();
+            mQuad.Draw();
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -490,6 +557,10 @@ namespace YH
 
 		private GLTexture2D mDiffuseMap = null;
 		private GLTexture2D mSpecularMap = null;
+
+        private int gPosition = 0; 
+        private int gNormal = 0; 
+        private int gAlbedoSpec = 0;
     	
 	}
 }
