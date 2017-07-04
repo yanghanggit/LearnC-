@@ -20,7 +20,6 @@ namespace YH
 			//
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.ClearColor(Color.Black);
-			GL.Enable(EnableCap.DepthTest);
 
 			//
 			mCube = new Cube();
@@ -91,11 +90,11 @@ namespace YH
 			// - Position color buffer
             gPosition = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, gPosition);
-			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, gPosition, 0);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
+            //GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Normal color buffer
 			gNormal = GL.GenTexture();
@@ -104,7 +103,7 @@ namespace YH
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, gNormal, 0);
-			GL.BindTexture(TextureTarget.Texture2D, 0);
+			//GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Color + Specular color buffer
 			gAlbedoSpec = GL.GenTexture();
@@ -113,18 +112,23 @@ namespace YH
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment2, TextureTarget.Texture2D, gAlbedoSpec, 0);
-			GL.BindTexture(TextureTarget.Texture2D, 0);
+			//GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
-			DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
+            DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
 			GL.DrawBuffers(3, attachments);
 
             // - Create and attach depth buffer (renderbuffer)
-            int rboDepth = GL.GenRenderbuffer();
-            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
+   //         int rboDepth = GL.GenRenderbuffer();
+   //         GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+   //         GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
+   //         GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+			//GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
+
+			int rboDepth = GL.GenRenderbuffer();
+			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
+			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
 
 			// - Finally check if framebuffer is complete
 			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -135,7 +139,7 @@ namespace YH
 			}
 
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 		
@@ -146,6 +150,8 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+            GL.Enable(EnableCap.DepthTest);
+
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																  (float)wnd.Width / (float)wnd.Height,
 																  0.1f, 100.0f);
@@ -156,7 +162,6 @@ namespace YH
 
             if (true)
             {
-                //GL.Enable(EnableCap.DepthTest);
                 // 1. Geometry Pass: render scene's geometry/color data into gbuffer
                 GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
@@ -189,8 +194,7 @@ namespace YH
 
             if (true)
             {
-                GL.Disable(EnableCap.DepthTest);
-                //GL.DepthMask(false);
+                //GL.Disable(EnableCap.DepthTest);
 				// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				shaderLightingPass.Use();
@@ -240,7 +244,7 @@ namespace YH
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
 
-            GL.Enable(EnableCap.DepthTest);
+            GL.Disable(EnableCap.DepthTest);
 			// 3. Render lights on top of scene, by blitting
             //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			shaderLightBox.Use();
