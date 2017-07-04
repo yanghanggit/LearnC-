@@ -43,7 +43,7 @@ namespace YH
 			//mCurrentApplication = new HelloGeometryShaderShowNormal();
 			//mCurrentApplication = new HelloInstancing();
 			//mCurrentApplication = new HelloAsteroidsInstanced();
-			//mCurrentApplication = new HelloAntiAliasing();
+			mCurrentApplication = new HelloAntiAliasing();
 			//mCurrentApplication = new HelloBlinnPhong();
 			//mCurrentApplication = new HelloGammaCorrection();
 			//mCurrentApplication = new HelloShadowMapping();
@@ -52,7 +52,7 @@ namespace YH
 			//mCurrentApplication = new HelloParallaxMapping();
 			//mCurrentApplication = new HelloHDR();
 			//mCurrentApplication = new HelloBloom();
-			mCurrentApplication = new HelloDeferredShading();
+			//mCurrentApplication = new HelloDeferredShading();
 
 			Title = mCurrentApplication.mAppName;
 		}
