@@ -1,6 +1,7 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
+using System.Drawing;
 using System.Collections.Generic;
 
 
@@ -19,8 +20,8 @@ namespace YH
 
             //
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.ClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-			GL.Enable(EnableCap.DepthTest);
+            GL.ClearColor(Color.Black);
+            GL.Enable(EnableCap.DepthTest);
 
             //
 			mCube = new Cube();
