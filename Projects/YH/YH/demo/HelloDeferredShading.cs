@@ -92,6 +92,7 @@ namespace YH
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, gPosition, 0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Normal color buffer
 			gNormal = GL.GenTexture();
@@ -100,14 +101,16 @@ namespace YH
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, gNormal, 0);
+			GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Color + Specular color buffer
-            gAlbedoSpec = GL.GenTexture();
+			gAlbedoSpec = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment2, TextureTarget.Texture2D, gAlbedoSpec, 0);
+			GL.BindTexture(TextureTarget.Texture2D, 0);
 
 			// - Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
 			DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
@@ -118,16 +121,18 @@ namespace YH
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
 
 			// - Finally check if framebuffer is complete
 			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-				//std::cout << "Framebuffer not complete!" << std::endl;
+			//std::cout << "Framebuffer not complete!" << std::endl;
 			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
 			{
 				Console.WriteLine("ERROR::FRAMEBUFFER:: BuildGBuffer is not complete!");
 			}
 
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
 		
@@ -220,17 +225,30 @@ namespace YH
             {
 				// 2.5. Copy content of geometry's depth buffer to default framebuffer's depth buffer
 				GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, gBuffer);
+                //GL.ReadBuffer(ReadBufferMode.);
 				GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-
 				GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
-									0, 0, wnd.Width, wnd.Height,
-									ClearBufferMask.DepthBufferBit,
+                                   0, 0, wnd.Width, wnd.Height,
+                                   //ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit,
+                                   ClearBufferMask.DepthBufferBit,
 								   BlitFramebufferFilter.Nearest);
+
+                //GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
+                //GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+
+
+
+                //GL.BlitNamedFramebuffer(gBuffer, 0 
+                                        //0, 0, wnd.Width, wnd.Height,
+                                        //0, 0, wnd.Width, wnd.Height, 
+                                        //ClearBufferMask.DepthBufferBit, 
+                                        //BlitFramebufferFilter.Nearest);
 
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
 
 			// 3. Render lights on top of scene, by blitting
+            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			shaderLightBox.Use();
 			GL.UniformMatrix4(shaderLightBox.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shaderLightBox.GetUniformLocation("view"), false, ref view);
@@ -251,6 +269,26 @@ namespace YH
 			if (e.Key == OpenTK.Input.Key.C)
 			{
                 wireframe = !wireframe;
+			}
+			else if (e.Key == OpenTK.Input.Key.Number1)
+			{
+				draw_mode = 1;
+			}
+			else if (e.Key == OpenTK.Input.Key.Number2)
+			{
+				draw_mode = 2;
+			}
+			else if (e.Key == OpenTK.Input.Key.Number3)
+			{
+				draw_mode = 3;
+			}
+			else if (e.Key == OpenTK.Input.Key.Number4)
+			{
+				draw_mode = 4;
+			}
+			else if (e.Key == OpenTK.Input.Key.Number5)
+			{
+				draw_mode = 5;
 			}
 		}
 

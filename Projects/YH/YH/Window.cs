@@ -17,7 +17,7 @@ namespace YH
 		DisplayDevice.Default,
 		4, // OpenGL major version
 		0, // OpenGL minor version
-		GraphicsContextFlags.ForwardCompatible)
+		GraphicsContextFlags.Default)
 		{
 			//mCurrentApplication = new HelloTriangle();
 			//mCurrentApplication = new HelloTexture2D();
