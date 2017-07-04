@@ -1,11 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/g_buffer.vs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
-      <File FileName="YH/demo/HelloDeferredShading.cs" Line="188" Column="57" />
-      <File FileName="YH/demo/HelloBloom.cs" Line="89" Column="7" />
-      <File FileName="YH/bin/Debug/Resources/g_buffer.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/g_buffer.vs" Line="4" Column="21" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="247" Column="25" />
+      <File FileName="YH/Window.cs" Line="14" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

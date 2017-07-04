@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Drawing;
@@ -118,17 +118,12 @@ namespace YH
             DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
 			GL.DrawBuffers(3, attachments);
 
-            // - Create and attach depth buffer (renderbuffer)
-   //         int rboDepth = GL.GenRenderbuffer();
-   //         GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
-   //         GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
-   //         GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+            //
+			var rbo = GL.GenRenderbuffer();
+			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
+			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.Depth24Stencil8, w, h);
 			//GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
-
-			int rboDepth = GL.GenRenderbuffer();
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
-			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthStencilAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
 			// - Finally check if framebuffer is complete
 			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -244,7 +239,7 @@ namespace YH
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
 
-            GL.Disable(EnableCap.DepthTest);
+            //GL.Disable(EnableCap.DepthTest);
 			// 3. Render lights on top of scene, by blitting
             //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			shaderLightBox.Use();

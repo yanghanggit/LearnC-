@@ -11,7 +11,7 @@ namespace YH
 		(
 		w, // initial width
 		h, // initial height
-		new GraphicsMode(32, 24, 8, 4),//GraphicsMode.Default, //public GraphicsMode (ColorFormat color, int depth, int stencil, int samples);
+		new GraphicsMode(32, 24, 8),//GraphicsMode.Default, //public GraphicsMode (ColorFormat color, int depth, int stencil, int samples);
 		"OpenTK.GameWindow",  // initial title
 		GameWindowFlags.Default,
 		DisplayDevice.Default,
