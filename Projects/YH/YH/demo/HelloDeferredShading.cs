@@ -31,6 +31,11 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
+
+
+			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
+			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
+
 			//
 			//mShader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
 			//mShaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
@@ -283,13 +288,23 @@ namespace YH
 			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
 			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
 
+			//
+			GL.ActiveTexture(TextureUnit.Texture0);
+			GL.BindTexture(TextureTarget.Texture2D, mDiffuseMap.getTextureId());
+			GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_diffuse1"), 0);
+
+			GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, mSpecularMap.getTextureId());
+			GL.Uniform1(shaderGeometryPass.GetUniformLocation("texture_specular1"), 1);
+
+            //
             for (var i = 0; i < objectPositions.Count; i++)
 			{
 				//model = glm::mat4();
 				//model = glm::translate(model, objectPositions[i]);
 				//model = glm::scale(model, glm::vec3(0.25f));
                 model = Matrix4.CreateTranslation(objectPositions[i]);
-                model = Matrix4.CreateScale(1.0f, 6.0f, 1.0f) * model;
+                //model = Matrix4.CreateScale(1.0f, 6.0f, 1.0f) * model;
 				//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
                 GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
 				//cyborg.Draw(shaderGeometryPass);
@@ -472,6 +487,9 @@ namespace YH
 		// Options
 		private int draw_mode = 1;
 		private bool wireframe = false;
+
+		private GLTexture2D mDiffuseMap = null;
+		private GLTexture2D mSpecularMap = null;
     	
 	}
 }
