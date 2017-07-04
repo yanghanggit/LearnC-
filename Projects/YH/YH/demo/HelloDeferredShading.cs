@@ -32,96 +32,148 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			//
-			mShader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
-			mShaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
-			mShaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
-			mShaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
+			//mShader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
+			//mShaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
+			//mShaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
+			//mShaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
+
+
+
+			shaderGeometryPass = new GLProgram(@"Resources/g_buffer.vs", @"Resources/g_buffer.frag"); //("g_buffer.vs", "g_buffer.frag");
+			shaderLightingPass = new GLProgram(@"Resources/deferred_shading.vs", @"Resources/deferred_shading.frag");// ("deferred_shading.vs", "deferred_shading.frag");
+			shaderLightBox = new GLProgram(@"Resources/deferred_light_box.vs", @"Resources/deferred_light_box.frag"); //("deferred_light_box.vs", "deferred_light_box.frag");
+
 
 			// Set samplers
-			mShaderBloomFinal.Use();
-			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("scene"), 0);
-			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
+			shaderLightingPass.Use();
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("gPosition"), 0);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("gNormal"), 1);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("gAlbedoSpec"), 2);
 
-			//
-			mLightPositions.Add(new Vector3(0.0f, 0.5f, 1.5f)); // back light
-			mLightPositions.Add(new Vector3(-4.0f, 0.5f, -3.0f));
-			mLightPositions.Add(new Vector3(3.0f, 0.5f, 1.0f));
-			mLightPositions.Add(new Vector3(-.8f, 2.4f, -1.0f));
-
-			//
-			mLightColors.Add(new Vector3(5.0f, 5.0f, 5.0f));
-			mLightColors.Add(new Vector3(5.5f, 0.0f, 0.0f));
-			mLightColors.Add(new Vector3(0.0f, 0.0f, 15.0f));
-			mLightColors.Add(new Vector3(0.0f, 1.5f, 0.0f));
-
-			// Load textures
-			mWoodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
-			mContainerTexture = new GLTexture2D(@"Resources/Texture/container2.png");
-
-			//
-			BuildHDRFramebuffer(wnd.Width, wnd.Height);
-
-			//
-			BuildPingPongFramebuffer(wnd.Width, wnd.Height);
-		}
-
-		private void BuildHDRFramebuffer(int w, int h)
-		{
-			// Set up floating point framebuffer to render scene to
-			mHDRFBO = GL.GenFramebuffer();
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
+            //
+            objectPositions.Add(new Vector3(-3.0f, -3.0f, -3.0f));
+			objectPositions.Add(new Vector3(0.0f, -3.0f, -3.0f));
+			objectPositions.Add(new Vector3(3.0f, -3.0f, -3.0f));
+			objectPositions.Add(new Vector3(-3.0f, -3.0f, 0.0f));
+			objectPositions.Add(new Vector3(0.0f, -3.0f, 0.0f));
+			objectPositions.Add(new Vector3(3.0f, -3.0f, 0.0f));
+			objectPositions.Add(new Vector3(-3.0f, -3.0f, 3.0f));
+			objectPositions.Add(new Vector3(0.0f, -3.0f, 3.0f));
+			objectPositions.Add(new Vector3(3.0f, -3.0f, 3.0f));
 
 
-			GL.GenTextures(2, mColorBuffers);
-
-			for (var i = 0; i < mColorBuffers.Length; i++)
+			// - Colors
+			const int NR_LIGHTS = 32;
+			//std::vector<glm::vec3> lightPositions;
+			//std::vector<glm::vec3> lightColors;
+			//srand(13);
+            var rd = new Random(13);
+			for (var i = 0; i < NR_LIGHTS; i++)
 			{
-				GL.BindTexture(TextureTarget.Texture2D, mColorBuffers[i]);
-				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-				GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, TextureTarget.Texture2D, mColorBuffers[i], 0);
+                // Calculate slightly random offsets
+                float xPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
+                float yPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 4.0);
+                float zPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
+                lightPositions.Add(new Vector3(xPos, yPos, zPos));
+
+				// Also calculate random color
+				float rColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				float gColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				float bColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
+				lightColors.Add(new Vector3(rColor, gColor, bColor));
 			}
 
-			int rboDepth = GL.GenRenderbuffer();
-			GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
-			GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
-			GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
 
-			DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 };
-			GL.DrawBuffers(2, attachments);
 
-			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-			{
-				Console.WriteLine("ERROR::FRAMEBUFFER:: BuildHDRFramebuffer is not complete!");
-			}
-			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+
+
+
+			//// Set samplers
+			//mShaderBloomFinal.Use();
+			//GL.Uniform1(mShaderBloomFinal.GetUniformLocation("scene"), 0);
+			//GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
+
+			////
+			//mLightPositions.Add(new Vector3(0.0f, 0.5f, 1.5f)); // back light
+			//mLightPositions.Add(new Vector3(-4.0f, 0.5f, -3.0f));
+			//mLightPositions.Add(new Vector3(3.0f, 0.5f, 1.0f));
+			//mLightPositions.Add(new Vector3(-.8f, 2.4f, -1.0f));
+
+			////
+			//mLightColors.Add(new Vector3(5.0f, 5.0f, 5.0f));
+			//mLightColors.Add(new Vector3(5.5f, 0.0f, 0.0f));
+			//mLightColors.Add(new Vector3(0.0f, 0.0f, 15.0f));
+			//mLightColors.Add(new Vector3(0.0f, 1.5f, 0.0f));
+
+			//// Load textures
+			//mWoodTexture = new GLTexture2D(@"Resources/Texture/wood.png");
+			//mContainerTexture = new GLTexture2D(@"Resources/Texture/container2.png");
+
+			////
+			//BuildHDRFramebuffer(wnd.Width, wnd.Height);
+
+			////
+			//BuildPingPongFramebuffer(wnd.Width, wnd.Height);
 		}
 
-		private void BuildPingPongFramebuffer(int w, int h)
-		{
-			GL.GenFramebuffers(2, mPingpongFBO);
-			GL.GenTextures(2, mPingpongColorbuffers);
+		//private void BuildHDRFramebuffer(int w, int h)
+		//{
+		//	// Set up floating point framebuffer to render scene to
+		//	mHDRFBO = GL.GenFramebuffer();
+		//	GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
 
 
-			for (var i = 0; i < mPingpongFBO.Length; i++)
-			{
-				GL.BindFramebuffer(FramebufferTarget.Framebuffer, mPingpongFBO[i]);
-				GL.BindTexture(TextureTarget.Texture2D, mPingpongColorbuffers[i]);
-				GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-				GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mPingpongColorbuffers[i], 0);
-				if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
-				{
-					Console.WriteLine("ERROR::FRAMEBUFFER:: BuildPingPongFramebuffer is not complete!");
-				}
-			}
-		}
+		//	GL.GenTextures(2, mColorBuffers);
+
+		//	for (var i = 0; i < mColorBuffers.Length; i++)
+		//	{
+		//		GL.BindTexture(TextureTarget.Texture2D, mColorBuffers[i]);
+		//		GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+		//		GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, TextureTarget.Texture2D, mColorBuffers[i], 0);
+		//	}
+
+		//	int rboDepth = GL.GenRenderbuffer();
+		//	GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+		//	GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
+		//	GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+
+		//	DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1 };
+		//	GL.DrawBuffers(2, attachments);
+
+		//	if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+		//	{
+		//		Console.WriteLine("ERROR::FRAMEBUFFER:: BuildHDRFramebuffer is not complete!");
+		//	}
+		//	GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		//}
+
+		//private void BuildPingPongFramebuffer(int w, int h)
+		//{
+		//	GL.GenFramebuffers(2, mPingpongFBO);
+		//	GL.GenTextures(2, mPingpongColorbuffers);
+
+
+		//	for (var i = 0; i < mPingpongFBO.Length; i++)
+		//	{
+		//		GL.BindFramebuffer(FramebufferTarget.Framebuffer, mPingpongFBO[i]);
+		//		GL.BindTexture(TextureTarget.Texture2D, mPingpongColorbuffers[i]);
+		//		GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+		//		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+		//		GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mPingpongColorbuffers[i], 0);
+		//		if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+		//		{
+		//			Console.WriteLine("ERROR::FRAMEBUFFER:: BuildPingPongFramebuffer is not complete!");
+		//		}
+		//	}
+		//}
 
 		public override void Update(double dt)
 		{
@@ -130,6 +182,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+            /*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
@@ -236,6 +289,7 @@ namespace YH
 			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
 			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("exposure"), mExposure);
 			mQuad.Draw();
+			*/
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -244,7 +298,7 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.C)
 			{
-				mBloom = !mBloom;
+				//mBloom = !mBloom;
 			}
 		}
 
@@ -254,12 +308,12 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				mExposure += (float)(2.0 * mDeltaTime);
+				//mExposure += (float)(2.0 * mDeltaTime);
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				mExposure -= (float)(2.0 * mDeltaTime);
-				mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
+				//mExposure -= (float)(2.0 * mDeltaTime);
+				//mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
 			}
 		}
 
@@ -267,19 +321,32 @@ namespace YH
 		private Cube mCube = null;
 		private Sphere mSphere = null;
 		private Quad mQuad = null;
-		private GLProgram mShader = null;
-		private GLProgram mShaderLight = null;
-		private GLProgram mShaderBlur = null;
-		private GLProgram mShaderBloomFinal = null;
-		private GLTexture2D mWoodTexture = null;
-		private GLTexture2D mContainerTexture = null;
-		private List<Vector3> mLightPositions = new List<Vector3>();
-		private List<Vector3> mLightColors = new List<Vector3>();
+		//private GLProgram mShader = null;
+		//private GLProgram mShaderLight = null;
+		//private GLProgram mShaderBlur = null;
+		//private GLProgram mShaderBloomFinal = null;
+		//private GLTexture2D mWoodTexture = null;
+		//private GLTexture2D mContainerTexture = null;
+
+		//std::vector<glm::vec3> lightPositions;
+		//std::vector<glm::vec3> lightColors;
+
+
+		private List<Vector3> lightPositions = new List<Vector3>();
+		private List<Vector3> lightColors = new List<Vector3>();
 		private int mHDRFBO = 0;
 		private int[] mPingpongFBO = { 0, 0 };
 		private int[] mPingpongColorbuffers = { 0, 0 };
 		private int[] mColorBuffers = { 0, 0 };
-		private bool mBloom = true;
-		private float mExposure = 1.0f;
+		//private bool mBloom = true;
+		//private float mExposure = 1.0f;
+
+
+        private GLProgram shaderGeometryPass = null;
+        private GLProgram shaderLightingPass = null;
+        private GLProgram shaderLightBox = null;
+        private List<Vector3> objectPositions = new List<Vector3>();
+       
+    	
 	}
 }
