@@ -1,10 +1,14 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/g_buffer.vs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/deferred_light_box.vs">
     <Files>
-      <File FileName="YH/demo/HelloDeferredShading.cs" Line="42" Column="59" />
-      <File FileName="YH/bin/Debug/Resources/g_buffer.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/g_buffer.vs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="22" Column="66" />
+      <File FileName="YH/bin/Debug/Resources/g_buffer.frag" Line="14" Column="6" />
+      <File FileName="YH/bin/Debug/Resources/g_buffer.vs" Line="2" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/deferred_light_box.vs" Line="4" Column="21" />
+      <File FileName="YH/bin/Debug/Resources/deferred_shading.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/deferred_shading.vs" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/deferred_light_box.frag" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

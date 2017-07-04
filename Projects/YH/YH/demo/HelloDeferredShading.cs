@@ -374,17 +374,43 @@ namespace YH
 
 
 
+			// 2.5. Copy content of geometry's depth buffer to default framebuffer's depth buffer
+			//glBindFramebuffer(GL_READ_FRAMEBUFFER, gBuffer);
+            GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, gBuffer);
+			//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Write to default framebuffer
+            GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+													   // blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
+													   // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the      
+													   // depth buffer in another stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
+			//glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+			GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
+								   0, 0, wnd.Width, wnd.Height,
+                               ClearBufferMask.DepthBufferBit, BlitFramebufferFilter.Nearest);
+            //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
+			// 3. Render lights on top of scene, by blitting
+			shaderLightBox.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shaderLightBox.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderLightBox.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shaderLightBox.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shaderLightBox.GetUniformLocation("view"), false, ref view);
 
-
-
-
-
-
-
-
-
+            for (var i = 0; i < lightPositions.Count; i++)
+			{
+				//model = glm::mat4();
+				//model = glm::translate(model, lightPositions[i]);
+                model = Matrix4.CreateTranslation(lightPositions[i]);
+				//model = glm::scale(model, glm::vec3(0.25f));
+                model = Matrix4.CreateScale(0.25f) * model;
+				//glUniformMatrix4fv(glGetUniformLocation(shaderLightBox.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+                GL.UniformMatrix4(shaderLightBox.GetUniformLocation("model"), false, ref model);
+				//glUniform3fv(glGetUniformLocation(shaderLightBox.Program, "lightColor"), 1, &lightColors[i][0]);
+                GL.Uniform3(shaderLightBox.GetUniformLocation("lightColor"), lightColors[i]);
+				//RenderCube();
+                mCube.Draw();
+			}
             /*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
