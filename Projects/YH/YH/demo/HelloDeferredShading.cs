@@ -289,9 +289,9 @@ namespace YH
 				//model = glm::translate(model, objectPositions[i]);
 				//model = glm::scale(model, glm::vec3(0.25f));
                 model = Matrix4.CreateTranslation(objectPositions[i]);
-                model = Matrix4.CreateScale(0.25f) * model;
+                model = Matrix4.CreateScale(1.0f, 6.0f, 1.0f) * model;
 				//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref model);
+                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
 				//cyborg.Draw(shaderGeometryPass);
                 mCube.Draw();
 			}
