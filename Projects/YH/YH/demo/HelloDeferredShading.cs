@@ -19,7 +19,7 @@ namespace YH
 
 			//
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(Color.Black);GL.ClearColor(Color.Gray);
+            GL.ClearColor(Color.White);
 			GL.Enable(EnableCap.DepthTest);
 
 			//
@@ -31,8 +31,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-
-
+            //
 			mDiffuseMap = new GLTexture2D(@"Resources/Texture/container2.png");
 			mSpecularMap = new GLTexture2D(@"Resources/Texture/container2_specular.png");
 
@@ -41,9 +40,7 @@ namespace YH
 			//mShaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
 			//mShaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
 			//mShaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
-
-
-
+            //
 			shaderGeometryPass = new GLProgram(@"Resources/g_buffer.vs", @"Resources/g_buffer.frag"); //("g_buffer.vs", "g_buffer.frag");
 			shaderLightingPass = new GLProgram(@"Resources/deferred_shading.vs", @"Resources/deferred_shading.frag");// ("deferred_shading.vs", "deferred_shading.frag");
 			shaderLightBox = new GLProgram(@"Resources/deferred_light_box.vs", @"Resources/deferred_light_box.frag"); //("deferred_light_box.vs", "deferred_light_box.frag");
@@ -79,7 +76,8 @@ namespace YH
                 float xPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
                 float yPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 4.0);
                 float zPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
-                lightPositions.Add(new Vector3(xPos, yPos, zPos));
+                //lightPositions.Add(new Vector3(xPos, yPos, zPos));
+                lightPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
 
 				// Also calculate random color
 				float rColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
@@ -332,8 +330,10 @@ namespace YH
 			//glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, gPosition);
+
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+
 			GL.ActiveTexture(TextureUnit.Texture2);
 			GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
 
@@ -383,9 +383,11 @@ namespace YH
 													   // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the      
 													   // depth buffer in another stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
 			//glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-			GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
-								   0, 0, wnd.Width, wnd.Height,
-                               ClearBufferMask.DepthBufferBit, BlitFramebufferFilter.Nearest);
+			GL.BlitFramebuffer( 0, 0, wnd.Width, wnd.Height,
+							    0, 0, wnd.Width, wnd.Height,
+                                ClearBufferMask.DepthBufferBit,
+                               BlitFramebufferFilter.Nearest);
+            
             //glBindFramebuffer(GL_FRAMEBUFFER, 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
@@ -403,13 +405,13 @@ namespace YH
 				//model = glm::translate(model, lightPositions[i]);
                 model = Matrix4.CreateTranslation(lightPositions[i]);
 				//model = glm::scale(model, glm::vec3(0.25f));
-                model = Matrix4.CreateScale(0.25f) * model;
+                //model = Matrix4.CreateScale(0.25f) * model;
 				//glUniformMatrix4fv(glGetUniformLocation(shaderLightBox.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
                 GL.UniformMatrix4(shaderLightBox.GetUniformLocation("model"), false, ref model);
 				//glUniform3fv(glGetUniformLocation(shaderLightBox.Program, "lightColor"), 1, &lightColors[i][0]);
                 GL.Uniform3(shaderLightBox.GetUniformLocation("lightColor"), lightColors[i]);
 				//RenderCube();
-                mCube.Draw();
+                mSphere.Draw();
 			}
             /*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
@@ -527,6 +529,7 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.C)
 			{
+                wireframe = !wireframe;
 				//mBloom = !mBloom;
 			}
 		}
@@ -564,9 +567,9 @@ namespace YH
 		private List<Vector3> lightPositions = new List<Vector3>();
 		private List<Vector3> lightColors = new List<Vector3>();
 		//private int mHDRFBO = 0;
-		private int[] mPingpongFBO = { 0, 0 };
-		private int[] mPingpongColorbuffers = { 0, 0 };
-		private int[] mColorBuffers = { 0, 0 };
+		//private int[] mPingpongFBO = { 0, 0 };
+		//private int[] mPingpongColorbuffers = { 0, 0 };
+		//private int[] mColorBuffers = { 0, 0 };
 		//private bool mBloom = true;
 		//private float mExposure = 1.0f;
 
