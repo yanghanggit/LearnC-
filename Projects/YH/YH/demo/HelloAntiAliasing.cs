@@ -76,7 +76,8 @@ namespace YH
 				GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
 				GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
 								   0, 0, wnd.Width, wnd.Height,
-								   ClearBufferMask.ColorBufferBit, BlitFramebufferFilter.Nearest);
+								   ClearBufferMask.ColorBufferBit, 
+                                   BlitFramebufferFilter.Nearest);
 			}
 		}
 

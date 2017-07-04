@@ -225,24 +225,11 @@ namespace YH
             {
 				// 2.5. Copy content of geometry's depth buffer to default framebuffer's depth buffer
 				GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, gBuffer);
-                //GL.ReadBuffer(ReadBufferMode.);
 				GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
 				GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
                                    0, 0, wnd.Width, wnd.Height,
-                                   //ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit,
                                    ClearBufferMask.DepthBufferBit,
 								   BlitFramebufferFilter.Nearest);
-
-                //GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
-                //GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-
-
-
-                //GL.BlitNamedFramebuffer(gBuffer, 0 
-                                        //0, 0, wnd.Width, wnd.Height,
-                                        //0, 0, wnd.Width, wnd.Height, 
-                                        //ClearBufferMask.DepthBufferBit, 
-                                        //BlitFramebufferFilter.Nearest);
 
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
