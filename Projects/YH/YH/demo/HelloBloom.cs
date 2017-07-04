@@ -1,6 +1,5 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
-//using System.Drawing;
 using OpenTK;
 using System.Collections.Generic;
 
@@ -131,10 +130,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-            //glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO);
-            //===============================================================================================
-            //GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																  (float)wnd.Width / (float)wnd.Height,
@@ -216,11 +212,8 @@ namespace YH
 			shaderBlur.Use();
 			for (int i = 0; i < amount; i++)
 			{
-				//glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, pingpongFBO[horizontal ? 1 : 0]);
-				//glUniform1i(glGetUniformLocation(shaderBlur.Program, "horizontal"), horizontal);
 				GL.Uniform1(shaderBlur.GetUniformLocation("horizontal"), horizontal ? 1 : 0);
-                //glBindTexture(GL_TEXTURE_2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[!horizontal]);  // bind texture of other framebuffer (or scene if first iteration)
                 GL.BindTexture(TextureTarget.Texture2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[horizontal ? 0 : 1]);
                 mQuad.Draw();
 				horizontal = !horizontal;
@@ -230,35 +223,18 @@ namespace YH
                 }
 					
 			}
-			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
 			//==============================================================================================
 
-			// 2. Now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
 			shaderBloomFinal.Use();
-			//glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, colorBuffers[0]);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, colorBuffers[0]);
-
-
-			//glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[!horizontal]);
-			//glActiveTexture(GL_TEXTURE1);
-			//glBindTexture(GL_TEXTURE_2D, pingpongColorbuffers[!horizontal]);
-
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, pingpongColorbuffers[horizontal ? 0 : 1]);
-
-
-			//glUniform1i(glGetUniformLocation(shaderBloomFinal.Program, "bloom"), bloom);
-			//glUniform1f(glGetUniformLocation(shaderBloomFinal.Program, "exposure"), exposure);
-
 			GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
 			GL.Uniform1(shaderBloomFinal.GetUniformLocation("exposure"), mExposure);
-			//RenderQuad();
             mQuad.Draw();
 		}
 

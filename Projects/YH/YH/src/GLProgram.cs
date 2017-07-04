@@ -7,11 +7,15 @@ namespace YH
 	{
         public GLProgram(string vertPath, string fragPath, string geomPath = "")
 		{
+            Console.WriteLine("new GLProgram vertPath = " + vertPath);
 			mVertexShader = new GLShader(ShaderType.VertexShader, vertPath);
+
+			Console.WriteLine("new GLProgram fragPath = " + fragPath);
 			mFragmentShader = new GLShader(ShaderType.FragmentShader, fragPath);
 
             if (geomPath.Length > 0)
             {
+                Console.WriteLine("new GLProgram geomPath = " + geomPath);
                 mGeometryShader = new GLShader(ShaderType.GeometryShader, geomPath);        
             }   
 
