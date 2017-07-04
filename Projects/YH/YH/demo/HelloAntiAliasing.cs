@@ -72,12 +72,17 @@ namespace YH
 
 			if (mUseMSAA)
 			{
+                //GL.BindFramebuffer(FramebufferTarget., 0);
                 GL.BindFramebuffer(FramebufferTarget.ReadFramebuffer, framebuffer.mFramebufferId);
-				GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
-				GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
+                GL.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
+
+                GL.ReadBuffer(ReadBufferMode.ColorAttachment0);
+                GL.DrawBuffer(DrawBufferMode.ColorAttachment0);
+
+                GL.BlitFramebuffer(0, 0, wnd.Width, wnd.Height,
 								   0, 0, wnd.Width, wnd.Height,
-								   ClearBufferMask.ColorBufferBit, 
-                                   BlitFramebufferFilter.Nearest);
+                                   ClearBufferMask.ColorBufferBit | ClearBufferMask.ColorBufferBit, 
+                                   BlitFramebufferFilter.Linear);
 			}
 		}
 
@@ -94,7 +99,7 @@ namespace YH
 		private Sphere mSphere = null;
 		private Camera mCamera = null;
         private GLProgram mShader = null;
-        private bool mUseMSAA = false;
+        private bool mUseMSAA = true;
         private GLMSAAFramebuffer framebuffer = null;
         private GLTexture2D mCubeTexture = null;
 	}
