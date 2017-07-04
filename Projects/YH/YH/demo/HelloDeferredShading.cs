@@ -19,7 +19,7 @@ namespace YH
 
 			//
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
-			GL.ClearColor(Color.Black);
+            GL.ClearColor(Color.Black);GL.ClearColor(Color.Gray);
 			GL.Enable(EnableCap.DepthTest);
 
 			//
@@ -183,8 +183,6 @@ namespace YH
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
 
-
-
 			// - Finally check if framebuffer is complete
 			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 				//std::cout << "Framebuffer not complete!" << std::endl;
@@ -261,6 +259,50 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+			//glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+            GL.PolygonMode(MaterialFace.FrontAndBack, wireframe ? PolygonMode.Line : PolygonMode.Fill);
+			// 1. Geometry Pass: render scene's geometry/color data into gbuffer
+			//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+            //GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glm::mat4 model;
+			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+																  (float)wnd.Width / (float)wnd.Height,
+																  0.1f, 100.0f);
+			var view = mCamera.GetViewMatrix();
+
+			var model = Matrix4.CreateTranslation(0, 0, 0);
+
+
+			shaderGeometryPass.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
+
+            for (var i = 0; i < objectPositions.Count; i++)
+			{
+				//model = glm::mat4();
+				//model = glm::translate(model, objectPositions[i]);
+				//model = glm::scale(model, glm::vec3(0.25f));
+                model = Matrix4.CreateTranslation(objectPositions[i]);
+                model = Matrix4.CreateScale(0.25f) * model;
+				//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+                GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref model);
+				//cyborg.Draw(shaderGeometryPass);
+                mCube.Draw();
+			}
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+
+
+
+
             /*
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -426,6 +468,10 @@ namespace YH
         private GLProgram shaderLightBox = null;
         private List<Vector3> objectPositions = new List<Vector3>();
         private int gBuffer = 0;
+
+		// Options
+		private int draw_mode = 1;
+		private bool wireframe = false;
     	
 	}
 }
