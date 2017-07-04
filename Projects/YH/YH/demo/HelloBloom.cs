@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.Generic;
@@ -33,14 +33,14 @@ namespace YH
 
             //
             mShader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
-            shaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
-            shaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
-            shaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
+            mShaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
+            mShaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
+            mShaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
 
 			// Set samplers
-			shaderBloomFinal.Use();
-            GL.Uniform1(shaderBloomFinal.GetUniformLocation("scene"), 0);
-            GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
+			mShaderBloomFinal.Use();
+            GL.Uniform1(mShaderBloomFinal.GetUniformLocation("scene"), 0);
+            GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
 
 			//
 			mLightPositions.Add(new Vector3(0.0f, 0.5f, 1.5f)); // back light
@@ -55,8 +55,8 @@ namespace YH
 			mLightColors.Add(new Vector3(0.0f, 1.5f, 0.0f));
 
 			// Load textures
-			woodTexture = new GLTexture2D(@"Resources/Texture/wood.png"); 
-			containerTexture = new GLTexture2D(@"Resources/Texture/container2.png"); 
+			mWoodTexture = new GLTexture2D(@"Resources/Texture/wood.png"); 
+			mContainerTexture = new GLTexture2D(@"Resources/Texture/container2.png"); 
 
             //
             BuildHDRFramebuffer(wnd.Width, wnd.Height);
@@ -144,7 +144,7 @@ namespace YH
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
+            GL.BindTexture(TextureTarget.Texture2D, mWoodTexture.getTextureId());
 
             for (int i = 0; i < mLightPositions.Count; i++)
 			{
@@ -158,7 +158,7 @@ namespace YH
             GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
-            GL.BindTexture(TextureTarget.Texture2D, containerTexture.getTextureId());
+            GL.BindTexture(TextureTarget.Texture2D, mContainerTexture.getTextureId());
 
             model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
 			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
@@ -191,16 +191,16 @@ namespace YH
 			mCube.Draw();
 
             // - finally show all the light sources as bright cubes
-			shaderLight.Use();
-			GL.UniformMatrix4(shaderLight.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shaderLight.GetUniformLocation("view"), false, ref view);
+			mShaderLight.Use();
+			GL.UniformMatrix4(mShaderLight.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShaderLight.GetUniformLocation("view"), false, ref view);
 
             for (int i = 0; i < mLightPositions.Count; i++)
 			{
                 model = Matrix4.CreateTranslation(mLightPositions[i]);
 				model = Matrix4.CreateScale(0.5f) * model;
-                GL.UniformMatrix4(shaderLight.GetUniformLocation("model"), false, ref model);
-                GL.Uniform3(shaderLight.GetUniformLocation("lightColor"), mLightColors[i]);
+                GL.UniformMatrix4(mShaderLight.GetUniformLocation("model"), false, ref model);
+                GL.Uniform3(mShaderLight.GetUniformLocation("lightColor"), mLightColors[i]);
                 mCube.Draw();
 			}
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
@@ -209,11 +209,11 @@ namespace YH
 			// 2. Blur bright fragments w/ two-pass Gaussian Blur 
 			bool horizontal = true, first_iteration = true;
 			int amount = 10;
-			shaderBlur.Use();
+			mShaderBlur.Use();
 			for (int i = 0; i < amount; i++)
 			{
                 GL.BindFramebuffer(FramebufferTarget.Framebuffer, pingpongFBO[horizontal ? 1 : 0]);
-				GL.Uniform1(shaderBlur.GetUniformLocation("horizontal"), horizontal ? 1 : 0);
+				GL.Uniform1(mShaderBlur.GetUniformLocation("horizontal"), horizontal ? 1 : 0);
                 GL.BindTexture(TextureTarget.Texture2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[horizontal ? 0 : 1]);
                 mQuad.Draw();
 				horizontal = !horizontal;
@@ -228,13 +228,13 @@ namespace YH
 			//==============================================================================================
 
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			shaderBloomFinal.Use();
+			mShaderBloomFinal.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, colorBuffers[0]);
 			GL.ActiveTexture(TextureUnit.Texture1);
 			GL.BindTexture(TextureTarget.Texture2D, pingpongColorbuffers[horizontal ? 0 : 1]);
-			GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
-			GL.Uniform1(shaderBloomFinal.GetUniformLocation("exposure"), mExposure);
+			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
+			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("exposure"), mExposure);
             mQuad.Draw();
 		}
 
@@ -268,11 +268,11 @@ namespace YH
 		private Sphere mSphere = null;
         private Quad mQuad = null;
 		private GLProgram mShader = null;
-		private GLProgram shaderLight = null;
-		private GLProgram shaderBlur = null;
-		private GLProgram shaderBloomFinal = null;
-        private GLTexture2D woodTexture = null;
-        private GLTexture2D containerTexture = null;
+		private GLProgram mShaderLight = null;
+		private GLProgram mShaderBlur = null;
+		private GLProgram mShaderBloomFinal = null;
+        private GLTexture2D mWoodTexture = null;
+        private GLTexture2D mContainerTexture = null;
 		private List<Vector3> mLightPositions = new List<Vector3>();
 		private List<Vector3> mLightColors = new List<Vector3>();
         private int hdrFBO = 0;
