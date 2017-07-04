@@ -67,14 +67,15 @@ namespace YH
                 float xPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
                 float yPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 4.0);
                 float zPos = (float)(((rd.NextDouble() % 100) / 100.0) * 6.0 - 3.0);
-                //lightPositions.Add(new Vector3(xPos, yPos, zPos));
-                lightPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
+                lightPositions.Add(new Vector3(xPos, yPos, zPos));
+                //lightPositions.Add(new Vector3(0.0f, 0.0f, 0.0f));
 
 				// Also calculate random color
 				float rColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
 				float gColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
 				float bColor = (float)(((rd.NextDouble() % 100) / 200.0f) + 0.5); // Between 0.5 and 1.0
 				lightColors.Add(new Vector3(rColor, gColor, bColor));
+                //lightColors.Add(new Vector3(1, 0, 0));
 			}
 
 			BuildGBuffer(wnd.Width, wnd.Height);
@@ -185,6 +186,7 @@ namespace YH
 
             if (true)
             {
+                GL.Disable(EnableCap.DepthTest);
 				// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
 				GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 				shaderLightingPass.Use();
@@ -234,6 +236,7 @@ namespace YH
 				GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             }
 
+            GL.Enable(EnableCap.DepthTest);
 			// 3. Render lights on top of scene, by blitting
             //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			shaderLightBox.Use();
@@ -243,6 +246,7 @@ namespace YH
             for (var i = 0; i < lightPositions.Count; i++)
             {
                 model = Matrix4.CreateTranslation(lightPositions[i]);
+                model = Matrix4.CreateScale(0.1f) * model;
                 GL.UniformMatrix4(shaderLightBox.GetUniformLocation("model"), false, ref model);
                 GL.Uniform3(shaderLightBox.GetUniformLocation("lightColor"), lightColors[i]);
                 mSphere.Draw();

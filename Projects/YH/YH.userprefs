@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/deferred_light_box.frag">
     <Files>
-      <File FileName="YH/demo/HelloAntiAliasing.cs" Line="64" Column="55" />
-      <File FileName="YH/Program.cs" Line="11" Column="27" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="248" Column="51" />
+      <File FileName="YH/bin/Debug/Resources/deferred_light_box.frag" Line="9" Column="7" />
+      <File FileName="YH/bin/Debug/Resources/deferred_light_box.vs" Line="8" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
