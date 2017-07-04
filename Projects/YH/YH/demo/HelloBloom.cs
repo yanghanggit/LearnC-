@@ -1,6 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
+//using System.Drawing;
 using OpenTK;
 using System.Collections.Generic;
 
@@ -256,8 +256,8 @@ namespace YH
 			//glUniform1i(glGetUniformLocation(shaderBloomFinal.Program, "bloom"), bloom);
 			//glUniform1f(glGetUniformLocation(shaderBloomFinal.Program, "exposure"), exposure);
 
-			GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloom"), 1);
-			GL.Uniform1(shaderBloomFinal.GetUniformLocation("exposure"), 1.0f);
+			GL.Uniform1(shaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
+			GL.Uniform1(shaderBloomFinal.GetUniformLocation("exposure"), mExposure);
 			//RenderQuad();
             mQuad.Draw();
 		}
@@ -266,9 +266,9 @@ namespace YH
 		{
 			base.OnKeyUp(e);
 
-			if (e.Key == OpenTK.Input.Key.H)
+            if (e.Key == OpenTK.Input.Key.C)
 			{
-				
+                mBloom = !mBloom;
 			}
 		}
 
@@ -278,11 +278,12 @@ namespace YH
 
 			if (e.Key == OpenTK.Input.Key.Plus)
 			{
-				
+				mExposure += (float)(2.0 * mDeltaTime);
 			}
 			else if (e.Key == OpenTK.Input.Key.Minus)
 			{
-				
+				mExposure -= (float)(2.0 * mDeltaTime);
+				mExposure = (mExposure >= 0.0f ? mExposure : 0.0f);
 			}
 		}
 
@@ -302,5 +303,7 @@ namespace YH
         private int[] pingpongFBO = {0, 0};
 		private int[] pingpongColorbuffers = {0, 0};
         private int[] colorBuffers = { 0, 0 };
+        private bool mBloom = true;
+        private float mExposure = 1.0f;
 	}
 }
