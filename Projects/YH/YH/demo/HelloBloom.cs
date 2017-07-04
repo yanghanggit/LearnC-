@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.Generic;
@@ -68,21 +68,21 @@ namespace YH
         private void BuildHDRFramebuffer(int w, int h)
         {
             // Set up floating point framebuffer to render scene to
-            hdrFBO = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO);
+            mHDRFBO = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
 
 
-            GL.GenTextures(2, colorBuffers);
+            GL.GenTextures(2, mColorBuffers);
 
-            for (var i = 0; i < colorBuffers.Length; i++)
+            for (var i = 0; i < mColorBuffers.Length; i++)
 			{
-                GL.BindTexture(TextureTarget.Texture2D, colorBuffers[i]);
+                GL.BindTexture(TextureTarget.Texture2D, mColorBuffers[i]);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, TextureTarget.Texture2D, colorBuffers[i], 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0 + i, TextureTarget.Texture2D, mColorBuffers[i], 0);
 			}
 
             int rboDepth = GL.GenRenderbuffer();
@@ -102,20 +102,20 @@ namespace YH
 
         private void BuildPingPongFramebuffer(int w, int h)
         {
-            GL.GenFramebuffers(2, pingpongFBO);
-            GL.GenTextures(2, pingpongColorbuffers);
+            GL.GenFramebuffers(2, mPingpongFBO);
+            GL.GenTextures(2, mPingpongColorbuffers);
 
 
-            for (var i = 0; i < pingpongFBO.Length; i++)
+            for (var i = 0; i < mPingpongFBO.Length; i++)
 			{
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, pingpongFBO[i]);
-                GL.BindTexture(TextureTarget.Texture2D, pingpongColorbuffers[i]);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, mPingpongFBO[i]);
+                GL.BindTexture(TextureTarget.Texture2D, mPingpongColorbuffers[i]);
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, pingpongColorbuffers[i], 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mPingpongColorbuffers[i], 0);
 				if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
 				{
 					Console.WriteLine("ERROR::FRAMEBUFFER:: BuildPingPongFramebuffer is not complete!");
@@ -130,7 +130,7 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, hdrFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mHDRFBO);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																  (float)wnd.Width / (float)wnd.Height,
@@ -212,9 +212,9 @@ namespace YH
 			mShaderBlur.Use();
 			for (int i = 0; i < amount; i++)
 			{
-                GL.BindFramebuffer(FramebufferTarget.Framebuffer, pingpongFBO[horizontal ? 1 : 0]);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, mPingpongFBO[horizontal ? 1 : 0]);
 				GL.Uniform1(mShaderBlur.GetUniformLocation("horizontal"), horizontal ? 1 : 0);
-                GL.BindTexture(TextureTarget.Texture2D, first_iteration ? colorBuffers[1] : pingpongColorbuffers[horizontal ? 0 : 1]);
+                GL.BindTexture(TextureTarget.Texture2D, first_iteration ? mColorBuffers[1] : mPingpongColorbuffers[horizontal ? 0 : 1]);
                 mQuad.Draw();
 				horizontal = !horizontal;
 				if (first_iteration)
@@ -230,9 +230,9 @@ namespace YH
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			mShaderBloomFinal.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, colorBuffers[0]);
+            GL.BindTexture(TextureTarget.Texture2D, mColorBuffers[0]);
 			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, pingpongColorbuffers[horizontal ? 0 : 1]);
+			GL.BindTexture(TextureTarget.Texture2D, mPingpongColorbuffers[horizontal ? 0 : 1]);
 			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloom"), mBloom ? 1 : 0);
 			GL.Uniform1(mShaderBloomFinal.GetUniformLocation("exposure"), mExposure);
             mQuad.Draw();
@@ -275,10 +275,10 @@ namespace YH
         private GLTexture2D mContainerTexture = null;
 		private List<Vector3> mLightPositions = new List<Vector3>();
 		private List<Vector3> mLightColors = new List<Vector3>();
-        private int hdrFBO = 0;
-        private int[] pingpongFBO = {0, 0};
-		private int[] pingpongColorbuffers = {0, 0};
-        private int[] colorBuffers = { 0, 0 };
+        private int mHDRFBO = 0;
+        private int[] mPingpongFBO = {0, 0};
+		private int[] mPingpongColorbuffers = {0, 0};
+        private int[] mColorBuffers = {0, 0};
         private bool mBloom = true;
         private float mExposure = 1.0f;
 	}
