@@ -32,7 +32,7 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
             //
-            shader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
+            mShader = new GLProgram(@"Resources/bloom.vs", @"Resources/bloom.frag");
             shaderLight = new GLProgram(@"Resources/bloom.vs", @"Resources/light_box.frag");
             shaderBlur = new GLProgram(@"Resources/blur.vs", @"Resources/blur.frag");
             shaderBloomFinal = new GLProgram(@"Resources/bloom_final.vs", @"Resources/bloom_final.frag");
@@ -139,55 +139,55 @@ namespace YH
 
 			var model = Matrix4.CreateTranslation(0, 0, 0);
 
-			shader.Use();
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+			mShader.Use();
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
 
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, woodTexture.getTextureId());
 
             for (int i = 0; i < mLightPositions.Count; i++)
 			{
-           		GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Position"), mLightPositions[i]);
-                GL.Uniform3(shader.GetUniformLocation("lights[" + i + "].Color"), mLightColors[i]);
+           		GL.Uniform3(mShader.GetUniformLocation("lights[" + i + "].Position"), mLightPositions[i]);
+                GL.Uniform3(mShader.GetUniformLocation("lights[" + i + "].Color"), mLightColors[i]);
 			}
-			GL.Uniform3(shader.GetUniformLocation("viewPos"), mCamera.Position);
+			GL.Uniform3(mShader.GetUniformLocation("viewPos"), mCamera.Position);
 
             model = Matrix4.CreateTranslation(0.0f, -1.0f, 0.0f);
             model = Matrix4.CreateScale(25.0f, 1.0f, 25.0f) * model;
-            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
             GL.BindTexture(TextureTarget.Texture2D, containerTexture.getTextureId());
 
             model = Matrix4.CreateTranslation(0.0f, 1.5f, 0.0f);
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 	
             model = Matrix4.CreateTranslation(2.0f, 0.0f, 1.0f);
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
             model = Matrix4.CreateTranslation(-1.0f, -1.0f, 2.0f);
             model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 60.0f) * model;
             model = Matrix4.CreateScale(2.0f) * model;
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 			
 			model = Matrix4.CreateTranslation(0.0f, 2.7f, 4.0f);
             model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 23.0f) * model;
             model = Matrix4.CreateScale(2.5f) * model;
-            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(-2.0f, 1.0f, -3.0f);
 			model = Matrix4.CreateFromAxisAngle(Vector3.Normalize(new Vector3(1.0f, 0.0f, 1.0f)), 124.0f) * model;
 			model = Matrix4.CreateScale(2.0f) * model;
-			GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
       
 			model = Matrix4.CreateTranslation(-3.0f, 0.0f, 0.0f);
-            GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
             // - finally show all the light sources as bright cubes
@@ -267,7 +267,7 @@ namespace YH
 		private Cube mCube = null;
 		private Sphere mSphere = null;
         private Quad mQuad = null;
-		private GLProgram shader = null;
+		private GLProgram mShader = null;
 		private GLProgram shaderLight = null;
 		private GLProgram shaderBlur = null;
 		private GLProgram shaderBloomFinal = null;
