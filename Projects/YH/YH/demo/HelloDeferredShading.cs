@@ -83,8 +83,7 @@ namespace YH
 				lightColors.Add(new Vector3(rColor, gColor, bColor));
 			}
 
-
-
+			BuildGBuffer(wnd.Width, wnd.Height);
 
 
 
@@ -117,6 +116,86 @@ namespace YH
 			//BuildPingPongFramebuffer(wnd.Width, wnd.Height);
 		}
 
+        private void BuildGBuffer(int w, int h)
+        {
+			//GLuint gBuffer;
+			//glGenFramebuffers(1, &gBuffer);
+            gBuffer = GL.GenFramebuffer();
+            //glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+
+			// - Position color buffer
+			//glGenTextures(1, &gPosition);
+			//glBindTexture(GL_TEXTURE_2D, gPosition);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gPosition, 0);
+            int gPosition = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, gPosition, 0);
+
+			// - Normal color buffer
+			//glGenTextures(1, &gNormal);
+			//glBindTexture(GL_TEXTURE_2D, gNormal);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal, 0);
+			int gNormal = GL.GenTexture();
+			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, gNormal, 0);
+
+			// - Color + Specular color buffer
+			//glGenTextures(1, &gAlbedoSpec);
+			//glBindTexture(GL_TEXTURE_2D, gAlbedoSpec);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedoSpec, 0);
+            int gAlbedoSpec = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, gAlbedoSpec);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, w, h, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment2, TextureTarget.Texture2D, gAlbedoSpec, 0);
+
+			// - Tell OpenGL which color attachments we'll use (of this framebuffer) for rendering
+			//GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+			//glDrawBuffers(3, attachments);
+			DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
+			GL.DrawBuffers(3, attachments);
+
+            // - Create and attach depth buffer (renderbuffer)
+            //GLuint rboDepth;
+            //glGenRenderbuffers(1, &rboDepth);
+            //glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+            //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_HEIGHT);
+            //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+            int rboDepth = GL.GenRenderbuffer();
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rboDepth);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent, w, h);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rboDepth);
+
+
+
+			// - Finally check if framebuffer is complete
+			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+				//std::cout << "Framebuffer not complete!" << std::endl;
+			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("ERROR::FRAMEBUFFER:: BuildGBuffer is not complete!");
+			}
+
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
 		//private void BuildHDRFramebuffer(int w, int h)
 		//{
 		//	// Set up floating point framebuffer to render scene to
@@ -334,7 +413,7 @@ namespace YH
 
 		private List<Vector3> lightPositions = new List<Vector3>();
 		private List<Vector3> lightColors = new List<Vector3>();
-		private int mHDRFBO = 0;
+		//private int mHDRFBO = 0;
 		private int[] mPingpongFBO = { 0, 0 };
 		private int[] mPingpongColorbuffers = { 0, 0 };
 		private int[] mColorBuffers = { 0, 0 };
@@ -346,7 +425,7 @@ namespace YH
         private GLProgram shaderLightingPass = null;
         private GLProgram shaderLightBox = null;
         private List<Vector3> objectPositions = new List<Vector3>();
-       
+        private int gBuffer = 0;
     	
 	}
 }
