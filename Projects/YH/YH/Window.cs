@@ -52,7 +52,8 @@ namespace YH
 			//mCurrentApplication = new HelloParallaxMapping();
 			//mCurrentApplication = new HelloHDR();
 			//mCurrentApplication = new HelloBloom();
-			mCurrentApplication = new HelloDeferredShading();
+			//mCurrentApplication = new HelloDeferredShading();
+			mCurrentApplication = new HelloSSAO();
 
 			Title = mCurrentApplication.mAppName;
 		}
