@@ -26,7 +26,7 @@ namespace YH
 			//mCurrentApplication = new HelloCamera();
 			//mCurrentApplication = new HelloColors();
 			//mCurrentApplication = new HelloBasicLighting();
-			mCurrentApplication = new HelloMaterials();
+			//mCurrentApplication = new HelloMaterials();
 			//mCurrentApplication = new HelloLightingMaps();
 			//mCurrentApplication = new HelloLightCasters();
 			//mCurrentApplication = new HelloMultipleLights();
@@ -53,7 +53,7 @@ namespace YH
 			//mCurrentApplication = new HelloHDR();
 			//mCurrentApplication = new HelloBloom();
 			//mCurrentApplication = new HelloDeferredShading();
-			//mCurrentApplication = new HelloSSAO();
+			mCurrentApplication = new HelloSSAO();
 
 			Title = mCurrentApplication.mAppName;
 		}

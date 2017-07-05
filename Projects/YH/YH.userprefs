@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloMaterials.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSSAO.cs">
     <Files>
-      <File FileName="YH/demo/HelloSSAO.cs" Line="9" Column="24" />
-      <File FileName="YH/Window.cs" Line="29" Column="37" />
-      <File FileName="YH/demo/HelloMaterials.cs" Line="170" Column="49" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="136" Column="115" />
+      <File FileName="YH/Window.cs" Line="48" Column="55" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="65" Column="68" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
