@@ -100,8 +100,14 @@ namespace YH
 				mLightColors.Add(new Vector3(rColor, gColor, bColor));
 			}
             */
+
 			BuildGBuffer(wnd.Width, wnd.Height);
 
+            BuildSSAOBuffer(wnd.Width, wnd.Height);
+
+            InitSampleKernel();
+
+            InitNoiseTexture();
 		}
 
 		private void BuildGBuffer(int w, int h)
@@ -237,6 +243,130 @@ namespace YH
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 			*/
 		}
+
+        private void BuildSSAOBuffer(int w, int h)
+        {
+			// Also create framebuffer to hold SSAO processing stage 
+			//GLuint ssaoFBO, ssaoBlurFBO;
+			//glGenFramebuffers(1, &ssaoFBO); 
+            //glGenFramebuffers(1, &ssaoBlurFBO);
+            ssaoFBO = GL.GenFramebuffer();
+            ssaoBlurFBO = GL.GenFramebuffer();
+			//glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoFBO);
+			//GLuint ssaoColorBuffer, ssaoColorBufferBlur;
+			// - SSAO color buffer
+			//glGenTextures(1, &ssaoColorBuffer);
+            ssaoColorBuffer = GL.GenTexture();
+			//glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBuffer);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.CompressedRed, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, ssaoColorBuffer, 0);
+			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+				//std::cout << "SSAO Framebuffer not complete!" << std::endl;
+            if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("SSAO Framebuffer not complete!");
+			}
+
+            // - and blur stage
+            //glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoBlurFBO);
+            //glGenTextures(1, &ssaoColorBufferBlur);
+            ssaoColorBufferBlur = GL.GenTexture();
+			//glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBufferBlur);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.CompressedRed, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, ssaoColorBufferBlur, 0);
+
+
+			//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+				//std::cout << "SSAO Blur Framebuffer not complete!" << std::endl;
+
+			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
+			{
+				Console.WriteLine("SSAO Blur Framebuffer not complete!");
+			}
+
+
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+        }
+
+        private float lerp(float a, float b, float f)
+		{
+			return a + f * (b - a);
+		}
+
+        private void InitSampleKernel()
+        {
+            var rd = new Random(System.DateTime.Now.Millisecond);
+			// Sample kernel
+			//std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
+			//std::default_random_engine generator;
+			//std::vector<glm::vec3> ssaoKernel;
+			for (var i = 0; i < 64; ++i)
+			{
+				//glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+                Vector3 sample = new Vector3((float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble());
+				//sample = glm::normalize(sample);
+                sample = Vector3.Normalize(sample);
+                //sample *= randomFloats(generator);
+                sample *= (float)rd.NextDouble();
+                //GLfloat scale = GLfloat(i) / 64.0;
+                float scale = (float)i / 64.0f;
+                // Scale samples s.t. they're more aligned to center of kernel
+                scale = lerp(0.1f, 1.0f, scale * scale);
+				sample *= scale;
+				//ssaoKernel.push_back(sample);
+                ssaoKernel.Add(sample);
+		    }
+        }
+
+        private void InitNoiseTexture()
+        {
+            var rd = new Random(System.DateTime.Now.Millisecond);
+			// Noise texture
+			//std::vector<glm::vec3> ssaoNoise;
+			
+			for (var i = 0; i < 16; i++)
+			{
+				//glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f); // rotate around z-axis (in tangent space)
+				Vector3 noise = new Vector3((float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble());
+                //ssaoNoise.push_back(noise);
+                ssaoNoise.Add(noise);
+			}
+
+            //glGenTextures(1, &noiseTexture);
+            noiseTexture = GL.GenTexture();
+			//glBindTexture(GL_TEXTURE_2D, noiseTexture);
+            GL.BindTexture(TextureTarget.Texture2D, noiseTexture);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb32f, 4, 4, 0, PixelFormat.Rgb, PixelType.Float, ssaoNoise.ToArray());
+
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
 
 		public override void Update(double dt)
 		{
@@ -413,5 +543,10 @@ namespace YH
 
         private int gBuffer = 0;
         private int gPosition = 0, gNormal = 0, gAlbedo = 0;
+        private int ssaoFBO = 0, ssaoBlurFBO = 0;
+        private int ssaoColorBuffer = 0, ssaoColorBufferBlur = 0;
+        private List<Vector3> ssaoKernel = new List<Vector3>();
+	    private List<Vector3> ssaoNoise = new List<Vector3>();
+        private int noiseTexture = 0;
 	}
 }

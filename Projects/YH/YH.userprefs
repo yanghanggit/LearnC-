@@ -2,9 +2,10 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSSAO.cs">
     <Files>
-      <File FileName="YH/demo/HelloSSAO.cs" Line="136" Column="115" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="305" Column="35" />
       <File FileName="YH/Window.cs" Line="48" Column="55" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="65" Column="68" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="66" Column="119" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="62" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
