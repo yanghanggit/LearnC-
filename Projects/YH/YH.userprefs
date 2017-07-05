@@ -1,9 +1,8 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloDeferredShading.cs">
     <Files>
-      <File FileName="YH/demo/HelloDeferredShading.cs" Line="247" Column="25" />
-      <File FileName="YH/Window.cs" Line="14" Column="24" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="132" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
