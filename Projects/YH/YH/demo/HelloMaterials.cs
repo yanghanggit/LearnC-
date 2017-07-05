@@ -17,6 +17,7 @@ namespace YH
 			base.Start(wnd);
 
 			mCube = new Cube();
+            mSphere = new Sphere();
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), Camera.YAW, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
@@ -96,10 +97,18 @@ namespace YH
 				GL.Uniform1(mLocMaterialShininess, mMaterialShinness);
 
 				Matrix4 model = Matrix4.CreateTranslation(0, 0, 0);
-				//model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mLocLightModel, false, ref model);
 
-				mCube.Draw();
+                if (mChangeGeom)
+                {
+                    model = Matrix4.CreateScale(0.5f) * model;
+                    GL.UniformMatrix4(mLocLightModel, false, ref model);
+                    mSphere.Draw();
+                }
+                else 
+                {
+                    GL.UniformMatrix4(mLocLightModel, false, ref model);
+                    mCube.Draw();
+                }
 			}
 			while (false);
 
@@ -133,10 +142,15 @@ namespace YH
 				mMaterialShinness /= 2.0f;
 				mMaterialShinness = mMaterialShinness <= 2.0f ? 2.0f : mMaterialShinness;
 			}
+			else if (e.Key == OpenTK.Input.Key.C)
+			{
+                mChangeGeom = !mChangeGeom;
+			}
 		}
 
         //
 		private Cube mCube = null;
+        private Sphere mSphere = null;
 		private Camera mCamera = null;
 
 		//
@@ -168,5 +182,6 @@ namespace YH
 		private Vector3 mLightPos = new Vector3(1.2f, 1.0f, 2.0f);
 
         private float mMaterialShinness = 32.0f;
+        private bool mChangeGeom = false;
 	}
 }

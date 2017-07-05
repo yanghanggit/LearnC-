@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloMaterials.cs">
     <Files>
       <File FileName="YH/demo/HelloSSAO.cs" Line="9" Column="24" />
-      <File FileName="YH/Window.cs" Line="57" Column="13" />
+      <File FileName="YH/Window.cs" Line="29" Column="37" />
+      <File FileName="YH/demo/HelloMaterials.cs" Line="170" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
