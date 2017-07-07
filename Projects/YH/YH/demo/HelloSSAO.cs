@@ -285,6 +285,97 @@ namespace YH
 			var view = mCamera.GetViewMatrix();
 
 			var model = Matrix4.CreateTranslation(0, 0, 0);
+
+
+			//
+			// 1. Geometry Pass: render scene's geometry/color data into gbuffer
+			//glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+   //         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 50.0f);
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glm::mat4 model;
+			shaderGeometryPass.Use();
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
+            // Background cubes
+            // Note that AO doesn't work too well on flat surfaces so simply scaling the cube as the background room wouldn't work
+            // as the resulting faces of the cube are completely flat.
+            //model = glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
+            //model = glm::scale(model, glm::vec3(1.0f, 20.0f, 20.0f));
+            model = Matrix4.CreateTranslation(10.0f, 0.0f, 0.0f);
+            model = Matrix4.CreateScale(new Vector3(1.0f, 20.0f, 20.0f)) * model;
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			//RenderCube();
+            mCube.Draw();
+
+   //         model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 0.0f));
+			//model = glm::scale(model, glm::vec3(1.0f, 20.0f, 20.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+            model = Matrix4.CreateTranslation(-10.0f, 0.0f, 0.0f);
+            model = Matrix4.CreateScale(new Vector3(1.0f, 20.0f, 20.0f)) * model;
+            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
+
+
+   //         model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 10.0f));
+			//model = glm::scale(model, glm::vec3(20.0f, 20.0f, 1.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+            model = Matrix4.CreateTranslation(0.0f, 0.0f, 10.0f);
+            model = Matrix4.CreateScale(new Vector3(20.0f, 20.0f, 1.0f)) * model;
+            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+            mCube.Draw();
+
+
+   //         model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 0.0f, -10.0f));
+			//model = glm::scale(model, glm::vec3(20.0f, 20.0f, 1.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+			model = Matrix4.CreateTranslation(0.0f, 0.0f, -10.0f);
+			model = Matrix4.CreateScale(new Vector3(20.0f, 20.0f, 1.0f)) * model;
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			//model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f));
+			//model = glm::scale(model, glm::vec3(20.0f, 1.0f, 20.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+			model = Matrix4.CreateTranslation(0.0f, 10.0f, 0.0f);
+			model = Matrix4.CreateScale(new Vector3(20.0f, 1.0f, 20.0f)) * model;
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+            // Floor cube
+   //         model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0, -1.0f, 0.0f));
+			//model = glm::scale(model, glm::vec3(20.0f, 1.0f, 20.0f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//RenderCube();
+			model = Matrix4.CreateTranslation(0.0f, -1.0f, 0.0f);
+			model = Matrix4.CreateScale(new Vector3(20.0f, 1.0f, 20.0f)) * model;
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+            // Nanosuit model on the floor
+			//model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0));
+			//model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+			//model = glm::scale(model, glm::vec3(0.5f));
+			//glUniformMatrix4fv(glGetUniformLocation(shaderGeometryPass.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//nanosuit.Draw(shaderGeometryPass);
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
