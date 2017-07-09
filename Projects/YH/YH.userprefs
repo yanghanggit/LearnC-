@@ -1,8 +1,9 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSSAO.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/ssao_lighting.frag">
     <Files>
-      <File FileName="YH/demo/HelloSSAO.cs" Line="351" Column="9" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="39" Column="86" />
+      <File FileName="YH/bin/Debug/Resources/ssao_lighting.frag" Line="23" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

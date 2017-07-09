@@ -234,6 +234,19 @@ namespace YH
 			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
+			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			model = Matrix4.CreateTranslation(1.0f, 0.0f, 0.5f);
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+			model = Matrix4.CreateTranslation(0.5f, 1.0f, 0.25f);
+			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			mCube.Draw();
+
+
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
