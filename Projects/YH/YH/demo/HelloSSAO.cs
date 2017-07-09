@@ -409,11 +409,64 @@ namespace YH
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
+			// 3. Blur SSAO texture to remove noise
+			//glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoBlurFBO);
+			//glClear(GL_COLOR_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit);
+			shaderSSAOBlur.Use();
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBuffer);
+			//RenderQuad();
+            mQuad.Draw();
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+			// 4. Lighting Pass: traditional deferred Blinn-Phong lighting now with added screen-space ambient occlusion
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			shaderLightingPass.Use();
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_2D, gPosition);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, gNormal);
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			//glActiveTexture(GL_TEXTURE2);
+			//glBindTexture(GL_TEXTURE_2D, gAlbedo);
+			GL.ActiveTexture(TextureUnit.Texture2);
+			GL.BindTexture(TextureTarget.Texture2D, gAlbedo);
+			//glActiveTexture(GL_TEXTURE3); // Add extra SSAO texture to lighting pass
+			//glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+			GL.ActiveTexture(TextureUnit.Texture3);
+			GL.BindTexture(TextureTarget.Texture2D, ssaoColorBufferBlur);
 
 
+            // Also send light relevant uniforms
+            //glm::vec3 lightPosView = glm::vec3(camera.GetViewMatrix() * glm::vec4(lightPos, 1.0));
+            Vector4 tmp = (new Vector4(lightPos.X, lightPos.Y, lightPos.Z, 1.0f)) * view;
+            Vector3 lightPosView = new Vector3(tmp.X, tmp.Y, tmp.Z);
+			//glUniform3fv(glGetUniformLocation(shaderLightingPass.Program, "light.Position"), 1, &lightPosView[0]);
+			GL.Uniform3(shaderLightingPass.GetUniformLocation("light.Position"), lightPosView);
+			//glUniform3fv(glGetUniformLocation(shaderLightingPass.Program, "light.Color"), 1, &lightColor[0]);
+			GL.Uniform3(shaderLightingPass.GetUniformLocation("light.Color"), lightColor);
 
-
-
+            // Update attenuation parameters
+            //const float constant = 1.0f; // Note that we don't send this to the shader, we assume it is always 1.0 (in our case)
+            const float linear = 0.09f;
+            const float quadratic = 0.032f;
+			//glUniform1f(glGetUniformLocation(shaderLightingPass.Program, "light.Linear"), linear);
+			//glUniform1f(glGetUniformLocation(shaderLightingPass.Program, "light.Quadratic"), quadratic);
+			//glUniform1i(glGetUniformLocation(shaderLightingPass.Program, "draw_mode"), draw_mode);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("light.Linear"), linear);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("light.Quadratic"), quadratic);
+			GL.Uniform1(shaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
+			//RenderQuad();
+            mQuad.Draw();
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -455,5 +508,7 @@ namespace YH
         private List<Vector3> ssaoKernel = new List<Vector3>();
 	    private List<Vector3> ssaoNoise = new List<Vector3>();
         private int noiseTexture = 0;
+		private int draw_mode = 1;
+
 	}
 }
