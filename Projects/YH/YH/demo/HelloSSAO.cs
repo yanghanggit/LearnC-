@@ -376,6 +376,44 @@ namespace YH
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
+
+			// 2. Create SSAO texture
+			//glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoFBO);
+			//glClear(GL_COLOR_BUFFER_BIT);
+			GL.Clear(ClearBufferMask.ColorBufferBit);
+			shaderSSAO.Use();
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_2D, gPosition);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, gNormal);
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			//glActiveTexture(GL_TEXTURE2);
+			//glBindTexture(GL_TEXTURE_2D, noiseTexture);
+			GL.ActiveTexture(TextureUnit.Texture2);
+			GL.BindTexture(TextureTarget.Texture2D, noiseTexture);
+			// Send kernel + rotation 
+			for (var i = 0; i < 64; ++i)
+            {
+                //glUniform3fv(glGetUniformLocation(shaderSSAO.Program, ("samples[" + std::to_string(i) + "]").c_str()), 1, &ssaoKernel[i][0]);
+				GL.Uniform3(shaderSSAO.GetUniformLocation("samples[" + i + "]"), ssaoKernel[i]);
+
+			}
+			//glUniformMatrix4fv(glGetUniformLocation(shaderSSAO.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			GL.UniformMatrix4(shaderSSAO.GetUniformLocation("projection"), false, ref projection);
+			//RenderQuad();
+			mQuad.Draw();
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+
+
+
+
+
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
