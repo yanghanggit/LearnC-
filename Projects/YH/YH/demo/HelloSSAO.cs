@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Drawing;
@@ -68,31 +68,31 @@ namespace YH
 
 		private void BuildGBuffer(int w, int h)
 		{
-            gBuffer = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+            mGBuffer = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mGBuffer);
 
-			gPosition = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, gPosition);
+			mGPosition = GL.GenTexture();
+			GL.BindTexture(TextureTarget.Texture2D, mGPosition);
 			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, gPosition, 0);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mGPosition, 0);
 			
-            gNormal = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, gNormal);
+            mGNormal = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, mGNormal);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb16f, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, gNormal, 0);
+			GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment1, TextureTarget.Texture2D, mGNormal, 0);
 			
-			gAlbedo = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, gAlbedo);
+			mGAlbedo = GL.GenTexture();
+			GL.BindTexture(TextureTarget.Texture2D, mGAlbedo);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, w, h, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment2, TextureTarget.Texture2D, gAlbedo, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment2, TextureTarget.Texture2D, mGAlbedo, 0);
 			
 			DrawBuffersEnum[] attachments = { DrawBuffersEnum.ColorAttachment0, DrawBuffersEnum.ColorAttachment1, DrawBuffersEnum.ColorAttachment2 };
 			GL.DrawBuffers(3, attachments);
@@ -112,15 +112,15 @@ namespace YH
 
         private void BuildSSAOBuffer(int w, int h)
         {
-            ssaoFBO = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoFBO);
+            mSSAOFBO = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mSSAOFBO);
 			
-            ssaoColorBuffer = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBuffer);
+            mSSAOColorBuffer = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, mSSAOColorBuffer);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, ssaoColorBuffer, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mSSAOColorBuffer, 0);
             if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
 			{
 				Console.WriteLine("SSAO Framebuffer not complete!");
@@ -129,14 +129,14 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
-            ssaoBlurFBO = GL.GenFramebuffer();
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoBlurFBO);
-            ssaoColorBufferBlur = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBufferBlur);
+            mSSAOBlurFBO = GL.GenFramebuffer();
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mSSAOBlurFBO);
+            mSSAOColorBufferBlur = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, mSSAOColorBufferBlur);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.R8, w, h, 0, PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, ssaoColorBufferBlur, 0);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, mSSAOColorBufferBlur, 0);
 			if (GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != FramebufferErrorCode.FramebufferComplete)
 			{
 				Console.WriteLine("SSAO Blur Framebuffer not complete!");
@@ -160,7 +160,7 @@ namespace YH
                 float scale = (float)i / 64.0f;
                 scale = lerp(0.1f, 1.0f, scale * scale);
 				sample *= scale;
-                ssaoKernel.Add(sample);
+                mSSAOKernel.Add(sample);
 		    }
         }
 
@@ -170,12 +170,12 @@ namespace YH
 			for (var i = 0; i < 16; i++)
 			{
 				Vector3 noise = new Vector3((float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble() * 2.0f - 1.0f, (float)rd.NextDouble());
-                ssaoNoise.Add(noise);
+                mSSAONoise.Add(noise);
 			}
 
-            noiseTexture = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, noiseTexture);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb32f, 4, 4, 0, PixelFormat.Rgb, PixelType.Float, ssaoNoise.ToArray());
+            mNoiseTexture = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, mNoiseTexture);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb32f, 4, 4, 0, PixelFormat.Rgb, PixelType.Float, mSSAONoise.ToArray());
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
@@ -197,7 +197,7 @@ namespace YH
 
 			var model = Matrix4.CreateTranslation(0, 0, 0);
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mGBuffer);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
   
 			mShaderGeometryPass.Use();
@@ -250,43 +250,43 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mSSAOFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 			mShaderSSAO.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+            GL.BindTexture(TextureTarget.Texture2D, mGPosition);
 			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			GL.BindTexture(TextureTarget.Texture2D, mGNormal);
 			GL.ActiveTexture(TextureUnit.Texture2);
-			GL.BindTexture(TextureTarget.Texture2D, noiseTexture);
+			GL.BindTexture(TextureTarget.Texture2D, mNoiseTexture);
 			// Send kernel + rotation 
 			for (var i = 0; i < 64; ++i)
             {
-				GL.Uniform3(mShaderSSAO.GetUniformLocation("samples[" + i + "]"), ssaoKernel[i]);
+				GL.Uniform3(mShaderSSAO.GetUniformLocation("samples[" + i + "]"), mSSAOKernel[i]);
 			}
 			GL.UniformMatrix4(mShaderSSAO.GetUniformLocation("projection"), false, ref projection);
 			mQuad.Draw();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             //
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoBlurFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, mSSAOBlurFBO);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 			mShaderSSAOBlur.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, ssaoColorBuffer);
+            GL.BindTexture(TextureTarget.Texture2D, mSSAOColorBuffer);
             mQuad.Draw();
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 			mShaderLightingPass.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, gPosition);
+            GL.BindTexture(TextureTarget.Texture2D, mGPosition);
 			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, gNormal);
+			GL.BindTexture(TextureTarget.Texture2D, mGNormal);
 			GL.ActiveTexture(TextureUnit.Texture2);
-			GL.BindTexture(TextureTarget.Texture2D, gAlbedo);
+			GL.BindTexture(TextureTarget.Texture2D, mGAlbedo);
 			GL.ActiveTexture(TextureUnit.Texture3);
-			GL.BindTexture(TextureTarget.Texture2D, ssaoColorBufferBlur);
+			GL.BindTexture(TextureTarget.Texture2D, mSSAOColorBufferBlur);
 
             //
             Vector4 tmp = (new Vector4(mLightPos.X, mLightPos.Y, mLightPos.Z, 1.0f)) * view;
@@ -299,7 +299,7 @@ namespace YH
             const float quadratic = 0.032f;
 			GL.Uniform1(mShaderLightingPass.GetUniformLocation("light.Linear"), linear);
 			GL.Uniform1(mShaderLightingPass.GetUniformLocation("light.Quadratic"), quadratic);
-			GL.Uniform1(mShaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("draw_mode"), mDrawMode);
             mQuad.Draw();
 		}
 
@@ -309,23 +309,23 @@ namespace YH
 
             if (e.Key == OpenTK.Input.Key.Number1)
 			{
-				draw_mode = 1;
+				mDrawMode = 1;
 			}
 			else if (e.Key == OpenTK.Input.Key.Number2)
 			{
-				draw_mode = 2;
+				mDrawMode = 2;
 			}
 			else if (e.Key == OpenTK.Input.Key.Number3)
 			{
-				draw_mode = 3;
+				mDrawMode = 3;
 			}
 			else if (e.Key == OpenTK.Input.Key.Number4)
 			{
-				draw_mode = 4;
+				mDrawMode = 4;
 			}
 			else if (e.Key == OpenTK.Input.Key.Number5)
 			{
-				draw_mode = 5;
+				mDrawMode = 5;
 			}
 		}
 
@@ -355,18 +355,18 @@ namespace YH
         private Vector3 mLightPos = new Vector3(2.0f, 4.0f, -2.0f);
 		private Vector3 mLightColor = new Vector3(0.2f, 0.2f, 0.7f);
 
-        private int gBuffer = 0;
-        private int gPosition = 0;
-		private int gNormal = 0;
-		private int gAlbedo = 0;
-        private int ssaoFBO = 0;
-        private int ssaoBlurFBO = 0;
-        private int ssaoColorBuffer = 0;
-		private int ssaoColorBufferBlur = 0;
+        private int mGBuffer = 0;
+        private int mGPosition = 0;
+		private int mGNormal = 0;
+		private int mGAlbedo = 0;
+        private int mSSAOFBO = 0;
+        private int mSSAOBlurFBO = 0;
+        private int mSSAOColorBuffer = 0;
+		private int mSSAOColorBufferBlur = 0;
 
-		private List<Vector3> ssaoKernel = new List<Vector3>();
-	    private List<Vector3> ssaoNoise = new List<Vector3>();
-        private int noiseTexture = 0;
-		private int draw_mode = 1;
+		private List<Vector3> mSSAOKernel = new List<Vector3>();
+	    private List<Vector3> mSSAONoise = new List<Vector3>();
+        private int mNoiseTexture = 0;
+		private int mDrawMode = 1;
 	}
 }
