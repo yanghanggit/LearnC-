@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFont.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/text.frag">
     <Files>
-      <File FileName="YH/demo/HelloFont.cs" Line="189" Column="13" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="81" Column="4" />
-      <File FileName="YH/demo/HelloBloom.cs" Line="155" Column="23" />
+      <File FileName="YH/demo/HelloFont.cs" Line="225" Column="36" />
+      <File FileName="YH/bin/Debug/Resources/text.frag" Line="12" Column="29" />
+      <File FileName="YH/bin/Debug/Resources/text.vs" Line="5" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
