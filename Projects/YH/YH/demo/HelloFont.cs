@@ -79,13 +79,20 @@ namespace YH
 			//int a = 0;
 
 			// Load first 128 characters of ASCII set
-            //for (uint c = 0; c < 128; c++)
+            for (uint c = 0; c < 128; c++)
 			{
-                var c = testChar;
+                //var c = testChar;
                 //face.LoadChar();
                 //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
                 face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
-				//face.Glyph.RenderGlyph(RenderMode.Normal);
+                //face.Glyph.RenderGlyph(RenderMode.Normal);
+                if (face.Glyph.Bitmap.Width <= 0)
+                {
+                    continue;
+                }
+
+
+
 
 				// Load character glyph 
 				//if (FT_Load_Char(face, c, FT_LOAD_RENDER))
@@ -141,7 +148,7 @@ namespace YH
                 character.Size = new Size(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
                 character.Bearing = new Vector2(face.Glyph.BitmapLeft, face.Glyph.BitmapTop);
                 character.Advance = (int)face.Glyph.Advance.X;
-                mCharacters.Add((char)c, character);
+                mCharacters.Add(c, character);
 			}
 			//glBindTexture(GL_TEXTURE_2D, 0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -186,26 +193,12 @@ namespace YH
 			//RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
 
 
-            var ch = mCharacters[testChar];
-
-
+            var ch = mCharacters['A'];
 			mScreenShader.Use();
 			GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
             GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
 			mQuad.Draw();
 			GL.BindTexture(TextureTarget.Texture2D, 0);
-
-			//if (mUseFramebuffer)
-			//{
-			//	GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), mPostProcessing);
-			//	GL.Viewport(0, 0, wnd.Width / 2, wnd.Height / 2);
-			//	mQuad.Draw();
-			//}
-
-
-
-
-
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -278,12 +271,12 @@ namespace YH
 		}
 
         private Library mLibrary = null;
-        private Dictionary<char, Character> mCharacters = new Dictionary<char, Character>();
+        private Dictionary<uint, Character> mCharacters = new Dictionary<uint, Character>();
         private int VAO = 0, VBO = 0;
         private GLProgram shader = null;
         private Quad mQuad = null;
         private GLProgram mScreenShader = null;
-        private char testChar = 'A';
+        //private char testChar = 'A';
 	}
 }
 
