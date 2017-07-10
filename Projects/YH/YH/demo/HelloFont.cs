@@ -188,11 +188,11 @@ namespace YH
             // Clear the colorbuffer
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             //glClear(GL_COLOR_BUFFER_BIT);
-            RenderText(shader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
+            RenderText(shader, "A", 0.0f, 0.0f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
             //RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
             //RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
 
-            if (true)
+            if (false)
             {
 				var ch = mCharacters['A'];
 				mScreenShader.Use();
@@ -235,7 +235,12 @@ namespace YH
                 float w = ch.Size.Width * scale;
                 float h = ch.Size.Height * scale;
 				// Update VBO for each character
-				
+
+				xpos = x;
+				ypos = y;
+                w = (float)ch.Size.Width / 800.0f;
+				h = (float)ch.Size.Height / 600.0f;
+
 				//GLfloat vertices[6][4] = {
 		        //    { xpos,     ypos + h,   0.0, 0.0 },            
 		        //    { xpos,     ypos,       0.0, 1.0 },
