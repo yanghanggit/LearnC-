@@ -2,7 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFont.cs">
     <Files>
-      <File FileName="YH/demo/HelloFont.cs" Line="87" Column="47" />
+      <File FileName="YH/demo/HelloFont.cs" Line="189" Column="13" />
+      <File FileName="YH/src/SimpleGeometry.cs" Line="81" Column="4" />
+      <File FileName="YH/demo/HelloBloom.cs" Line="155" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
