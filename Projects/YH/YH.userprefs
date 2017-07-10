@@ -1,17 +1,13 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/text.frag">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFont.cs">
     <Files>
-      <File FileName="YH/demo/HelloFont.cs" Line="34" Column="4" />
-      <File FileName="YH/bin/Debug/Resources/text.frag" Line="1" Column="1" />
-      <File FileName="YH/bin/Debug/Resources/text.vs" Line="7" Column="1" />
+      <File FileName="YH/demo/HelloFont.cs" Line="87" Column="47" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloFont.cs" relfile="YH/demo/HelloFont.cs" line="33" column="28" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
