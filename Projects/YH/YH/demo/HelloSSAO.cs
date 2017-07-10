@@ -64,6 +64,9 @@ namespace YH
 
             //
             InitNoiseTexture();
+
+            //
+            mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 		}
 
 		private void BuildGBuffer(int w, int h)
@@ -186,6 +189,15 @@ namespace YH
 		public override void Update(double dt)
 		{
 			base.Update(dt);
+
+            //
+			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+            mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f + 1.0f;
+
+            //
+			mLightColor.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			mLightColor.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f + 1.0f;
+			mLightColor.Z = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
@@ -246,7 +258,16 @@ namespace YH
 			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
+			//
+			mLampShader.Use();
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("view"), false, ref view);
+			model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
+			model = Matrix4.CreateScale(0.2f) * model;
+			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+			mSphere.Draw();
 
+            //
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
 
@@ -368,5 +389,7 @@ namespace YH
 	    private List<Vector3> mSSAONoise = new List<Vector3>();
         private int mNoiseTexture = 0;
 		private int mDrawMode = 1;
+
+        private GLProgram mLampShader = null;
 	}
 }
