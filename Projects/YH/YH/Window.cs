@@ -53,8 +53,8 @@ namespace YH
 			//mCurrentApplication = new HelloHDR();
 			//mCurrentApplication = new HelloBloom();
 			//mCurrentApplication = new HelloDeferredShading();
-			mCurrentApplication = new HelloSSAO();
-			//mCurrentApplication = new HelloFont();
+			//mCurrentApplication = new HelloSSAO();
+			mCurrentApplication = new HelloFont();
 
 			Title = mCurrentApplication.mAppName;
 		}

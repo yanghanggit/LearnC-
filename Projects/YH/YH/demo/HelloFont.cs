@@ -32,8 +32,13 @@ namespace YH
 		{
 			base.Start(wnd);
 
-            GL.Viewport(0, 0, wnd.Width, wnd.Height);
+            mQuad = new Quad();
+
+			mScreenShader = new GLProgram(@"Resources/framebuffers_screen.vs", @"Resources/framebuffers_screen.frag");
+
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.ClearColor(Color.Black);
+            GL.Disable(EnableCap.DepthTest);
 
 			// Set OpenGL options
 			//glEnable(GL_CULL_FACE);
@@ -64,7 +69,7 @@ namespace YH
 
             var face = new Face(mLibrary, @"Resources/Font/test.ttf");
             //face.SetCharSize(46, 46, 96, 96);
-            face.SetPixelSizes(46, 46);
+            face.SetPixelSizes(32, 32);
 
 			//face.LoadChar('a', LoadFlags.Render, LoadTarget.Mono);
 			//var w = face.Glyph.Bitmap.Width;
@@ -76,7 +81,7 @@ namespace YH
 			// Load first 128 characters of ASCII set
             //for (uint c = 0; c < 128; c++)
 			{
-                var c = 'a';
+                var c = testChar;
                 //face.LoadChar();
                 //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
                 face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
@@ -178,7 +183,29 @@ namespace YH
 			//glClear(GL_COLOR_BUFFER_BIT);
             //RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f));
 			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
-			RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
+			//RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
+
+
+            var ch = mCharacters[testChar];
+
+
+			mScreenShader.Use();
+			GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
+            GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
+			mQuad.Draw();
+			GL.BindTexture(TextureTarget.Texture2D, 0);
+
+			//if (mUseFramebuffer)
+			//{
+			//	GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), mPostProcessing);
+			//	GL.Viewport(0, 0, wnd.Width / 2, wnd.Height / 2);
+			//	mQuad.Draw();
+			//}
+
+
+
+
+
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -254,6 +281,9 @@ namespace YH
         private Dictionary<char, Character> mCharacters = new Dictionary<char, Character>();
         private int VAO = 0, VBO = 0;
         private GLProgram shader = null;
+        private Quad mQuad = null;
+        private GLProgram mScreenShader = null;
+        private char testChar = 'A';
 	}
 }
 
