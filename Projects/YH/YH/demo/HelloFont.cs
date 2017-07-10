@@ -19,7 +19,10 @@ namespace YH
             GL.ClearColor(Color.Black);
 
             mLib = new Library();
-            var face = mLib.NewFace(fontName, 0);
+            var face = mLib.NewFace(@"Resources/Font/test.ttf", 0);
+
+
+            //int a = 0;
 		}
 
 		public override void Update(double dt)
