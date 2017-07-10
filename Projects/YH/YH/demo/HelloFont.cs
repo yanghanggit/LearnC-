@@ -147,7 +147,7 @@ namespace YH
                 character.TextureID = texture;
                 character.Size = new Size(face.Glyph.Bitmap.Width, face.Glyph.Bitmap.Rows);
                 character.Bearing = new Vector2(face.Glyph.BitmapLeft, face.Glyph.BitmapTop);
-                character.Advance = (int)face.Glyph.Advance.X;
+                character.Advance = face.Glyph.Advance.X.ToInt32();
                 mCharacters.Add(c, character);
 			}
 			//glBindTexture(GL_TEXTURE_2D, 0);
@@ -185,20 +185,22 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
-			// Clear the colorbuffer
-			//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-			//glClear(GL_COLOR_BUFFER_BIT);
-            //RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f));
-			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
-			//RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
+            // Clear the colorbuffer
+            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            //glClear(GL_COLOR_BUFFER_BIT);
+            RenderText(shader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
+            //RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
+            //RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
 
-
-            var ch = mCharacters['A'];
-			mScreenShader.Use();
-			GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
-            GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
-			mQuad.Draw();
-			GL.BindTexture(TextureTarget.Texture2D, 0);
+            if (true)
+            {
+				var ch = mCharacters['A'];
+				mScreenShader.Use();
+				GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
+				GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
+				mQuad.Draw();
+				GL.BindTexture(TextureTarget.Texture2D, 0);
+            }
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -222,6 +224,11 @@ namespace YH
             //for (c = text.begin(); c != text.end(); c++)
             foreach (var c in text)
 			{
+                if (!mCharacters.ContainsKey(c))
+                {
+                    continue;
+                }
+
                 Character ch = mCharacters[c];//Characters[c];
                 float xpos = x + ch.Bearing.X * scale;
                 float ypos = y - (ch.Size.Height - ch.Bearing.Y) * scale;
