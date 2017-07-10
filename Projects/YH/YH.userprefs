@@ -1,17 +1,17 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloGammaCorrection.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
     <Files>
       <File FileName="YH/demo/HelloAntiAliasing.cs" Line="17" Column="13" />
-      <File FileName="YH/demo/HelloSSAO.cs" Line="268" Column="19" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="267" Column="41" />
       <File FileName="YH/demo/HelloGammaCorrection.cs" Line="116" Column="81" />
+      <File FileName="YH/demo/HelloFont.cs" Line="107" Column="1" />
+      <File FileName="YH/Window.cs" Line="56" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloFont.cs" relfile="YH/demo/HelloFont.cs" line="107" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
