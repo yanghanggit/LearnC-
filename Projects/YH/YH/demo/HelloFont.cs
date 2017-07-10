@@ -1,4 +1,4 @@
-﻿﻿//using OpenTK.Graphics.OpenGL;
+﻿﻿﻿//using OpenTK.Graphics.OpenGL;
 //using System.Drawing;
 
 
@@ -33,7 +33,7 @@ namespace YH
 			base.Start(wnd);
 
             GL.Viewport(0, 0, wnd.Width, wnd.Height);
-            GL.ClearColor(Color.Blue);
+            GL.ClearColor(Color.Black);
 
 			// Set OpenGL options
 			//glEnable(GL_CULL_FACE);
@@ -60,8 +60,11 @@ namespace YH
 
 			mLibrary = new Library();
 
-            var face = mLibrary.NewFace(@"Resources/Font/test.ttf", 0);
-            face.SetCharSize(0, 46, 0, 96);
+            //var face = mLibrary.NewFace(@"Resources/Font/test.ttf", 0);
+
+            var face = new Face(mLibrary, @"Resources/Font/test.ttf");
+            //face.SetCharSize(46, 46, 96, 96);
+            face.SetPixelSizes(46, 46);
 
 			//face.LoadChar('a', LoadFlags.Render, LoadTarget.Mono);
 			//var w = face.Glyph.Bitmap.Width;
@@ -73,7 +76,12 @@ namespace YH
 			// Load first 128 characters of ASCII set
             for (uint c = 0; c < 128; c++)
 			{
-                face.LoadChar(c, LoadFlags.Render, LoadTarget.Mono);
+                //face.LoadChar();
+                //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
+				face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
+				face.Glyph.RenderGlyph(RenderMode.Normal);
+
+
 				// Load character glyph 
 				//if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 				//{
