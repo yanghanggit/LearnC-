@@ -42,11 +42,11 @@ namespace YH
 
 			// Set OpenGL options
 			//glEnable(GL_CULL_FACE);
-            //GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.CullFace);
 			//glEnable(GL_BLEND);
-            //GL.Enable(EnableCap.Blend);
+            GL.Enable(EnableCap.Blend);
 			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			// Disable byte-alignment restriction
 			//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
@@ -57,7 +57,7 @@ namespace YH
 			shader = new GLProgram(@"Resources/text.vs", @"Resources/text.frag");
 
 			const float near_plane = 0.1f;
-			const float far_plane = 7.5f;
+			const float far_plane = 1000.0f;
             Matrix4 projection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);//glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
 			shader.Use();
 			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -85,7 +85,7 @@ namespace YH
                 //face.LoadChar();
                 //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
                 face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
-				face.Glyph.RenderGlyph(RenderMode.Normal);
+				//face.Glyph.RenderGlyph(RenderMode.Normal);
 
 				// Load character glyph 
 				//if (FT_Load_Char(face, c, FT_LOAD_RENDER))
