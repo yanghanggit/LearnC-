@@ -32,9 +32,9 @@ namespace YH
 		{
 			base.Start(wnd);
 
-            mQuad = new Quad();
+   //         mQuad = new Quad();
 
-			mScreenShader = new GLProgram(@"Resources/framebuffers_screen.vs", @"Resources/framebuffers_screen.frag");
+			//mScreenShader = new GLProgram(@"Resources/framebuffers_screen.vs", @"Resources/framebuffers_screen.frag");
 
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
             GL.ClearColor(Color.Black);
@@ -65,35 +65,17 @@ namespace YH
 
 			mLibrary = new Library();
 
-            //var face = mLibrary.NewFace(@"Resources/Font/test.ttf", 0);
-
             var face = new Face(mLibrary, @"Resources/Font/test.ttf");
-            //face.SetCharSize(46, 46, 96, 96);
-            face.SetPixelSizes(32, 32);
-
-			//face.LoadChar('a', LoadFlags.Render, LoadTarget.Mono);
-			//var w = face.Glyph.Bitmap.Width;
-			//var h = face.Glyph.Bitmap.Rows;
-			//var buffer = face.Glyph.Bitmap.Buffer;
-			// FontFace.SetCharSize(0, size, 0, 96);
-			//int a = 0;
+            face.SetPixelSizes(46, 46);
 
 			// Load first 128 characters of ASCII set
-            for (uint c = 0; c < 128; c++)
+            for (uint c = 0; c < 128; ++c)
 			{
                 //var c = testChar;
                 //face.LoadChar();
                 //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
                 face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
                 //face.Glyph.RenderGlyph(RenderMode.Normal);
-                if (face.Glyph.Bitmap.Width <= 0)
-                {
-                    continue;
-                }
-
-
-
-
 				// Load character glyph 
 				//if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 				//{
@@ -185,22 +167,22 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
-            // Clear the colorbuffer
-            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            //glClear(GL_COLOR_BUFFER_BIT);
-            RenderText(shader, "G", 0.0f, 0.0f, 2.0f, new Vector3(1.0f, 0.0f, 1.0f)); //This is sample text
+			// Clear the colorbuffer
+			//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			//glClear(GL_COLOR_BUFFER_BIT); This is sample text
+            RenderText(shader, "(C) LearnOpenGL.com", 0.0f, 0.0f, 2.0f, new Vector3(1.0f, 1.0f, 1.0f)); //This is sample text
             //RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
             //RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
 
-            if (false)
-            {
-				var ch = mCharacters['A'];
-				mScreenShader.Use();
-				GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
-				GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
-				mQuad.Draw();
-				GL.BindTexture(TextureTarget.Texture2D, 0);
-            }
+    //        if (false)
+    //        {
+				//var ch = mCharacters['A'];
+				//mScreenShader.Use();
+				//GL.Uniform1(mScreenShader.GetUniformLocation("post_processing"), 0);
+				//GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
+				//mQuad.Draw();
+				//GL.BindTexture(TextureTarget.Texture2D, 0);
+            //}
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -222,6 +204,8 @@ namespace YH
             // Iterate through all characters
             //std::string::const_iterator c;
             //for (c = text.begin(); c != text.end(); c++)
+
+            bool first = false;
             foreach (var c in text)
 			{
                 if (!mCharacters.ContainsKey(c))
@@ -241,8 +225,13 @@ namespace YH
                 w = ch.Size.Width * scale;
 				h = ch.Size.Height * scale;
 
-                xpos /= 800.0f;
-                ypos /= 600.0f;
+                if (!first)
+                {
+                    first = true;
+					xpos /= 800.0f;
+					ypos /= 600.0f;
+                }
+
                 w /= 800.0f; 
                 h /= 600.0f;
 
@@ -278,9 +267,13 @@ namespace YH
 				// Render quad
 				//glDrawArrays(GL_TRIANGLES, 0, 6);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-				// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-				x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-			}
+                // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+
+                //x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+                var adv = (ch.Advance * scale);// (ch.Advance >> 6) * scale;
+                adv /= 800.0f;
+                x += adv;
+            }
             //glBindVertexArray(0);
             GL.BindVertexArray(0);
 			//glBindTexture(GL_TEXTURE_2D, 0);
@@ -291,8 +284,8 @@ namespace YH
         private Dictionary<uint, Character> mCharacters = new Dictionary<uint, Character>();
         private int VAO = 0, VBO = 0;
         private GLProgram shader = null;
-        private Quad mQuad = null;
-        private GLProgram mScreenShader = null;
+        //private Quad mQuad = null;
+        //private GLProgram mScreenShader = null;
 	}
 }
 
