@@ -196,7 +196,7 @@ namespace YH
 
             //
 			mLightColor.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			mLightColor.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f + 1.0f;
+			mLightColor.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
 			mLightColor.Z = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
 		}
 
@@ -265,6 +265,7 @@ namespace YH
 			model = Matrix4.CreateTranslation(mLightPos.X, mLightPos.Y, mLightPos.Z);
 			model = Matrix4.CreateScale(0.2f) * model;
 			GL.UniformMatrix4(mLampShader.GetUniformLocation("model"), false, ref model);
+            //GL.Uniform3(mLampShader.GetUniformLocation("set_color"), mLightColor);
 			mSphere.Draw();
 
             //
