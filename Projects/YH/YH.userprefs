@@ -1,9 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloMaterials.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloTriangle.cs">
     <Files>
-      <File FileName="YH/demo/HelloSSAO.cs" Line="306" Column="15" />
-      <File FileName="YH/demo/HelloMaterials.cs" Line="157" Column="41" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="181" Column="54" />
+      <File FileName="YH/Window.cs" Line="22" Column="36" />
+      <File FileName="YH/demo/HelloFont.cs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloTriangle.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
