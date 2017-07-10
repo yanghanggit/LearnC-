@@ -1,10 +1,8 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTextureCube.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSSAO.cs">
     <Files>
-      <File FileName="YH/demo/HelloSSAO.cs" Line="256" Column="52" />
-      <File FileName="YH/bin/Debug/Resources/ssao_lighting.frag" Line="27" Column="26" />
-      <File FileName="YH/src/GLTextureCube.cs" Line="46" Column="28" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="38" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

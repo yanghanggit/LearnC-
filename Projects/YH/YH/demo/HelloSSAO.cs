@@ -35,23 +35,23 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			//
-			shaderGeometryPass = new GLProgram(@"Resources/ssao_geometry.vs", @"Resources/ssao_geometry.frag"); 
-			shaderLightingPass = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_lighting.frag"); 
-			shaderSSAO = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao.frag"); 
-			shaderSSAOBlur = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_blur.frag"); 
+			mShaderGeometryPass = new GLProgram(@"Resources/ssao_geometry.vs", @"Resources/ssao_geometry.frag"); 
+			mShaderLightingPass = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_lighting.frag"); 
+			mShaderSSAO = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao.frag"); 
+			mShaderSSAOBlur = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_blur.frag"); 
 
 			// Set samplers
-			shaderLightingPass.Use();
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("gPosition"), 0);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("gNormal"), 1);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("gAlbedo"), 2);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("ssao"), 3);
+			mShaderLightingPass.Use();
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gPosition"), 0);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gNormal"), 1);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gAlbedo"), 2);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("ssao"), 3);
 
             //
-			shaderSSAO.Use();
-			GL.Uniform1(shaderSSAO.GetUniformLocation("gPosition"), 0);
-			GL.Uniform1(shaderSSAO.GetUniformLocation("gNormal"), 1);
-			GL.Uniform1(shaderSSAO.GetUniformLocation("texNoise"), 2);
+			mShaderSSAO.Use();
+			GL.Uniform1(mShaderSSAO.GetUniformLocation("gPosition"), 0);
+			GL.Uniform1(mShaderSSAO.GetUniformLocation("gNormal"), 1);
+			GL.Uniform1(mShaderSSAO.GetUniformLocation("texNoise"), 2);
 
             //
 			BuildGBuffer(wnd.Width, wnd.Height);
@@ -200,50 +200,50 @@ namespace YH
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, gBuffer);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
   
-			shaderGeometryPass.Use();
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("view"), false, ref view);
+			mShaderGeometryPass.Use();
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("view"), false, ref view);
 
             model = Matrix4.CreateTranslation(10.0f, 0.0f, 0.0f);
             model = Matrix4.CreateScale(new Vector3(1.0f, 20.0f, 20.0f)) * model;
-            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
             model = Matrix4.CreateTranslation(-10.0f, 0.0f, 0.0f);
             model = Matrix4.CreateScale(new Vector3(1.0f, 20.0f, 20.0f)) * model;
-            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
             model = Matrix4.CreateTranslation(0.0f, 0.0f, 10.0f);
             model = Matrix4.CreateScale(new Vector3(20.0f, 20.0f, 1.0f)) * model;
-            GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+            GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
             mCube.Draw();
 
 			model = Matrix4.CreateTranslation(0.0f, 0.0f, -10.0f);
 			model = Matrix4.CreateScale(new Vector3(20.0f, 20.0f, 1.0f)) * model;
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(0.0f, 10.0f, 0.0f);
 			model = Matrix4.CreateScale(new Vector3(20.0f, 1.0f, 20.0f)) * model;
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(0.0f, -1.0f, 0.0f);
 			model = Matrix4.CreateScale(new Vector3(20.0f, 1.0f, 20.0f)) * model;
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(0.0f, 0.0f, 0.0f);
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(1.0f, 0.0f, 0.5f);
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 			model = Matrix4.CreateTranslation(0.5f, 1.0f, 0.25f);
-			GL.UniformMatrix4(shaderGeometryPass.GetUniformLocation("model"), false, ref model);
+			GL.UniformMatrix4(mShaderGeometryPass.GetUniformLocation("model"), false, ref model);
 			mCube.Draw();
 
 
@@ -252,7 +252,7 @@ namespace YH
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoFBO);
 			GL.Clear(ClearBufferMask.ColorBufferBit);
-			shaderSSAO.Use();
+			mShaderSSAO.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, gPosition);
 			GL.ActiveTexture(TextureUnit.Texture1);
@@ -262,23 +262,23 @@ namespace YH
 			// Send kernel + rotation 
 			for (var i = 0; i < 64; ++i)
             {
-				GL.Uniform3(shaderSSAO.GetUniformLocation("samples[" + i + "]"), ssaoKernel[i]);
+				GL.Uniform3(mShaderSSAO.GetUniformLocation("samples[" + i + "]"), ssaoKernel[i]);
 			}
-			GL.UniformMatrix4(shaderSSAO.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShaderSSAO.GetUniformLocation("projection"), false, ref projection);
 			mQuad.Draw();
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             //
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, ssaoBlurFBO);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-			shaderSSAOBlur.Use();
+			mShaderSSAOBlur.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, ssaoColorBuffer);
             mQuad.Draw();
 			GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			shaderLightingPass.Use();
+			mShaderLightingPass.Use();
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, gPosition);
 			GL.ActiveTexture(TextureUnit.Texture1);
@@ -289,17 +289,17 @@ namespace YH
 			GL.BindTexture(TextureTarget.Texture2D, ssaoColorBufferBlur);
 
             //
-            Vector4 tmp = (new Vector4(lightPos.X, lightPos.Y, lightPos.Z, 1.0f)) * view;
+            Vector4 tmp = (new Vector4(mLightPos.X, mLightPos.Y, mLightPos.Z, 1.0f)) * view;
             Vector3 lightPosView = new Vector3(tmp.X, tmp.Y, tmp.Z);
-			GL.Uniform3(shaderLightingPass.GetUniformLocation("light.Position"), lightPosView);
-			GL.Uniform3(shaderLightingPass.GetUniformLocation("light.Color"), lightColor);
+			GL.Uniform3(mShaderLightingPass.GetUniformLocation("light.Position"), lightPosView);
+			GL.Uniform3(mShaderLightingPass.GetUniformLocation("light.Color"), mLightColor);
 
             //const float constant = 1.0f;
             const float linear = 0.09f;
             const float quadratic = 0.032f;
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("light.Linear"), linear);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("light.Quadratic"), quadratic);
-			GL.Uniform1(shaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("light.Linear"), linear);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("light.Quadratic"), quadratic);
+			GL.Uniform1(mShaderLightingPass.GetUniformLocation("draw_mode"), draw_mode);
             mQuad.Draw();
 		}
 
@@ -347,13 +347,13 @@ namespace YH
 		private Sphere mSphere = null;
 		private Quad mQuad = null;
 
-        private GLProgram shaderGeometryPass = null;
-		private GLProgram shaderLightingPass = null;
-		private GLProgram shaderSSAO = null;
-		private GLProgram shaderSSAOBlur = null;
+        private GLProgram mShaderGeometryPass = null;
+		private GLProgram mShaderLightingPass = null;
+		private GLProgram mShaderSSAO = null;
+		private GLProgram mShaderSSAOBlur = null;
 
-        private Vector3 lightPos = new Vector3(2.0f, 4.0f, -2.0f);
-		private Vector3 lightColor = new Vector3(0.2f, 0.2f, 0.7f);
+        private Vector3 mLightPos = new Vector3(2.0f, 4.0f, -2.0f);
+		private Vector3 mLightColor = new Vector3(0.2f, 0.2f, 0.7f);
 
         private int gBuffer = 0;
         private int gPosition = 0;
