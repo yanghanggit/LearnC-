@@ -37,11 +37,11 @@ namespace YH
 
 			// Set OpenGL options
 			//glEnable(GL_CULL_FACE);
-            GL.Enable(EnableCap.CullFace);
+            //GL.Enable(EnableCap.CullFace);
 			//glEnable(GL_BLEND);
-            GL.Enable(EnableCap.Blend);
+            //GL.Enable(EnableCap.Blend);
 			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 			// Disable byte-alignment restriction
 			//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
@@ -74,13 +74,13 @@ namespace YH
 			//int a = 0;
 
 			// Load first 128 characters of ASCII set
-            for (uint c = 0; c < 128; c++)
+            //for (uint c = 0; c < 128; c++)
 			{
+                var c = 'a';
                 //face.LoadChar();
                 //face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
-				face.LoadChar(c, LoadFlags.Default, LoadTarget.Normal);
+                face.LoadChar(c, LoadFlags.Render, LoadTarget.Normal);
 				face.Glyph.RenderGlyph(RenderMode.Normal);
-
 
 				// Load character glyph 
 				//if (FT_Load_Char(face, c, FT_LOAD_RENDER))
@@ -176,8 +176,9 @@ namespace YH
 			// Clear the colorbuffer
 			//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			//glClear(GL_COLOR_BUFFER_BIT);
-            RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f));
-			RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
+            //RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f));
+			//RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
+			RenderText(shader, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0.5f, 0.5f, 1.0f, new Vector3(1.0f, 1.0f, 1.0f));
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
