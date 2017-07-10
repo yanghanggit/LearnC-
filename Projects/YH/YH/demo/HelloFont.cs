@@ -20,9 +20,17 @@ namespace YH
 
             mLib = new Library();
             var face = mLib.NewFace(@"Resources/Font/test.ttf", 0);
+            face.SetCharSize(0, 46, 0, 96);
 
+            face.LoadChar('a', LoadFlags.Render, LoadTarget.Mono);
+            var w = face.Glyph.Bitmap.Width;
+            var h = face.Glyph.Bitmap.Rows;
+            var buffer = face.Glyph.Bitmap.Buffer;
+               // FontFace.SetCharSize(0, size, 0, 96);
+            int a = 0;
 
-            //int a = 0;
+            mLib.Dispose();
+            face.Dispose();
 		}
 
 		public override void Update(double dt)
