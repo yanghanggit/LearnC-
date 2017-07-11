@@ -7,6 +7,8 @@ uniform mat4 projection;
 void main()
 {
     gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);
-    gl_Position = vec4(vertex.x/800.0, vertex.y/600.0, 0.0, 1.0);
+    float x = (vertex.x/800.0) * 2.0 - 1.0f;
+    float y = (vertex.y/600.0) * 2.0 - 1.0f;
+    gl_Position = vec4(x, y, 0.0, 1.0);
     TexCoords = vertex.zw;
 }
