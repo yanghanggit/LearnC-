@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -35,13 +35,13 @@ namespace YH
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
 
-			shader = new GLProgram(@"Resources/text.vs", @"Resources/text.frag");
+			mTextShader = new GLProgram(@"Resources/text.vs", @"Resources/text.frag");
 
 			const float near_plane = 0.1f;
 			const float far_plane = 1000.0f;
             Matrix4 projection = Matrix4.CreateOrthographic(wnd.Width, wnd.Height, near_plane, far_plane);
-			shader.Use();
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			mTextShader.Use();
+			GL.UniformMatrix4(mTextShader.GetUniformLocation("projection"), false, ref projection);
 
 			var library = new Library();
 
@@ -81,10 +81,10 @@ namespace YH
             face.Dispose();
 			library.Dispose();
 
-            VAO = GL.GenVertexArray();
-            VBO = GL.GenBuffer();
-            GL.BindVertexArray(VAO);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+            mVAO = GL.GenVertexArray();
+            mVBO = GL.GenBuffer();
+            GL.BindVertexArray(mVAO);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mVBO);
             GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 6 * 4, IntPtr.Zero, BufferUsageHint.DynamicDraw);
             GL.EnableVertexAttribArray(0);
 			GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
@@ -101,8 +101,8 @@ namespace YH
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            RenderText(shader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f), wnd.Width, wnd.Height);
-			RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f), wnd.Width, wnd.Height);
+            RenderText(mTextShader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f), wnd.Width, wnd.Height);
+			RenderText(mTextShader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f), wnd.Width, wnd.Height);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -115,7 +115,7 @@ namespace YH
 			sh.Use();
             GL.Uniform3(sh.GetUniformLocation("textColor"), color.X, color.Y, color.Z);
             GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindVertexArray(VAO);
+            GL.BindVertexArray(mVAO);
 
             foreach (var c in text)
 			{
@@ -141,7 +141,7 @@ namespace YH
 				};
 
                 GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, mVBO);
                 GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, sizeof(float) * vertices.Length, vertices);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
@@ -155,8 +155,9 @@ namespace YH
 		}
 
         private Dictionary<uint, Character> mCharacters = new Dictionary<uint, Character>();
-        private int VAO = 0, VBO = 0;
-        private GLProgram shader = null;
+        private int mVAO = 0;
+        private int mVBO = 0;
+        private GLProgram mTextShader = null;
 	}
 }
 
