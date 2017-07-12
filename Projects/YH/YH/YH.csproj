@@ -101,6 +101,7 @@
     <Compile Include="demo\HelloDeferredShading.cs" />
     <Compile Include="demo\HelloSSAO.cs" />
     <Compile Include="demo\HelloFont.cs" />
+    <Compile Include="demo\HelloAssimp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />

@@ -1,8 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloFont.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloAssimp.cs">
     <Files>
-      <File FileName="YH/demo/HelloFont.cs" Line="64" Column="57" />
+      <File FileName="YH/demo/HelloFont.cs" Line="17" Column="4" />
+      <File FileName="YH/Window.cs" Line="26" Column="46" />
+      <File FileName="YH/demo/HelloAssimp.cs" Line="21" Column="26" />
+      <File FileName="YH/demo/HelloColors.cs" Line="109" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
