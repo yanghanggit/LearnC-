@@ -101,8 +101,8 @@ namespace YH
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit);
 
-			RenderText(shader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f));
-			RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f));
+            RenderText(shader, "This is sample text", 0.0f, 0.0f, 1.0f, new Vector3(0.5f, 0.8f, 0.2f), wnd.Width, wnd.Height);
+			RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, new Vector3(0.3f, 0.7f, 0.9f), wnd.Width, wnd.Height);
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -110,7 +110,7 @@ namespace YH
 			base.OnKeyUp(e);
 		}
 
-        public void RenderText(GLProgram sh, string text, float x, float y, float scale, Vector3 color)
+        public void RenderText(GLProgram sh, string text, float x, float y, float scale, Vector3 color, float wndWidth, float wndHeight)
 		{
 			sh.Use();
             GL.Uniform3(sh.GetUniformLocation("textColor"), color.X, color.Y, color.Z);
@@ -129,15 +129,15 @@ namespace YH
                 float ypos = y - (ch.Size.Height - ch.Bearing.Y) * scale;
                 float w = ch.Size.Width * scale;
                 float h = ch.Size.Height * scale;
-			
-				float[] vertices = {
-                     xpos,     ypos + h,   0.0f, 0.0f,
-                     xpos,     ypos,       0.0f, 1.0f,
-                     xpos + w, ypos,       1.0f, 1.0f,
 
-                     xpos,     ypos + h,   0.0f, 0.0f,
-                     xpos + w, ypos,       1.0f, 1.0f,
-                     xpos + w, ypos + h,   1.0f, 0.0f
+				float[] vertices = {
+                    xpos/wndWidth,        (ypos + h)/wndHeight,      0.0f, 0.0f,
+                    xpos/wndWidth,        ypos/wndHeight,            0.0f, 1.0f,
+                    (xpos + w)/wndWidth,  ypos/wndHeight,            1.0f, 1.0f,
+
+                    xpos/wndWidth,        (ypos + h)/wndHeight,      0.0f, 0.0f,
+                    (xpos + w)/wndWidth,  ypos/wndHeight,            1.0f, 1.0f,
+                    (xpos + w)/wndWidth,  (ypos + h)/wndHeight,      1.0f, 0.0f
 				};
 
                 GL.BindTexture(TextureTarget.Texture2D, ch.TextureID);
