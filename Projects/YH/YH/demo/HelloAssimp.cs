@@ -4,6 +4,20 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using OpenTK;
 
+//using System;
+//using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
+using Assimp.Configs;
+//using OpenTK;
+using OpenTK.Graphics;
+//using OpenTK.Graphics.OpenGL;
+using Assimp.Unmanaged;
+using Assimp;
+
+
+
 namespace YH
 {
 	public class HelloAssimp : Application
@@ -26,6 +40,18 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			mLightShader = new GLProgram(@"Resources/colors.vs", @"Resources/colors.frag");
+
+
+			//Title = "Quack! - AssimpNet Simple OpenGL Sample";
+
+			String fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "duck.dae");
+
+			AssimpContext importer = new AssimpContext();
+			importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
+			m_model = importer.ImportFile(fileName, PostProcessPreset.TargetRealTimeMaximumQuality);
+
+            int a = 0;
+			//ComputeBoundingBox();
 		}
 
 		public override void Update(double dt)
@@ -59,5 +85,6 @@ namespace YH
 		private Cube mCube = null;
 		private Camera mCamera = null;
 		private GLProgram mLightShader = null;
+        private Scene m_model = null;
 	}
 }
