@@ -21,7 +21,7 @@ namespace YH
 		{
 			//mCurrentApplication = new HelloTriangle();
 			//mCurrentApplication = new HelloTexture2D();
-			//mCurrentApplication = new HelloTransform();
+			mCurrentApplication = new HelloTransform();
 			//mCurrentApplication = new HelloCoordinateSystem();
 			//mCurrentApplication = new HelloCamera();
 			//mCurrentApplication = new HelloColors();
@@ -55,7 +55,7 @@ namespace YH
 			//mCurrentApplication = new HelloDeferredShading();
 			//mCurrentApplication = new HelloSSAO();
 			//mCurrentApplication = new HelloFont();
-			mCurrentApplication = new HelloAssimp();
+			//mCurrentApplication = new HelloAssimp();
 
 			Title = mCurrentApplication.mAppName;
 		}
