@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/g_buffer.vs">
     <Files>
-      <File FileName="YH/demo/HelloTexture2D.cs" Line="24" Column="25" />
-      <File FileName="YH/src/SimpleGeometry.cs" Line="126" Column="31" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="67" Column="17" />
-      <File FileName="YH/Window.cs" Line="24" Column="4" />
+      <File FileName="YH/demo/HelloDeferredShading.cs" Line="46" Column="63" />
+      <File FileName="YH/bin/Debug/Resources/g_buffer.frag" Line="1" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/g_buffer.vs" Line="17" Column="1" />
+      <File FileName="YH/demo/HelloBloom.cs" Line="17" Column="41" />
+      <File FileName="YH/Window.cs" Line="57" Column="21" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
