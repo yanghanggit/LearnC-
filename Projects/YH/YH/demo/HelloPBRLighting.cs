@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 ﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using System;
 using OpenTK.Graphics.OpenGL;
 using OpenTK;
@@ -25,16 +25,16 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-            shader = new GLProgram(@"Resources/1.1.pbr.vs", @"Resources/1.1.pbr.fs");
-			shader.Use();
-            GL.Uniform3(shader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
-            GL.Uniform1(shader.GetUniformLocation("ao"), 1.0f);
+            mShader = new GLProgram(@"Resources/1.1.pbr.vs", @"Resources/1.1.pbr.fs");
+			mShader.Use();
+            GL.Uniform3(mShader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
+            GL.Uniform1(mShader.GetUniformLocation("ao"), 1.0f);
 
-			projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 															(float)wnd.Width / (float)wnd.Height,
 														    0.1f, 100.0f);
 
-			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
+			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref mProjection);
 		}
 
 		public override void Update(double dt)
@@ -46,10 +46,10 @@ namespace YH
 		{
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-			shader.Use();
+			mShader.Use();
             var view = mCamera.GetViewMatrix();
-			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
-            GL.Uniform3(shader.GetUniformLocation("camPos"), mCamera.Position);
+			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
+            GL.Uniform3(mShader.GetUniformLocation("camPos"), mCamera.Position);
 
 
 			var model = Matrix4.CreateTranslation(0, 0, 0);
@@ -60,46 +60,46 @@ namespace YH
 
             for (int row = 0; row < nrRows; ++row)
             {
-                GL.Uniform1(shader.GetUniformLocation("metallic"), (float)row / (float)nrRows);
+                GL.Uniform1(mShader.GetUniformLocation("metallic"), (float)row / (float)nrRows);
 
                 for (int col = 0; col < nrColumns; ++col)
                 {
                     float v = (float)col / (float)nrColumns;
 					v = (v < 0.05f) ? 0.05f : ((v > 1.0f) ? 1.0f : v);
-					GL.Uniform1(shader.GetUniformLocation("roughness"), v);
+					GL.Uniform1(mShader.GetUniformLocation("roughness"), v);
 
 					model = Matrix4.CreateTranslation(
                         (float)(col - (nrColumns / 2)) * spacing,
 						(float)(row - (nrRows / 2)) * spacing,
 						0.0f);
                     
-					GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+					GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
 					renderSphere();
 				}
 			}
 
-            for (int i = 0; i < lightPositions.Length; ++i)
+            for (int i = 0; i < mLightPositions.Length; ++i)
 			{
-                Vector3 newPos = lightPositions[i] + new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f);
+                Vector3 newPos = mLightPositions[i] + new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f);
 
-				newPos = lightPositions[i];
-				GL.Uniform3(shader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
-				GL.Uniform3(shader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
+				newPos = mLightPositions[i];
+				GL.Uniform3(mShader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
+				GL.Uniform3(mShader.GetUniformLocation("lightColors[" + i + "]"), mLightColors[i]);
 
                 model = Matrix4.CreateTranslation(newPos);
                 model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
-				renderSphere();
+				//renderSphere();
 			}
 		}
 
         private void renderSphere()
         {
-			if (sphereVAO == 0)
+			if (mSphereVAO == 0)
 			{
-                sphereVAO = GL.GenVertexArray();
+                mSphereVAO = GL.GenVertexArray();
 
                 int vbo = GL.GenBuffer();
                 int ebo = GL.GenBuffer();
@@ -152,7 +152,7 @@ namespace YH
 					oddRow = !oddRow;
 				}
 
-                indexCount = indices.Count;
+                mIndexCount = indices.Count;
 
                 List<float> data = new List<float>();
 
@@ -176,7 +176,7 @@ namespace YH
 					}
 				}
 
-                GL.BindVertexArray(sphereVAO);
+                GL.BindVertexArray(mSphereVAO);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
                 GL.BufferData(BufferTarget.ArrayBuffer, data.Count * sizeof(float), data.ToArray(), BufferUsageHint.StaticDraw);
                 GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
@@ -195,8 +195,8 @@ namespace YH
 				GL.BindVertexArray(0);
 			}
 
-            GL.BindVertexArray(sphereVAO);
-            GL.DrawElements(PrimitiveType.TriangleStrip, indexCount, DrawElementsType.UnsignedInt, 0);
+            GL.BindVertexArray(mSphereVAO);
+            GL.DrawElements(PrimitiveType.TriangleStrip, mIndexCount, DrawElementsType.UnsignedInt, 0);
 			GL.BindVertexArray(0);
 		}
 
@@ -212,24 +212,24 @@ namespace YH
 
 
 		private Camera mCamera = null;
-		private GLProgram shader = null;
+		private GLProgram mShader = null;
 
-		private Vector3[] lightPositions = {
+		private Vector3[] mLightPositions = {
 			new Vector3(-10.0f,  10.0f, 10.0f),
 			new Vector3( 10.0f,  10.0f, 10.0f),
 			new Vector3(-10.0f, -10.0f, 10.0f),
 			new Vector3( 10.0f, -10.0f, 10.0f),
 	    };
 
-        private Vector3[] lightColors = {
+        private Vector3[] mLightColors = {
 			new Vector3(300.0f, 300.0f, 300.0f),
 			new Vector3(300.0f, 300.0f, 300.0f),
 			new Vector3(300.0f, 300.0f, 300.0f),
 			new Vector3(300.0f, 300.0f, 300.0f)
 	    };
 
-        private Matrix4 projection = new Matrix4();
-		private int sphereVAO = 0;
-		private int indexCount = 0;
+        private Matrix4 mProjection = new Matrix4();
+		private int mSphereVAO = 0;
+		private int mIndexCount = 0;
 	}
 }
