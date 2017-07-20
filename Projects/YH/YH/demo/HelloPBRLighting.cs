@@ -22,7 +22,7 @@ namespace YH
             GL.ClearColor(Color.Black);
 			GL.Enable(EnableCap.DepthTest);
 
-			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
+			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
             mShader = new GLProgram(@"Resources/1.1.pbr.vs", @"Resources/1.1.pbr.fs");
@@ -80,10 +80,9 @@ namespace YH
 			}
 
             for (int i = 0; i < mLightPositions.Length; ++i)
-			{
-                Vector3 newPos = mLightPositions[i] + new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f);
+			{                
+                Vector3 newPos = Vector3.Add(mLightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 2.0f), (float)Math.Sin(mTotalRuningTime * 2.0f), 0.0f));
 
-				newPos = mLightPositions[i];
 				GL.Uniform3(mShader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
 				GL.Uniform3(mShader.GetUniformLocation("lightColors[" + i + "]"), mLightColors[i]);
 
@@ -91,7 +90,7 @@ namespace YH
                 model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
-				//renderSphere();
+				renderSphere();
 			}
 		}
 
@@ -223,9 +222,9 @@ namespace YH
 
         private Vector3[] mLightColors = {
 			new Vector3(300.0f, 300.0f, 300.0f),
-			new Vector3(300.0f, 300.0f, 300.0f),
-			new Vector3(300.0f, 300.0f, 300.0f),
-			new Vector3(300.0f, 300.0f, 300.0f)
+			new Vector3(0.0f, 300.0f, 300.0f),
+			new Vector3(300.0f, 0.0f, 300.0f),
+			new Vector3(300.0f, 300.0f, 0.0f)
 	    };
 
         private Matrix4 mProjection = new Matrix4();
