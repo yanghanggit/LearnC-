@@ -18,58 +18,59 @@ namespace YH
 		{
 			base.Start(wnd);
 
-			//
+			////
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Black);
 			GL.Enable(EnableCap.DepthTest);
 
-			//
-			mCube = new Cube();
-			mSphere = new Sphere();
-			mQuad = new Quad();
+			////
+			//mCube = new Cube();
+			//mSphere = new Sphere();
+			//mQuad = new Quad();
 
-			//
-			mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
-			mCamera.MovementSpeed *= 2.0f;
+			////
+			//mCamera = new Camera(new Vector3(0.0f, 0.0f, 5.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
+			//mCamera.MovementSpeed *= 2.0f;
 
-			//
-			mCameraController = new CameraController(mAppName, mCamera);
+			////
+			//mCameraController = new CameraController(mAppName, mCamera);
 
-			//
-			mShaderGeometryPass = new GLProgram(@"Resources/ssao_geometry.vs", @"Resources/ssao_geometry.frag");
-			mShaderLightingPass = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_lighting.frag");
-			mShaderSSAO = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao.frag");
-			mShaderSSAOBlur = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_blur.frag");
+			////
+			//mShaderGeometryPass = new GLProgram(@"Resources/ssao_geometry.vs", @"Resources/ssao_geometry.frag");
+			//mShaderLightingPass = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_lighting.frag");
+			//mShaderSSAO = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao.frag");
+			//mShaderSSAOBlur = new GLProgram(@"Resources/ssao.vs", @"Resources/ssao_blur.frag");
 
-			// Set samplers
-			mShaderLightingPass.Use();
-			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gPosition"), 0);
-			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gNormal"), 1);
-			GL.Uniform1(mShaderLightingPass.GetUniformLocation("gAlbedo"), 2);
-			GL.Uniform1(mShaderLightingPass.GetUniformLocation("ssao"), 3);
+			//// Set samplers
+			//mShaderLightingPass.Use();
+			//GL.Uniform1(mShaderLightingPass.GetUniformLocation("gPosition"), 0);
+			//GL.Uniform1(mShaderLightingPass.GetUniformLocation("gNormal"), 1);
+			//GL.Uniform1(mShaderLightingPass.GetUniformLocation("gAlbedo"), 2);
+			//GL.Uniform1(mShaderLightingPass.GetUniformLocation("ssao"), 3);
 
-			//
-			mShaderSSAO.Use();
-			GL.Uniform1(mShaderSSAO.GetUniformLocation("gPosition"), 0);
-			GL.Uniform1(mShaderSSAO.GetUniformLocation("gNormal"), 1);
-			GL.Uniform1(mShaderSSAO.GetUniformLocation("texNoise"), 2);
+			////
+			//mShaderSSAO.Use();
+			//GL.Uniform1(mShaderSSAO.GetUniformLocation("gPosition"), 0);
+			//GL.Uniform1(mShaderSSAO.GetUniformLocation("gNormal"), 1);
+			//GL.Uniform1(mShaderSSAO.GetUniformLocation("texNoise"), 2);
 
-			//
-			BuildGBuffer(wnd.Width, wnd.Height);
+			////
+			//BuildGBuffer(wnd.Width, wnd.Height);
 
-			//
-			BuildSSAOBuffer(wnd.Width, wnd.Height);
+			////
+			//BuildSSAOBuffer(wnd.Width, wnd.Height);
 
-			//
-			InitSampleKernel();
+			////
+			//InitSampleKernel();
 
-			//
-			InitNoiseTexture();
+			////
+			//InitNoiseTexture();
 
-			//
-			mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
+			////
+			//mLampShader = new GLProgram(@"Resources/lamp.vs", @"Resources/lamp.frag");
 		}
 
+        /*
 		private void BuildGBuffer(int w, int h)
 		{
 			mGBuffer = GL.GenFramebuffer();
@@ -186,23 +187,27 @@ namespace YH
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
 			GL.BindTexture(TextureTarget.Texture2D, 0);
 		}
+        */
 
 		public override void Update(double dt)
 		{
 			base.Update(dt);
 
 			//
-			mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f + 1.0f;
+			//mLightPos.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			//mLightPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f + 1.0f;
 
-			//
-			mLightColor.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-			mLightColor.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
-			mLightColor.Z = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			////
+			//mLightColor.X = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+			//mLightColor.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f;
+			//mLightColor.Z = 1.0f + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
 		}
 
 		public override void Draw(double dt, Window wnd)
 		{
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            /*
 			var projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 																  (float)wnd.Width / (float)wnd.Height,
 																  0.1f, 100.0f);
@@ -324,47 +329,49 @@ namespace YH
 			GL.Uniform1(mShaderLightingPass.GetUniformLocation("light.Quadratic"), quadratic);
 			GL.Uniform1(mShaderLightingPass.GetUniformLocation("draw_mode"), mDrawMode);
 			mQuad.Draw();
+			*/
 		}
 
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
 
-			if (e.Key == OpenTK.Input.Key.Number1)
-			{
-				mDrawMode = 1;
-			}
-			else if (e.Key == OpenTK.Input.Key.Number2)
-			{
-				mDrawMode = 2;
-			}
-			else if (e.Key == OpenTK.Input.Key.Number3)
-			{
-				mDrawMode = 3;
-			}
-			else if (e.Key == OpenTK.Input.Key.Number4)
-			{
-				mDrawMode = 4;
-			}
-			else if (e.Key == OpenTK.Input.Key.Number5)
-			{
-				mDrawMode = 5;
-			}
+			//if (e.Key == OpenTK.Input.Key.Number1)
+			//{
+			//	mDrawMode = 1;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Number2)
+			//{
+			//	mDrawMode = 2;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Number3)
+			//{
+			//	mDrawMode = 3;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Number4)
+			//{
+			//	mDrawMode = 4;
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Number5)
+			//{
+			//	mDrawMode = 5;
+			//}
 		}
 
 		public override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyDown(e);
 
-			if (e.Key == OpenTK.Input.Key.Plus)
-			{
-			}
-			else if (e.Key == OpenTK.Input.Key.Minus)
-			{
+			//if (e.Key == OpenTK.Input.Key.Plus)
+			//{
+			//}
+			//else if (e.Key == OpenTK.Input.Key.Minus)
+			//{
 
-			}
+			//}
 		}
 
+        /*
 		private Camera mCamera = null;
 		private Cube mCube = null;
 		private Sphere mSphere = null;
@@ -393,5 +400,6 @@ namespace YH
 		private int mDrawMode = 1;
 
 		private GLProgram mLampShader = null;
+		*/
 	}
 }
