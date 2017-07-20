@@ -104,10 +104,33 @@ namespace YH
 			}
 
 
+			// render light source (simply re-render sphere at light positions)
+			// this looks a bit off as we use the same shader, but it'll make their positions obvious and 
+			// keeps the codeprint small.
+			//for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+            for (int i = 0; i < lightPositions.Length; ++i)
+			{
+                //glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+                Vector3 newPos = lightPositions[i] + new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f);
 
+				newPos = lightPositions[i];
+				//shader.setVec3("lightPositions[" + std::to_string(i) + "]", newPos);
+				GL.Uniform3(shader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
+				//shader.setVec3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
+				GL.Uniform3(shader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
+
+                //model = glm::mat4();
+                //model = glm::translate(model, newPos);
+                //model = glm::scale(model, glm::vec3(0.5f));
+                //shader.setMat4("model", model);
+                model = Matrix4.CreateTranslation(newPos);
+                model = Matrix4.CreateScale(0.5f) * model;
+				GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+
+                //
+				renderSphere();
+			}
 		}
-
-
 
         private int sphereVAO = 0;
 		private int indexCount = 0;
