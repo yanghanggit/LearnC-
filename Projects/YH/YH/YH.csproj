@@ -102,6 +102,7 @@
     <Compile Include="demo\HelloSSAO.cs" />
     <Compile Include="demo\HelloFont.cs" />
     <Compile Include="demo\HelloAssimp.cs" />
+    <Compile Include="demo\HelloPBRLighting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
