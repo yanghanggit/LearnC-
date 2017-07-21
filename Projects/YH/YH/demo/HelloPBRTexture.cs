@@ -25,6 +25,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
+            /*
 			mShader = new GLProgram(@"Resources/1.1.pbr.vs", @"Resources/1.1.pbr.fs");
 			mShader.Use();
 			GL.Uniform3(mShader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
@@ -35,6 +36,7 @@ namespace YH
 															0.1f, 100.0f);
 
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref mProjection);
+			*/
 		}
 
 		public override void Update(double dt)
@@ -46,6 +48,7 @@ namespace YH
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            /*
 			mShader.Use();
 			var view = mCamera.GetViewMatrix();
 			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
@@ -92,6 +95,7 @@ namespace YH
 
 				RenderSphere();
 			}
+			*/
 		}
 
 		private void RenderSphere()
@@ -211,23 +215,23 @@ namespace YH
 
 
 		private Camera mCamera = null;
-		private GLProgram mShader = null;
+		//private GLProgram mShader = null;
 
-		private Vector3[] mLightPositions = {
-			new Vector3(-10.0f,  10.0f, 10.0f),
-			new Vector3( 10.0f,  10.0f, 10.0f),
-			new Vector3(-10.0f, -10.0f, 10.0f),
-			new Vector3( 10.0f, -10.0f, 10.0f),
-		};
+		//private Vector3[] mLightPositions = {
+		//	new Vector3(-10.0f,  10.0f, 10.0f),
+		//	new Vector3( 10.0f,  10.0f, 10.0f),
+		//	new Vector3(-10.0f, -10.0f, 10.0f),
+		//	new Vector3( 10.0f, -10.0f, 10.0f),
+		//};
 
-		private Vector3[] mLightColors = {
-			new Vector3(300.0f, 300.0f, 300.0f),
-			new Vector3(0.0f, 300.0f, 300.0f),
-			new Vector3(300.0f, 0.0f, 300.0f),
-			new Vector3(300.0f, 300.0f, 0.0f)
-		};
+		//private Vector3[] mLightColors = {
+		//	new Vector3(300.0f, 300.0f, 300.0f),
+		//	new Vector3(0.0f, 300.0f, 300.0f),
+		//	new Vector3(300.0f, 0.0f, 300.0f),
+		//	new Vector3(300.0f, 300.0f, 0.0f)
+		//};
 
-		private Matrix4 mProjection = new Matrix4();
+		//private Matrix4 mProjection = new Matrix4();
 		private int mSphereVAO = 0;
 		private int mIndexCount = 0;
 	}
