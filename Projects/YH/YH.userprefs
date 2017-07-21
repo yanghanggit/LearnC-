@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/bin/Debug/Resources/pbr.vs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloSSAO.cs">
     <Files>
-      <File FileName="YH/demo/HelloPBRTexture.cs" Line="66" Column="86" />
-      <File FileName="YH/bin/Debug/Resources/pbr.frag" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloPBRTexture.cs" Line="160" Column="5" />
+      <File FileName="YH/bin/Debug/Resources/pbr.frag" Line="90" Column="27" />
       <File FileName="YH/bin/Debug/Resources/pbr.vs" Line="1" Column="1" />
+      <File FileName="YH/demo/HelloSSAO.cs" Line="335" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

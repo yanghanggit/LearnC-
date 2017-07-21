@@ -158,7 +158,12 @@ namespace YH
 			//}
 			for (int i = 0; i < lightPositions.Length; ++i)
 			{
-				Vector3 newPos = Vector3.Add(lightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f));
+                Vector3 newPos = new Vector3();//Vector3.Add(lightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f));
+
+                newPos.X = lightPositions[i].X + (float)Math.Sin((float)mTotalRuningTime) * 2.0f * 2.0f;
+                newPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f * 2.0f + lightPositions[i].Y;
+                newPos.Z = lightPositions[i].Z + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
+
 
 				GL.Uniform3(shader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
 				GL.Uniform3(shader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
