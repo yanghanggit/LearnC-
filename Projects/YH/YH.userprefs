@@ -2,10 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloPBRLighting.cs">
     <Files>
-      <File FileName="YH/bin/Debug/Resources/1.1.pbr.fs" Line="2" Column="1" />
+      <File FileName="YH/bin/Debug/Resources/1.1.pbr.fs" Line="121" Column="34" />
       <File FileName="YH/bin/Debug/Resources/1.1.pbr.vs" Line="7" Column="19" />
-      <File FileName="YH/demo/HelloPBRLighting.cs" Line="128" Column="51" />
-      <File FileName="YH/demo/HelloSSAO.cs" Line="231" Column="50" />
+      <File FileName="YH/demo/HelloPBRLighting.cs" Line="113" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

@@ -75,7 +75,7 @@ namespace YH
                     
 					GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
-					renderSphere();
+					RenderSphere();
 				}
 			}
 
@@ -90,11 +90,11 @@ namespace YH
                 model = Matrix4.CreateScale(0.5f) * model;
 				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
 
-				renderSphere();
+				RenderSphere();
 			}
 		}
 
-        private void renderSphere()
+        private void RenderSphere()
         {
 			if (mSphereVAO == 0)
 			{
