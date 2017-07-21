@@ -25,18 +25,44 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-            /*
-			mShader = new GLProgram(@"Resources/1.1.pbr.vs", @"Resources/1.1.pbr.fs");
-			mShader.Use();
-			GL.Uniform3(mShader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
-			GL.Uniform1(mShader.GetUniformLocation("ao"), 1.0f);
+			//
+			//GLuint albedo = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/albedo.png").c_str());
+			//GLuint normal = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/normal.png").c_str());
+			//GLuint metallic = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/metallic.png").c_str());
+			//GLuint roughness = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/roughness.png").c_str());
+			//GLuint ao = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/ao.png").c_str());
+			albedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
+			normal = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_normal.png");
+			metallic = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_metallic.png");
+			roughness = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_roughness.png");
+			ao = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
 
-			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+			//Shader shader("pbr.vs", "pbr.frag");
+			shader = new GLProgram(@"Resources/pbr.vs", @"Resources/pbr.frag");
+
+			// set material texture uniforms
+			//shader.Use();
+			//glUniform1i(glGetUniformLocation(shader.Program, "albedoMap"), 0);
+			//glUniform1i(glGetUniformLocation(shader.Program, "normalMap"), 1);
+			//glUniform1i(glGetUniformLocation(shader.Program, "metallicMap"), 2);
+			//glUniform1i(glGetUniformLocation(shader.Program, "roughnessMap"), 3);
+			//glUniform1i(glGetUniformLocation(shader.Program, "aoMap"), 4);
+			shader.Use();
+			GL.Uniform1(shader.GetUniformLocation("albedoMap"), 0);
+			GL.Uniform1(shader.GetUniformLocation("normalMap"), 1);
+			GL.Uniform1(shader.GetUniformLocation("metallicMap"), 2);
+			GL.Uniform1(shader.GetUniformLocation("roughnessMap"), 3);
+			GL.Uniform1(shader.GetUniformLocation("aoMap"), 4);
+
+
+			// projection setup
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+			projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 															(float)wnd.Width / (float)wnd.Height,
 															0.1f, 100.0f);
 
-			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref mProjection);
-			*/
+			GL.UniformMatrix4(shader.GetUniformLocation("projection"), false, ref projection);
 		}
 
 		public override void Update(double dt)
@@ -47,6 +73,77 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+			const int nrRows = 7;
+			const int nrColumns = 7;
+            const float spacing = 2.5f;
+
+			// configure view matrix
+			//shader.Use();
+			//glm::mat4 view = camera.GetViewMatrix();
+			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+			shader.Use();
+			var view = mCamera.GetViewMatrix();
+			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
+
+			// setup relevant shader uniforms
+			//glUniform3fv(glGetUniformLocation(shader.Program, "camPos"), 1, &camera.Position[0]);
+			GL.Uniform3(shader.GetUniformLocation("camPos"), mCamera.Position);
+
+
+            // set material
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_2D, albedo);
+            //glActiveTexture(GL_TEXTURE1);
+            //glBindTexture(GL_TEXTURE_2D, normal);
+            //glActiveTexture(GL_TEXTURE2);
+            //glBindTexture(GL_TEXTURE_2D, metallic);
+            //glActiveTexture(GL_TEXTURE3);
+            //glBindTexture(GL_TEXTURE_2D, roughness);
+            //glActiveTexture(GL_TEXTURE4);
+            //glBindTexture(GL_TEXTURE_2D, ao);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, albedo.getTextureId());
+			GL.ActiveTexture(TextureUnit.Texture1);
+			GL.BindTexture(TextureTarget.Texture2D, normal.getTextureId());
+			GL.ActiveTexture(TextureUnit.Texture2);
+			GL.BindTexture(TextureTarget.Texture2D, metallic.getTextureId());
+			GL.ActiveTexture(TextureUnit.Texture3);
+			GL.BindTexture(TextureTarget.Texture2D, roughness.getTextureId());
+			GL.ActiveTexture(TextureUnit.Texture4);
+			GL.BindTexture(TextureTarget.Texture2D, ao.getTextureId());
+
+
+
+			// render rows*column number of spheres with material properties defined by textures (they all have the same material properties)
+			//glm::mat4 model;
+            var model = Matrix4.CreateTranslation(0, 0, 0);
+			for (int row = 0; row < nrRows; ++row)
+			{
+				for (int col = 0; col < nrColumns; ++col)
+				{
+					//model = glm::mat4();
+					//model = glm::translate(model, glm::vec3(
+					//	(float)(col - (nrColumns / 2)) * spacing,
+					//	(float)(row - (nrRows / 2)) * spacing,
+					//	0.0f
+					//));
+					model = Matrix4.CreateTranslation(
+					    (float)(col - (nrColumns / 2)) * spacing,
+					    (float)(row - (nrRows / 2)) * spacing,
+					    0.0f);
+                    
+					//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+					GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
+					RenderSphere();
+				}
+			}
+
+
+
+
+
+
 
             /*
 			mShader.Use();
@@ -217,22 +314,32 @@ namespace YH
 		private Camera mCamera = null;
 		//private GLProgram mShader = null;
 
-		//private Vector3[] mLightPositions = {
-		//	new Vector3(-10.0f,  10.0f, 10.0f),
-		//	new Vector3( 10.0f,  10.0f, 10.0f),
-		//	new Vector3(-10.0f, -10.0f, 10.0f),
-		//	new Vector3( 10.0f, -10.0f, 10.0f),
-		//};
 
-		//private Vector3[] mLightColors = {
-		//	new Vector3(300.0f, 300.0f, 300.0f),
-		//	new Vector3(0.0f, 300.0f, 300.0f),
-		//	new Vector3(300.0f, 0.0f, 300.0f),
-		//	new Vector3(300.0f, 300.0f, 0.0f)
+		//glm::vec3 lightPositions[] = {
+		//    glm::vec3(0.0, 0.0f, 10.0f),
 		//};
+		//glm::vec3 lightColors[] = {
+		//    glm::vec3(150.0f, 150.0f, 150.0f)
+		//};
+		private Vector3[] lightPositions = {
+			new Vector3(0.0f, 0.0f, 10.0f)
+		};
 
-		//private Matrix4 mProjection = new Matrix4();
+		private Vector3[] lightColors = {
+			new Vector3(150.0f, 150.0f, 150.0f)
+		};
+
+		private Matrix4 projection = new Matrix4();
 		private int mSphereVAO = 0;
 		private int mIndexCount = 0;
+
+
+        //
+        private GLTexture2D albedo = null;
+		private GLTexture2D normal = null;
+		private GLTexture2D metallic = null;
+		private GLTexture2D roughness = null;
+		private GLTexture2D ao = null;
+        private GLProgram shader = null;
 	}
 }
