@@ -56,7 +56,8 @@ namespace YH
 			//mCurrentApplication = new HelloSSAO();
 			//mCurrentApplication = new HelloFont();
 			//mCurrentApplication = new HelloAssimp();
-			mCurrentApplication = new HelloPBRLighting();
+			//mCurrentApplication = new HelloPBRLighting();
+			mCurrentApplication = new HelloPBRTexture();
 
 			Title = mCurrentApplication.mAppName;
 		}
