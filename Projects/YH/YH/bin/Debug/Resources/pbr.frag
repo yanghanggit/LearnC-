@@ -87,7 +87,7 @@ void main()
     vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
     float metallic  = texture(metallicMap, TexCoords).r;
     float roughness = texture(roughnessMap, TexCoords).r;
-    float ao        = texture(aoMap, TexCoords).r;
+    float ao        = 1.0f;//texture(aoMap, TexCoords).r;
 
     vec3 N = getNormalFromMap();
     vec3 V = normalize(camPos - WorldPos);

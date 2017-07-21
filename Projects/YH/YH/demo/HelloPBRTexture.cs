@@ -140,11 +140,35 @@ namespace YH
 			}
 
 
+			// render light source (simply re-render sphere at light positions)
+			// this looks a bit off as we use the same shader, but it'll make their positions obvious and 
+			// keeps the codeprint small.
+			//for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+			//{
+			//	glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+			//	newPos = lightPositions[i];
+			//	glUniform3fv(glGetUniformLocation(shader.Program, ("lightPositions[" + std::to_string(i) + "]").c_str()), 1, &newPos[0]);
+			//	glUniform3fv(glGetUniformLocation(shader.Program, ("lightColors[" + std::to_string(i) + "]").c_str()), 1, &lightColors[i][0]);
 
+			//	model = glm::mat4();
+			//	model = glm::translate(model, newPos);
+			//	model = glm::scale(model, glm::vec3(0.5f));
+			//	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+			//	renderSphere();
+			//}
+			for (int i = 0; i < lightPositions.Length; ++i)
+			{
+				Vector3 newPos = Vector3.Add(lightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f));
 
+				GL.Uniform3(shader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
+				GL.Uniform3(shader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
 
+				model = Matrix4.CreateTranslation(newPos);
+				model = Matrix4.CreateScale(0.5f) * model;
+				GL.UniformMatrix4(shader.GetUniformLocation("model"), false, ref model);
 
-
+				RenderSphere();
+			}
             /*
 			mShader.Use();
 			var view = mCamera.GetViewMatrix();
