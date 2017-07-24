@@ -25,6 +25,7 @@ namespace YH
 
 			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
 			{
+                //Stb.stbi_set_flip_vertically_on_load(0);
 				StbSharp.Image image = loader.Read(stream, isPng ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
 				mTextureId = GL.GenTexture();
 				GL.BindTexture(TextureTarget.Texture2D, mTextureId);

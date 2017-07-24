@@ -26,27 +26,15 @@ namespace YH
 			mCameraController = new CameraController(mAppName, mCamera);
 
 			//
-			//GLuint albedo = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/albedo.png").c_str());
-			//GLuint normal = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/normal.png").c_str());
-			//GLuint metallic = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/metallic.png").c_str());
-			//GLuint roughness = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/roughness.png").c_str());
-			//GLuint ao = loadTexture(FileSystem::getPath("resources/textures/pbr/rusted_iron/ao.png").c_str());
 			albedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
 			normal = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_normal.png");
 			metallic = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_metallic.png");
 			roughness = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_roughness.png");
 			ao = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
 
-			//Shader shader("pbr.vs", "pbr.frag");
 			shader = new GLProgram(@"Resources/pbr.vs", @"Resources/pbr.frag");
 
 			// set material texture uniforms
-			//shader.Use();
-			//glUniform1i(glGetUniformLocation(shader.Program, "albedoMap"), 0);
-			//glUniform1i(glGetUniformLocation(shader.Program, "normalMap"), 1);
-			//glUniform1i(glGetUniformLocation(shader.Program, "metallicMap"), 2);
-			//glUniform1i(glGetUniformLocation(shader.Program, "roughnessMap"), 3);
-			//glUniform1i(glGetUniformLocation(shader.Program, "aoMap"), 4);
 			shader.Use();
 			GL.Uniform1(shader.GetUniformLocation("albedoMap"), 0);
 			GL.Uniform1(shader.GetUniformLocation("normalMap"), 1);
@@ -56,8 +44,6 @@ namespace YH
 
 
 			// projection setup
-			//glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 			projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 															(float)wnd.Width / (float)wnd.Height,
 															0.1f, 100.0f);
@@ -79,29 +65,15 @@ namespace YH
             const float spacing = 2.5f;
 
 			// configure view matrix
-			//shader.Use();
-			//glm::mat4 view = camera.GetViewMatrix();
-			//glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 			shader.Use();
 			var view = mCamera.GetViewMatrix();
 			GL.UniformMatrix4(shader.GetUniformLocation("view"), false, ref view);
 
 			// setup relevant shader uniforms
-			//glUniform3fv(glGetUniformLocation(shader.Program, "camPos"), 1, &camera.Position[0]);
 			GL.Uniform3(shader.GetUniformLocation("camPos"), mCamera.Position);
 
 
             // set material
-            //glActiveTexture(GL_TEXTURE0);
-            //glBindTexture(GL_TEXTURE_2D, albedo);
-            //glActiveTexture(GL_TEXTURE1);
-            //glBindTexture(GL_TEXTURE_2D, normal);
-            //glActiveTexture(GL_TEXTURE2);
-            //glBindTexture(GL_TEXTURE_2D, metallic);
-            //glActiveTexture(GL_TEXTURE3);
-            //glBindTexture(GL_TEXTURE_2D, roughness);
-            //glActiveTexture(GL_TEXTURE4);
-            //glBindTexture(GL_TEXTURE_2D, ao);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, albedo.getTextureId());
 			GL.ActiveTexture(TextureUnit.Texture1);
@@ -116,18 +88,11 @@ namespace YH
 
 
 			// render rows*column number of spheres with material properties defined by textures (they all have the same material properties)
-			//glm::mat4 model;
             var model = Matrix4.CreateTranslation(0, 0, 0);
 			for (int row = 0; row < nrRows; ++row)
 			{
 				for (int col = 0; col < nrColumns; ++col)
 				{
-					//model = glm::mat4();
-					//model = glm::translate(model, glm::vec3(
-					//	(float)(col - (nrColumns / 2)) * spacing,
-					//	(float)(row - (nrRows / 2)) * spacing,
-					//	0.0f
-					//));
 					model = Matrix4.CreateTranslation(
 					    (float)(col - (nrColumns / 2)) * spacing,
 					    (float)(row - (nrRows / 2)) * spacing,
@@ -139,31 +104,14 @@ namespace YH
 				}
 			}
 
-
-			// render light source (simply re-render sphere at light positions)
-			// this looks a bit off as we use the same shader, but it'll make their positions obvious and 
-			// keeps the codeprint small.
-			//for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
-			//{
-			//	glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
-			//	newPos = lightPositions[i];
-			//	glUniform3fv(glGetUniformLocation(shader.Program, ("lightPositions[" + std::to_string(i) + "]").c_str()), 1, &newPos[0]);
-			//	glUniform3fv(glGetUniformLocation(shader.Program, ("lightColors[" + std::to_string(i) + "]").c_str()), 1, &lightColors[i][0]);
-
-			//	model = glm::mat4();
-			//	model = glm::translate(model, newPos);
-			//	model = glm::scale(model, glm::vec3(0.5f));
-			//	glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-			//	renderSphere();
-			//}
 			for (int i = 0; i < lightPositions.Length; ++i)
 			{
                 Vector3 newPos = new Vector3();//Vector3.Add(lightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 5.0f), 0.0f, 0.0f));
 
                 newPos.X = lightPositions[i].X + (float)Math.Sin((float)mTotalRuningTime) * 2.0f * 2.0f;
                 newPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f * 2.0f + lightPositions[i].Y;
-                newPos.Z = lightPositions[i].Z + (float)Math.Sin((float)mTotalRuningTime) * 2.0f;
-
+                //newPos.Z = lightPositions[i].Z + (float)Math.Sin((float)mTotalRuningTime) * 1.0f;
+                newPos.Z = (float)Math.Sin((float)mTotalRuningTime) * 3.0f;
 
 				GL.Uniform3(shader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
 				GL.Uniform3(shader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
@@ -174,54 +122,6 @@ namespace YH
 
 				RenderSphere();
 			}
-            /*
-			mShader.Use();
-			var view = mCamera.GetViewMatrix();
-			GL.UniformMatrix4(mShader.GetUniformLocation("view"), false, ref view);
-			GL.Uniform3(mShader.GetUniformLocation("camPos"), mCamera.Position);
-
-
-			var model = Matrix4.CreateTranslation(0, 0, 0);
-
-			const int nrRows = 7;
-			const int nrColumns = 7;
-			const float spacing = 2.5f;
-
-			for (int row = 0; row < nrRows; ++row)
-			{
-				GL.Uniform1(mShader.GetUniformLocation("metallic"), (float)row / (float)nrRows);
-
-				for (int col = 0; col < nrColumns; ++col)
-				{
-					float v = (float)col / (float)nrColumns;
-					v = (v < 0.05f) ? 0.05f : ((v > 1.0f) ? 1.0f : v);
-					GL.Uniform1(mShader.GetUniformLocation("roughness"), v);
-
-					model = Matrix4.CreateTranslation(
-						(float)(col - (nrColumns / 2)) * spacing,
-						(float)(row - (nrRows / 2)) * spacing,
-						0.0f);
-
-					GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-
-					RenderSphere();
-				}
-			}
-
-			for (int i = 0; i < mLightPositions.Length; ++i)
-			{
-				Vector3 newPos = Vector3.Add(mLightPositions[i], new Vector3((float)Math.Sin(mTotalRuningTime * 2.0f), (float)Math.Sin(mTotalRuningTime * 2.0f), 0.0f));
-
-				GL.Uniform3(mShader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
-				GL.Uniform3(mShader.GetUniformLocation("lightColors[" + i + "]"), mLightColors[i]);
-
-				model = Matrix4.CreateTranslation(newPos);
-				model = Matrix4.CreateScale(0.5f) * model;
-				GL.UniformMatrix4(mShader.GetUniformLocation("model"), false, ref model);
-
-				RenderSphere();
-			}
-			*/
 		}
 
 		private void RenderSphere()
@@ -341,15 +241,7 @@ namespace YH
 
 
 		private Camera mCamera = null;
-		//private GLProgram mShader = null;
 
-
-		//glm::vec3 lightPositions[] = {
-		//    glm::vec3(0.0, 0.0f, 10.0f),
-		//};
-		//glm::vec3 lightColors[] = {
-		//    glm::vec3(150.0f, 150.0f, 150.0f)
-		//};
 		private Vector3[] lightPositions = {
 			new Vector3(0.0f, 0.0f, 10.0f)
 		};
