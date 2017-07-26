@@ -20,7 +20,6 @@ namespace YH
 		{
 			base.Start(wnd);
 
-
 			// configure global opengl state
 			// -----------------------------
 			//glEnable(GL_DEPTH_TEST);
@@ -33,8 +32,6 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
-
-			
 			// build and compile shaders
 			// -------------------------
 			//Shader pbrShader("2.1.2.pbr.vs", "2.1.2.pbr.fs");
@@ -56,12 +53,10 @@ namespace YH
             GL.Uniform3(pbrShader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
             GL.Uniform1(pbrShader.GetUniformLocation("ao"), 1.0f);
 
-			//
 			//backgroundShader.use();
 			//backgroundShader.setInt("environmentMap", 0);
 			backgroundShader.Use();
 			GL.Uniform1(backgroundShader.GetUniformLocation("environmentMap"), 0);
-
 
             // pbr: setup framebuffer
             // ----------------------
@@ -79,8 +74,6 @@ namespace YH
             GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, 512, 512);
             //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, captureRBO);
-
-
 
             // pbr: load the HDR environment map
             // ---------------------------------
@@ -105,39 +98,106 @@ namespace YH
             //{
             //	std::cout << "Failed to load HDR image." << std::endl;
             //}
-            //hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
-
-
-
             hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
 
-            int a = 0;
-			/*
-			//
-			mAlbedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
-			mNormal = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_normal.png");
-			mMetallic = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_metallic.png");
-			mRoughness = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_roughness.png");
-			mAO = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
+			// pbr: setup cubemap to render to and attach to framebuffer
+			// ---------------------------------------------------------
+			//unsigned int envCubemap;
+			//glGenTextures(1, &envCubemap);
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+            envCubemap = GL.GenTexture();
+            GL.BindTexture(TextureTarget.TextureCubeMap, envCubemap);
+			for (int i = 0; i < 6; ++i)
+			{
+				//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
+                GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
+                              0, PixelInternalFormat.Rgb16f,
+                              512, 512, 0,
+                              PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+			}
 
-			mShader = new GLProgram(@"Resources/pbr.vs", @"Resources/pbr.frag");
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
 
-			// set material texture uniforms
-			mShader.Use();
-			GL.Uniform1(mShader.GetUniformLocation("albedoMap"), 0);
-			GL.Uniform1(mShader.GetUniformLocation("normalMap"), 1);
-			GL.Uniform1(mShader.GetUniformLocation("metallicMap"), 2);
-			GL.Uniform1(mShader.GetUniformLocation("roughnessMap"), 3);
-			GL.Uniform1(mShader.GetUniformLocation("aoMap"), 4);
+			// pbr: set up projection and view matrices for capturing data onto the 6 cubemap face directions
+			// ----------------------------------------------------------------------------------------------
+			//glm::mat4 captureProjection = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+		    var captureProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(90.0f), 1.0f, 0.1f, 10.0f);
+            Matrix4[] captureViews =
+			{
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+				//glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(1.0f,  0.0f,  0.0f), new Vector3(0.0f, -1.0f,  0.0f)),
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(-1.0f,  0.0f, 0.0f), new Vector3(0.0f, -1.0f,  0.0f)),
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f,  1.0f,  0.0f), new Vector3(0.0f,  0.0f,  1.0f)),
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, -1.0f,  0.0f), new Vector3(0.0f,  0.0f, -1.0f)),
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f,  0.0f,  1.0f), new Vector3(0.0f, -1.0f,  0.0f)),
+				Matrix4.LookAt(new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f,  0.0f, -1.0f), new Vector3(0.0f, -1.0f,  0.0f))
+			};
 
+			// pbr: convert HDR equirectangular environment map to cubemap equivalent
+			// ----------------------------------------------------------------------
+			//equirectangularToCubemapShader.use();
+            equirectangularToCubemapShader.Use();
+			//equirectangularToCubemapShader.setInt("equirectangularMap", 0);
+            GL.Uniform1(equirectangularToCubemapShader.GetUniformLocation("equirectangularMap"), 0);
+			//equirectangularToCubemapShader.setMat4("projection", captureProjection);
+            GL.UniformMatrix4(equirectangularToCubemapShader.GetUniformLocation("projection"), false, ref captureProjection);
+			//glActiveTexture(GL_TEXTURE0);
+            GL.ActiveTexture(TextureUnit.Texture0);
+			//glBindTexture(GL_TEXTURE_2D, hdrTexture);
+            GL.BindTexture(TextureTarget.Texture2D, hdrTexture);
+			//glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
+            GL.Viewport(0, 0, 512, 512);
+			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
+			for (int i = 0; i < 6; ++i)
+			{
+				//equirectangularToCubemapShader.setMat4("view", captureViews[i]);
+				GL.UniformMatrix4(equirectangularToCubemapShader.GetUniformLocation("view"), false, ref captureViews[i]);
 
-			// projection setup
-			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
+				//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.TextureCubeMapPositiveX + i, envCubemap, 0);
+				//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                //renderCube();
+                RenderCube();
+			}
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+			// initialize static shader uniforms before rendering
+			// --------------------------------------------------
+			//glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
 															(float)wnd.Width / (float)wnd.Height,
 															0.1f, 100.0f);
+			//pbrShader.use();
+            pbrShader.Use();
+			//pbrShader.setMat4("projection", projection);
+            GL.UniformMatrix4(pbrShader.GetUniformLocation("projection"), false, ref projection);
+			//backgroundShader.use();
+            backgroundShader.Use();
+			//backgroundShader.setMat4("projection", projection);
+			GL.UniformMatrix4(backgroundShader.GetUniformLocation("projection"), false, ref projection);
 
-			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref mProjection);
-            */
+			// then before rendering, configure the viewport to the original framebuffer's screen dimensions
+			//int scrWidth, scrHeight;
+			//glfwGetFramebufferSize(window, &scrWidth, &scrHeight);
+			//glViewport(0, 0, scrWidth, scrHeight);
+			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 		}
 
 		public override void Update(double dt)
@@ -395,6 +455,99 @@ namespace YH
             return 0;
 		}
 
+		// renderCube() renders a 1x1 3D cube in NDC.
+		// -------------------------------------------------
+        private int cubeVAO = 0;
+		private int cubeVBO = 0;
+		void RenderCube()
+		{
+			// initialize (if necessary)
+			if (cubeVAO == 0)
+			{
+				float[] vertices = {
+		            // back face
+		            -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+		             1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+		             1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f, // bottom-right         
+		             1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, // top-right
+		            -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+		            -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f, // top-left
+		            // front face
+		            -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+		             1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f, // bottom-right
+		             1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+		             1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, // top-right
+		            -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f, // top-left
+		            -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+		            // left face
+		            -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+		            -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-left
+		            -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+		            -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-left
+		            -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+		            -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-right
+		            // right face
+		             1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+		             1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+		             1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, // top-right         
+		             1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f, // bottom-right
+		             1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f, // top-left
+		             1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left     
+		            // bottom face
+		            -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+		             1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, // top-left
+		             1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+		             1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f, // bottom-left
+		            -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+		            -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f, // top-right
+		            // top face
+		            -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+		             1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+		             1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, // top-right     
+		             1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f, // bottom-right
+		            -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f, // top-left
+		            -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left        
+		        };
+
+				//glGenVertexArrays(1, &cubeVAO);
+                cubeVAO = GL.GenVertexArray();
+				//glGenBuffers(1, &cubeVBO);
+                cubeVBO = GL.GenBuffer();
+				// fill buffer
+				//glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, cubeVBO);
+				//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+                GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
+				// link vertex attributes
+				//glBindVertexArray(cubeVAO);
+                GL.BindVertexArray(cubeVAO);
+				//glEnableVertexAttribArray(0);
+                GL.EnableVertexAttribArray(0);
+				//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+                GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false,  8 * sizeof(float), IntPtr.Zero);
+				//glEnableVertexAttribArray(1);
+                GL.EnableVertexAttribArray(1);
+				//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+                GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), (3 * sizeof(float)));
+				//glEnableVertexAttribArray(2);
+				GL.EnableVertexAttribArray(2);
+				//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+                GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), (6 * sizeof(float)));
+				//glBindBuffer(GL_ARRAY_BUFFER, 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+				//glBindVertexArray(0);
+                GL.BindVertexArray(0);
+			}
+			// render Cube
+			//glBindVertexArray(cubeVAO);
+			//glDrawArrays(GL_TRIANGLES, 0, 36);
+			//glBindVertexArray(0);
+			GL.BindVertexArray(cubeVAO);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
+			GL.BindVertexArray(0);
+		}
+
 		private Camera mCamera = null;
 
 		private Vector3[] lightPositions = {
@@ -417,12 +570,6 @@ namespace YH
 
 
 		////
-		//private GLTexture2D mAlbedo = null;
-		//private GLTexture2D mNormal = null;
-		//private GLTexture2D mMetallic = null;
-		//private GLTexture2D mRoughness = null;
-		//private GLTexture2D mAO = null;
-		//private GLProgram mShader = null;
         private GLProgram pbrShader = null;
         private GLProgram equirectangularToCubemapShader = null;
         private GLProgram irradianceShader = null;
@@ -432,5 +579,8 @@ namespace YH
 		private int captureFBO = 0;
 		private int captureRBO = 0;
         private int hdrTexture = 0;
+        private int envCubemap = 0;
+
+        private Matrix4 projection = new Matrix4();
 	}
 }
