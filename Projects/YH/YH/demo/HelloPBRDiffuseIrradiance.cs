@@ -93,33 +93,38 @@ namespace YH
 
 
 
-			// pbr: load the HDR environment map
-			// ---------------------------------
-			//stbi_set_flip_vertically_on_load(true);
-			//int width, height, nrComponents;
-			//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
-			//unsigned int hdrTexture;
-			//if (data)
-			//{
-			//	glGenTextures(1, &hdrTexture);
-			//	glBindTexture(GL_TEXTURE_2D, hdrTexture);
-			//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
+            // pbr: load the HDR environment map
+            // ---------------------------------
+            //stbi_set_flip_vertically_on_load(true);
+            //int width, height, nrComponents;
+            //float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
+            //unsigned int hdrTexture;
+            //if (data)
+            //{
+            //	glGenTextures(1, &hdrTexture);
+            //	glBindTexture(GL_TEXTURE_2D, hdrTexture);
+            //	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
 
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-			//	stbi_image_free(data);
-			//}
-			//else
-			//{
-			//	std::cout << "Failed to load HDR image." << std::endl;
-			//}
+            //	stbi_image_free(data);
+            //}
+            //else
+            //{
+            //	std::cout << "Failed to load HDR image." << std::endl;
+            //}
             var a = LoadTexture(@"Resources/Texture/UenoShrine3k.hdr");//03-Ueno-Shrine_3k.hdr
 
-
-
+			//var fileName = @"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/UenoShrine3k.hdr";
+   //         //fileName = @"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/window.png";
+			//if (File.Exists(fileName))
+			//{
+   //             int a = 0;
+   //             var textureBitmap = new Bitmap(fileName);
+			//}
 
 			/*
 			//
@@ -409,61 +414,20 @@ namespace YH
 
 		public int LoadTexture(string texPath)
 		{
-			ImageReader loader = new ImageReader();
+			ImageReader imgReader = new ImageReader();
 			texPath = texPath.Replace(@"\\", @"/");
 			texPath = texPath.Replace(@"\", @"/");
 
+            //Stb.stbi__png_load();
+
 			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
 			{
+				// pbr: load the HDR environment map
+				// ---------------------------------
+				//stbi_set_flip_vertically_on_load(true);
+                Stb.stbi_set_flip_vertically_on_load(1);
 
-                int a = 0;
-                /*
-				//Stb.stbi_set_flip_vertically_on_load(0);
-				StbSharp.Image image = loader.Read(stream, isPng ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
-				mTextureId = GL.GenTexture();
-				GL.BindTexture(TextureTarget.Texture2D, mTextureId);
-
-				if (gammaCorrection)
-				{
-					//glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrection ? GL_SRGB : GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-					GL.TexImage2D(TextureTarget.Texture2D,
-								  0,
-								  isPng ? PixelInternalFormat.SrgbAlpha : PixelInternalFormat.Srgb,
-								  image.Width,
-								  image.Height,
-								  0,
-								  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-								  PixelType.UnsignedByte,
-								  image.Data);
-				}
-				else
-				{
-					GL.TexImage2D(TextureTarget.Texture2D,
-								  0,
-								  isPng ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb,
-								  image.Width,
-								  image.Height,
-								  0,
-								  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-								  PixelType.UnsignedByte,
-								  image.Data);
-				}
-                */
-
-				//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-				//GL.TexParameter(TextureTarget.Texture2D,
-				//				TextureParameterName.TextureWrapS,
-				//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
-
-				//GL.TexParameter(TextureTarget.Texture2D,
-				//				TextureParameterName.TextureWrapT,
-				//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
-
-				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
-				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-				//GL.BindTexture(TextureTarget.Texture2D, 0);
+                var image = imgReader.Read(stream);
 			}
 
             return 0;

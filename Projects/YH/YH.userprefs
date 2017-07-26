@@ -1,17 +1,21 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloPBRDiffuseIrradiance.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
       <File FileName="YH/demo/HelloPBRTexture.cs" Line="262" Column="2" />
-      <File FileName="YH/Window.cs" Line="61" Column="42" />
-      <File FileName="YH/demo/HelloPBRDiffuseIrradiance.cs" Line="373" Column="1" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="67" Column="119" />
+      <File FileName="YH/Window.cs" Line="70" Column="1" />
+      <File FileName="YH/demo/HelloPBRDiffuseIrradiance.cs" Line="440" Column="67" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="73" Column="5" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloAssimp.cs" relfile="YH/demo/HelloAssimp.cs" line="54" column="1" />
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloPBRDiffuseIrradiance.cs" relfile="YH/demo/HelloPBRDiffuseIrradiance.cs" line="416" column="1" />
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloPBRDiffuseIrradiance.cs" relfile="YH/demo/HelloPBRDiffuseIrradiance.cs" line="529" column="1" />
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloPBRDiffuseIrradiance.cs" relfile="YH/demo/HelloPBRDiffuseIrradiance.cs" line="442" column="1" />
+      <Breakpoint file="/Users/yh/LearnMono/Projects/YH/YH/demo/HelloPBRDiffuseIrradiance.cs" relfile="YH/demo/HelloPBRDiffuseIrradiance.cs" line="125" column="27" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
