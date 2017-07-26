@@ -116,15 +116,9 @@ namespace YH
             //{
             //	std::cout << "Failed to load HDR image." << std::endl;
             //}
-            var a = LoadTexture(@"Resources/Texture/UenoShrine3k.hdr");//03-Ueno-Shrine_3k.hdr
+            hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
 
-			//var fileName = @"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/UenoShrine3k.hdr";
-   //         //fileName = @"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/window.png";
-			//if (File.Exists(fileName))
-			//{
-   //             int a = 0;
-   //             var textureBitmap = new Bitmap(fileName);
-			//}
+            int a = 0;
 
 			/*
 			//
@@ -344,37 +338,67 @@ namespace YH
 			base.OnKeyDown(e);
 		}
 
-		public int LoadTexture(string texPath)
+		private int LoadTexture(String fileName)
 		{
-			ImageReader imgReader = new ImageReader();
-			texPath = texPath.Replace(@"\\", @"/");
-			texPath = texPath.Replace(@"\", @"/");
+			// pbr: load the HDR environment map
+			// ---------------------------------
+			//stbi_set_flip_vertically_on_load(true);
+			//int width, height, nrComponents;
+			//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
+			//unsigned int hdrTexture;
+			//if (data)
+			//{
+			//  glGenTextures(1, &hdrTexture);
+			//  glBindTexture(GL_TEXTURE_2D, hdrTexture);
+			//  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
 
-            //Stb.stbi__png_load();
+			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
+			//  stbi_image_free(data);
+			//}
+			//else
+			//{
+			//  std::cout << "Failed to load HDR image." << std::endl;
+			//}
+			string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fileName);
+			if (!File.Exists(path))
 			{
-				// pbr: load the HDR environment map
-				// ---------------------------------
-				//stbi_set_flip_vertically_on_load(true);
-                //Stb.stbi_set_flip_vertically_on_load(1);
-
-                var image = imgReader.Read(stream);
+				return 0;
 			}
 
-            return 0;
+			Bitmap textureBitmap = new Bitmap(path);
+			BitmapData TextureData = textureBitmap.LockBits(
+					new System.Drawing.Rectangle(0, 0, textureBitmap.Width, textureBitmap.Height),
+					System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                    textureBitmap.PixelFormat
+				);
+			
+            var texture = GL.GenTexture();
+			GL.BindTexture(TextureTarget.Texture2D, texture);
+
+			GL.TexImage2D(TextureTarget.Texture2D,
+                          0,
+                          PixelInternalFormat.Rgb16f,
+                          textureBitmap.Width,
+                          textureBitmap.Height,
+                          0,
+                          OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
+                          PixelType.Float,
+                          TextureData.Scan0);
+            
+			textureBitmap.UnlockBits(TextureData);
+
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            return texture;
 		}
 
-
 		private Camera mCamera = null;
-
-		//private Vector3[] mLightPositions = {
-		//	new Vector3(0.0f, 0.0f, 10.0f)
-		//};
-
-		//private Vector3[] mLightColors = {
-		//	new Vector3(150.0f, 150.0f, 150.0f)
-		//};
 
 		private Vector3[] lightPositions = {
 			new Vector3(-10.0f,  10.0f, 10.0f),
@@ -410,5 +434,6 @@ namespace YH
 
 		private int captureFBO = 0;
 		private int captureRBO = 0;
+        private int hdrTexture = 0;
 	}
 }

@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
   <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="YH/src/GLTexture2D.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/demo/HelloBloom.cs">
     <Files>
       <File FileName="YH/demo/HelloPBRTexture.cs" Line="257" Column="40" />
       <File FileName="YH/Window.cs" Line="61" Column="4" />
       <File FileName="YH/demo/HelloPBRDiffuseIrradiance.cs" Line="330" Column="5" />
-      <File FileName="YH/src/GLTexture2D.cs" Line="37" Column="13" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="32" Column="17" />
+      <File FileName="YH/demo/HelloBloom.cs" Line="81" Column="59" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

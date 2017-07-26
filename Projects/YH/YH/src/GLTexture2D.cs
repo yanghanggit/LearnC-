@@ -29,7 +29,7 @@ namespace YH
 				StbSharp.Image image = loader.Read(stream, isPng ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
 				mTextureId = GL.GenTexture();
 				GL.BindTexture(TextureTarget.Texture2D, mTextureId);
-				
+
                 if (gammaCorrection)
                 {
 					//glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrection ? GL_SRGB : GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
