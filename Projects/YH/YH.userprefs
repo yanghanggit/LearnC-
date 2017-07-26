@@ -4,7 +4,8 @@
     <Files>
       <File FileName="YH/demo/HelloPBRTexture.cs" Line="262" Column="2" />
       <File FileName="YH/Window.cs" Line="61" Column="42" />
-      <File FileName="YH/demo/HelloPBRDiffuseIrradiance.cs" Line="53" Column="13" />
+      <File FileName="YH/demo/HelloPBRDiffuseIrradiance.cs" Line="373" Column="1" />
+      <File FileName="YH/src/GLTexture2D.cs" Line="67" Column="119" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
