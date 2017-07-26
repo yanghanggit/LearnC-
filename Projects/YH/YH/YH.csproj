@@ -104,6 +104,7 @@
     <Compile Include="demo\HelloAssimp.cs" />
     <Compile Include="demo\HelloPBRLighting.cs" />
     <Compile Include="demo\HelloPBRTexture.cs" />
+    <Compile Include="demo\HelloPBRDiffuseIrradiance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
