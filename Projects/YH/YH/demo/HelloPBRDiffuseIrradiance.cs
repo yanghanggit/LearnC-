@@ -116,7 +116,7 @@ namespace YH
 			//{
 			//	std::cout << "Failed to load HDR image." << std::endl;
 			//}
-            var a = _LoadTexture(@"Resources/Texture/03-Ueno-Shrine_3k.hdr");//03-Ueno-Shrine_3k.hdr
+            var a = LoadTexture(@"Resources/Texture/UenoShrine3k.hdr");//03-Ueno-Shrine_3k.hdr
 
 
 
@@ -339,135 +339,135 @@ namespace YH
 			base.OnKeyDown(e);
 		}
 
-		private int _LoadTexture(String fileName)
-		{
-			//stbi_set_flip_vertically_on_load(true);
-			//int width, height, nrComponents;
-			//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
-			//unsigned int hdrTexture;
-			//if (data)
-			//{
-			//  glGenTextures(1, &hdrTexture);
-			//  glBindTexture(GL_TEXTURE_2D, hdrTexture);
-			//  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
-
-			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			//  stbi_image_free(data);
-			//}
-			//else
-			//{
-			//  std::cout << "Failed to load HDR image." << std::endl;
-			//}
-
-			string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			fileName = Path.Combine(dir, fileName);
-			if (!File.Exists(fileName))
-			{
-				return 0;
-			}
-
-			Bitmap textureBitmap = new Bitmap(fileName);
-			BitmapData TextureData = textureBitmap.LockBits(
-					new System.Drawing.Rectangle(0, 0, textureBitmap.Width, textureBitmap.Height),
-					System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                    System.Drawing.Imaging.PixelFormat.Format48bppRgb
-				);
-            
-			int textureId = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, textureId);
-
-            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
-			GL.TexImage2D(TextureTarget.Texture2D,
-                          0,
-                          PixelInternalFormat.Rgb16f,
-                          textureBitmap.Width,
-                          textureBitmap.Height,
-                          0,
-                          OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-                          PixelType.Float, 
-						  TextureData.Scan0);
-            
-			textureBitmap.UnlockBits(TextureData);
-
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
-            return textureId;
-		}
-
-
-
-
-
-		//public int LoadFromPath(string texPath)
+		//private int _LoadTexture(String fileName)
 		//{
-		//	ImageReader loader = new ImageReader();
-		//	texPath = texPath.Replace(@"\\", @"/");
-		//	texPath = texPath.Replace(@"\", @"/");
+		//	//stbi_set_flip_vertically_on_load(true);
+		//	//int width, height, nrComponents;
+		//	//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
+		//	//unsigned int hdrTexture;
+		//	//if (data)
+		//	//{
+		//	//  glGenTextures(1, &hdrTexture);
+		//	//  glBindTexture(GL_TEXTURE_2D, hdrTexture);
+		//	//  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
 
-		//	bool isPng = texPath.EndsWith(@".png");
+		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		//	using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
+		//	//  stbi_image_free(data);
+		//	//}
+		//	//else
+		//	//{
+		//	//  std::cout << "Failed to load HDR image." << std::endl;
+		//	//}
+
+		//	string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+		//	string finalFileName = Path.Combine(dir, fileName);
+		//	if (!File.Exists(finalFileName))
 		//	{
-  //              /*
-		//		//Stb.stbi_set_flip_vertically_on_load(0);
-		//		StbSharp.Image image = loader.Read(stream, isPng ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
-		//		mTextureId = GL.GenTexture();
-		//		GL.BindTexture(TextureTarget.Texture2D, mTextureId);
-
-		//		if (gammaCorrection)
-		//		{
-		//			//glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrection ? GL_SRGB : GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-		//			GL.TexImage2D(TextureTarget.Texture2D,
-		//						  0,
-		//						  isPng ? PixelInternalFormat.SrgbAlpha : PixelInternalFormat.Srgb,
-		//						  image.Width,
-		//						  image.Height,
-		//						  0,
-		//						  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-		//						  PixelType.UnsignedByte,
-		//						  image.Data);
-		//		}
-		//		else
-		//		{
-		//			GL.TexImage2D(TextureTarget.Texture2D,
-		//						  0,
-		//						  isPng ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb,
-		//						  image.Width,
-		//						  image.Height,
-		//						  0,
-		//						  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-		//						  PixelType.UnsignedByte,
-		//						  image.Data);
-		//		}
-  //              */
-
-		//		//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-
-		//		//GL.TexParameter(TextureTarget.Texture2D,
-		//		//				TextureParameterName.TextureWrapS,
-		//		//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
-
-		//		//GL.TexParameter(TextureTarget.Texture2D,
-		//		//				TextureParameterName.TextureWrapT,
-		//		//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
-
-		//		//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
-		//		//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-		//		//GL.BindTexture(TextureTarget.Texture2D, 0);
+		//		return 0;
 		//	}
 
-  //          return 0;
+		//	Bitmap textureBitmap = new Bitmap(@"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/UenoShrine3k.hdr");
+		//	BitmapData TextureData = textureBitmap.LockBits(
+		//			new System.Drawing.Rectangle(0, 0, textureBitmap.Width, textureBitmap.Height),
+		//			System.Drawing.Imaging.ImageLockMode.ReadOnly,
+  //                  System.Drawing.Imaging.PixelFormat.Format48bppRgb
+		//		);
+            
+		//	int textureId = GL.GenTexture();
+		//	GL.BindTexture(TextureTarget.Texture2D, textureId);
+
+  //          //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+		//	GL.TexImage2D(TextureTarget.Texture2D,
+  //                        0,
+  //                        PixelInternalFormat.Rgb16f,
+  //                        textureBitmap.Width,
+  //                        textureBitmap.Height,
+  //                        0,
+  //                        OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
+  //                        PixelType.Float, 
+		//				  TextureData.Scan0);
+            
+		//	textureBitmap.UnlockBits(TextureData);
+
+		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+			
+  //          GL.BindTexture(TextureTarget.Texture2D, 0);
+
+  //          return textureId;
 		//}
+
+
+
+
+
+		public int LoadTexture(string texPath)
+		{
+			ImageReader loader = new ImageReader();
+			texPath = texPath.Replace(@"\\", @"/");
+			texPath = texPath.Replace(@"\", @"/");
+
+			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
+			{
+
+                int a = 0;
+                /*
+				//Stb.stbi_set_flip_vertically_on_load(0);
+				StbSharp.Image image = loader.Read(stream, isPng ? Stb.STBI_rgb_alpha : Stb.STBI_rgb);
+				mTextureId = GL.GenTexture();
+				GL.BindTexture(TextureTarget.Texture2D, mTextureId);
+
+				if (gammaCorrection)
+				{
+					//glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrection ? GL_SRGB : GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+					GL.TexImage2D(TextureTarget.Texture2D,
+								  0,
+								  isPng ? PixelInternalFormat.SrgbAlpha : PixelInternalFormat.Srgb,
+								  image.Width,
+								  image.Height,
+								  0,
+								  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
+								  PixelType.UnsignedByte,
+								  image.Data);
+				}
+				else
+				{
+					GL.TexImage2D(TextureTarget.Texture2D,
+								  0,
+								  isPng ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb,
+								  image.Width,
+								  image.Height,
+								  0,
+								  isPng ? OpenTK.Graphics.OpenGL.PixelFormat.Rgba : OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
+								  PixelType.UnsignedByte,
+								  image.Data);
+				}
+                */
+
+				//GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+				//GL.TexParameter(TextureTarget.Texture2D,
+				//				TextureParameterName.TextureWrapS,
+				//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
+
+				//GL.TexParameter(TextureTarget.Texture2D,
+				//				TextureParameterName.TextureWrapT,
+				//				repeatOrClampToEdge ? (int)TextureWrapMode.Repeat : (int)TextureWrapMode.ClampToEdge);
+
+				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
+				//GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+				//GL.BindTexture(TextureTarget.Texture2D, 0);
+			}
+
+            return 0;
+		}
 
 
 		private Camera mCamera = null;
