@@ -7,17 +7,6 @@ using System.Collections.Generic;
 using StbSharp;
 using System.IO;
 
-
-
-using System.Drawing.Imaging;
-
-using System.Reflection;
-using Assimp.Configs;
-
-
-
-
-
 namespace YH
 {
 	public class HelloPBRDiffuseIrradiance : Application
@@ -116,10 +105,13 @@ namespace YH
             //{
             //	std::cout << "Failed to load HDR image." << std::endl;
             //}
+            //hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
+
+
+
             hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
 
             int a = 0;
-
 			/*
 			//
 			mAlbedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
@@ -338,7 +330,7 @@ namespace YH
 			base.OnKeyDown(e);
 		}
 
-		private int LoadTexture(String fileName)
+		public int LoadTexture(string texPath)
 		{
 			// pbr: load the HDR environment map
 			// ---------------------------------
@@ -363,39 +355,44 @@ namespace YH
 			//{
 			//  std::cout << "Failed to load HDR image." << std::endl;
 			//}
-			string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fileName);
-			if (!File.Exists(path))
+			ImageReader loader = new ImageReader();
+			texPath = texPath.Replace(@"\\", @"/");
+			texPath = texPath.Replace(@"\", @"/");
+
+			using (System.IO.Stream stream = File.Open(texPath, FileMode.Open))
 			{
-				return 0;
+				Stb.stbi_set_flip_vertically_on_load(1);
+				StbSharp.Image image = loader.Read(stream, Stb.STBI_rgb);
+				int textureId = GL.GenTexture();
+				GL.BindTexture(TextureTarget.Texture2D, textureId);
+
+				GL.TexImage2D(TextureTarget.Texture2D,
+								  0,
+								  PixelInternalFormat.Rgb16f,
+								  image.Width,
+								  image.Height,
+								  0,
+								  OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
+								  PixelType.UnsignedByte,
+								  image.Data);
+
+				GL.TexParameter(TextureTarget.Texture2D,
+								TextureParameterName.TextureWrapS,
+								(int)TextureWrapMode.ClampToEdge);
+
+				GL.TexParameter(TextureTarget.Texture2D,
+								TextureParameterName.TextureWrapT,
+								(int)TextureWrapMode.ClampToEdge);
+
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Nearest);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+				GL.BindTexture(TextureTarget.Texture2D, 0);
+
+                return textureId;
 			}
 
-			Bitmap textureBitmap = new Bitmap(path);
-			BitmapData TextureData = textureBitmap.LockBits(
-					new System.Drawing.Rectangle(0, 0, textureBitmap.Width, textureBitmap.Height),
-					System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                    textureBitmap.PixelFormat
-				);
-			
-            var texture = GL.GenTexture();
-			GL.BindTexture(TextureTarget.Texture2D, texture);
-
-			GL.TexImage2D(TextureTarget.Texture2D,
-                          0,
-                          PixelInternalFormat.Rgb16f,
-                          textureBitmap.Width,
-                          textureBitmap.Height,
-                          0,
-                          OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-                          PixelType.Float,
-                          TextureData.Scan0);
-            
-			textureBitmap.UnlockBits(TextureData);
-
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            return texture;
+            return 0;
 		}
 
 		private Camera mCamera = null;
