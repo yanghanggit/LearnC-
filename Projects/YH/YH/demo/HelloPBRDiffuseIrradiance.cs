@@ -25,6 +25,7 @@ namespace YH
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
 
+            /*
 			//
 			mAlbedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
 			mNormal = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_normal.png");
@@ -49,6 +50,7 @@ namespace YH
 															0.1f, 100.0f);
 
 			GL.UniformMatrix4(mShader.GetUniformLocation("projection"), false, ref mProjection);
+            */
 		}
 
 		public override void Update(double dt)
@@ -60,6 +62,7 @@ namespace YH
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            /*
 			const int nrRows = 7;
 			const int nrColumns = 7;
 			const float spacing = 2.5f;
@@ -118,6 +121,7 @@ namespace YH
 
 				RenderSphere();
 			}
+			*/
 		}
 
 		private void RenderSphere()
@@ -238,25 +242,25 @@ namespace YH
 
 		private Camera mCamera = null;
 
-		private Vector3[] mLightPositions = {
-			new Vector3(0.0f, 0.0f, 10.0f)
-		};
+		//private Vector3[] mLightPositions = {
+		//	new Vector3(0.0f, 0.0f, 10.0f)
+		//};
 
-		private Vector3[] mLightColors = {
-			new Vector3(150.0f, 150.0f, 150.0f)
-		};
+		//private Vector3[] mLightColors = {
+		//	new Vector3(150.0f, 150.0f, 150.0f)
+		//};
 
-		private Matrix4 mProjection = new Matrix4();
+		//private Matrix4 mProjection = new Matrix4();
 		private int mSphereVAO = 0;
 		private int mIndexCount = 0;
 
 
-		//
-		private GLTexture2D mAlbedo = null;
-		private GLTexture2D mNormal = null;
-		private GLTexture2D mMetallic = null;
-		private GLTexture2D mRoughness = null;
-		private GLTexture2D mAO = null;
-		private GLProgram mShader = null;
+		////
+		//private GLTexture2D mAlbedo = null;
+		//private GLTexture2D mNormal = null;
+		//private GLTexture2D mMetallic = null;
+		//private GLTexture2D mRoughness = null;
+		//private GLTexture2D mAO = null;
+		//private GLProgram mShader = null;
 	}
 }
