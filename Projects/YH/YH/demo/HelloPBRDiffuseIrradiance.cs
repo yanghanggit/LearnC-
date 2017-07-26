@@ -18,12 +18,48 @@ namespace YH
 		{
 			base.Start(wnd);
 
+
+			// configure global opengl state
+			// -----------------------------
+			//glEnable(GL_DEPTH_TEST);
+			//glDepthFunc(GL_LEQUAL); // set depth function to less than AND equal for skybox depth trick.
 			GL.Viewport(0, 0, wnd.Width, wnd.Height);
 			GL.ClearColor(Color.Black);
 			GL.Enable(EnableCap.DepthTest);
+            GL.DepthFunc(DepthFunction.Lequal);
 
 			mCamera = new Camera(new Vector3(0.0f, 0.0f, 20.0f), new Vector3(0.0f, 1.0f, 0.0f), -90.0f, Camera.PITCH);
 			mCameraController = new CameraController(mAppName, mCamera);
+
+
+			
+			// build and compile shaders
+			// -------------------------
+			//Shader pbrShader("2.1.2.pbr.vs", "2.1.2.pbr.fs");
+			//Shader equirectangularToCubemapShader("2.1.2.cubemap.vs", "2.1.2.equirectangular_to_cubemap.fs");
+			//Shader irradianceShader("2.1.2.cubemap.vs", "2.1.2.irradiance_convolution.fs");
+			//Shader backgroundShader("2.1.2.background.vs", "2.1.2.background.fs");
+			pbrShader = new GLProgram(@"Resources/2.1.2.pbr.vs", @"Resources/2.1.2.pbr.fs");
+			equirectangularToCubemapShader = new GLProgram(@"Resources/2.1.2.cubemap.vs", @"Resources/2.1.2.equirectangular_to_cubemap.fs");
+			irradianceShader = new GLProgram(@"Resources/2.1.2.cubemap.vs", @"Resources/2.1.2.irradiance_convolution.fs");
+			backgroundShader = new GLProgram(@"Resources/2.1.2.background.vs", @"Resources/2.1.2.background.fs");
+
+            //
+            //pbrShader.use();
+            //pbrShader.setInt("irradianceMap", 0);
+            //pbrShader.setVec3("albedo", 0.5f, 0.0f, 0.0f);
+            //pbrShader.setFloat("ao", 1.0f);
+            pbrShader.Use();
+            GL.Uniform1(pbrShader.GetUniformLocation("irradianceMap"), 0);
+            GL.Uniform3(pbrShader.GetUniformLocation("albedo"), 0.5f, 0.0f, 0.0f);
+            GL.Uniform1(pbrShader.GetUniformLocation("ao"), 1.0f);
+
+			//
+			//backgroundShader.use();
+			//backgroundShader.setInt("environmentMap", 0);
+			backgroundShader.Use();
+			GL.Uniform1(backgroundShader.GetUniformLocation("environmentMap"), 0);
+
 
             /*
 			//
@@ -61,6 +97,12 @@ namespace YH
 		public override void Draw(double dt, Window wnd)
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+			const int nrRows = 7;
+			const int nrColumns = 7;
+            const float spacing = 2.5f;
+
+
 
             /*
 			const int nrRows = 7;
@@ -250,6 +292,20 @@ namespace YH
 		//	new Vector3(150.0f, 150.0f, 150.0f)
 		//};
 
+		private Vector3[] lightPositions = {
+			new Vector3(-10.0f,  10.0f, 10.0f),
+			new Vector3( 10.0f,  10.0f, 10.0f),
+			new Vector3(-10.0f, -10.0f, 10.0f),
+			new Vector3( 10.0f, -10.0f, 10.0f),
+		};
+
+		private Vector3[] lightColors = {
+			new Vector3(300.0f, 300.0f, 300.0f),
+			new Vector3(300.0f, 300.0f, 300.0f),
+			new Vector3(300.0f, 300.0f, 300.0f),
+			new Vector3(300.0f, 300.0f, 300.0f)
+		};
+
 		//private Matrix4 mProjection = new Matrix4();
 		private int mSphereVAO = 0;
 		private int mIndexCount = 0;
@@ -262,5 +318,9 @@ namespace YH
 		//private GLTexture2D mRoughness = null;
 		//private GLTexture2D mAO = null;
 		//private GLProgram mShader = null;
+        private GLProgram pbrShader = null;
+        private GLProgram equirectangularToCubemapShader = null;
+        private GLProgram irradianceShader = null;
+        private GLProgram backgroundShader = null;
 	}
 }
