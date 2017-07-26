@@ -344,74 +344,6 @@ namespace YH
 			base.OnKeyDown(e);
 		}
 
-		//private int _LoadTexture(String fileName)
-		//{
-		//	//stbi_set_flip_vertically_on_load(true);
-		//	//int width, height, nrComponents;
-		//	//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
-		//	//unsigned int hdrTexture;
-		//	//if (data)
-		//	//{
-		//	//  glGenTextures(1, &hdrTexture);
-		//	//  glBindTexture(GL_TEXTURE_2D, hdrTexture);
-		//	//  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
-
-		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//	//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		//	//  stbi_image_free(data);
-		//	//}
-		//	//else
-		//	//{
-		//	//  std::cout << "Failed to load HDR image." << std::endl;
-		//	//}
-
-		//	string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-		//	string finalFileName = Path.Combine(dir, fileName);
-		//	if (!File.Exists(finalFileName))
-		//	{
-		//		return 0;
-		//	}
-
-		//	Bitmap textureBitmap = new Bitmap(@"/Users/yh/LearnMono/Projects/YH/YH/bin/Debug/Resources/Texture/UenoShrine3k.hdr");
-		//	BitmapData TextureData = textureBitmap.LockBits(
-		//			new System.Drawing.Rectangle(0, 0, textureBitmap.Width, textureBitmap.Height),
-		//			System.Drawing.Imaging.ImageLockMode.ReadOnly,
-  //                  System.Drawing.Imaging.PixelFormat.Format48bppRgb
-		//		);
-            
-		//	int textureId = GL.GenTexture();
-		//	GL.BindTexture(TextureTarget.Texture2D, textureId);
-
-  //          //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
-		//	GL.TexImage2D(TextureTarget.Texture2D,
-  //                        0,
-  //                        PixelInternalFormat.Rgb16f,
-  //                        textureBitmap.Width,
-  //                        textureBitmap.Height,
-  //                        0,
-  //                        OpenTK.Graphics.OpenGL.PixelFormat.Rgb,
-  //                        PixelType.Float, 
-		//				  TextureData.Scan0);
-            
-		//	textureBitmap.UnlockBits(TextureData);
-
-		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-		//	GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-			
-  //          GL.BindTexture(TextureTarget.Texture2D, 0);
-
-  //          return textureId;
-		//}
-
-
-
-
-
 		public int LoadTexture(string texPath)
 		{
 			ImageReader imgReader = new ImageReader();
@@ -425,7 +357,7 @@ namespace YH
 				// pbr: load the HDR environment map
 				// ---------------------------------
 				//stbi_set_flip_vertically_on_load(true);
-                Stb.stbi_set_flip_vertically_on_load(1);
+                //Stb.stbi_set_flip_vertically_on_load(1);
 
                 var image = imgReader.Read(stream);
 			}
