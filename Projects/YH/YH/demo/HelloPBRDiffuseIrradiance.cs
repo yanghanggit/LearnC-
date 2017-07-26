@@ -61,6 +61,30 @@ namespace YH
 			GL.Uniform1(backgroundShader.GetUniformLocation("environmentMap"), 0);
 
 
+            // pbr: setup framebuffer
+            // ----------------------
+            //unsigned int captureFBO;
+            //unsigned int captureRBO;
+            //glGenFramebuffers(1, &captureFBO);
+            //glGenRenderbuffers(1, &captureRBO);
+            captureFBO = GL.GenFramebuffer();
+            captureRBO = GL.GenRenderbuffer();
+            //glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
+            //glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, captureRBO);
+			//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, 512, 512);
+            //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, captureRBO);
+
+
+
+
+
+
+
+
             /*
 			//
 			mAlbedo = new GLTexture2D(@"Resources/Texture/rustediron1-alt2-Unreal-Engine/rustediron2_basecolor.png");
@@ -101,8 +125,6 @@ namespace YH
 			const int nrRows = 7;
 			const int nrColumns = 7;
             const float spacing = 2.5f;
-
-
 
             /*
 			const int nrRows = 7;
@@ -322,5 +344,9 @@ namespace YH
         private GLProgram equirectangularToCubemapShader = null;
         private GLProgram irradianceShader = null;
         private GLProgram backgroundShader = null;
+
+
+		private int captureFBO = 0;
+		private int captureRBO = 0;
 	}
 }
