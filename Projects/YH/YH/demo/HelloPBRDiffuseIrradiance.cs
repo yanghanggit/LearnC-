@@ -98,7 +98,7 @@ namespace YH
             //{
             //	std::cout << "Failed to load HDR image." << std::endl;
             //}
-            hdrTexture = LoadTexture(@"Resources/Texture/03-Ueno-Shrine_8k.jpg");
+            hdrTexture = LoadTexture(@"Resources/Texture/Lobby-Center_8k_TMap.jpg");
 
 			// pbr: setup cubemap to render to and attach to framebuffer
 			// ---------------------------------------------------------
