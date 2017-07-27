@@ -159,7 +159,9 @@ namespace YH
             GL.ActiveTexture(TextureUnit.Texture0);
 			//glBindTexture(GL_TEXTURE_2D, hdrTexture);
             GL.BindTexture(TextureTarget.Texture2D, hdrTexture);
-			//glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
+			
+
+            //glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
             GL.Viewport(0, 0, 512, 512);
 			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
@@ -173,6 +175,73 @@ namespace YH
 				//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                 //renderCube();
+                RenderCube();
+			}
+			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+
+			// pbr: create an irradiance cubemap, and re-scale capture FBO to irradiance scale.
+			// --------------------------------------------------------------------------------
+			//unsigned int irradianceMap;
+			//glGenTextures(1, &irradianceMap);
+            irradianceMap = GL.GenTexture();
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+            GL.BindTexture(TextureTarget.TextureCubeMap, irradianceMap);
+			for (int i = 0; i < 6; ++i)
+			{
+				//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
+				GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
+							  0, PixelInternalFormat.Rgb16f,
+							  32, 32, 0,
+							  PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
+			}
+
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int)TextureWrapMode.ClampToEdge);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, (int)TextureMagFilter.Linear);
+			GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+
+			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
+			//glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+            GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, captureRBO);
+            //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, 32, 32);
+
+			// pbr: solve diffuse integral by convolution to create an irradiance (cube)map.
+			// -----------------------------------------------------------------------------
+			//irradianceShader.use();
+			//irradianceShader.setInt("environmentMap", 0);
+			//irradianceShader.setMat4("projection", captureProjection);
+			//glActiveTexture(GL_TEXTURE0);
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+            irradianceShader.Use();
+			GL.Uniform1(irradianceShader.GetUniformLocation("environmentMap"), 0);
+			GL.UniformMatrix4(irradianceShader.GetUniformLocation("projection"), false, ref captureProjection);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, envCubemap);
+
+            //
+            //glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
+            GL.Viewport(0, 0, 32, 32);
+			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
+			for (int i = 0; i < 6; ++i)
+			{
+				//irradianceShader.setMat4("view", captureViews[i]);
+				GL.UniformMatrix4(irradianceShader.GetUniformLocation("view"), false, ref captureViews[i]);
+				//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.TextureCubeMapPositiveX + i, irradianceMap, 0);
+                //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+				//renderCube();
                 RenderCube();
 			}
 			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -207,13 +276,122 @@ namespace YH
 
 		public override void Draw(double dt, Window wnd)
 		{
+			// render
+			// ------
+			//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+
+            // render scene, supplying the convoluted irradiance map to the final shader.
+            // ------------------------------------------------------------------------------------------
+            //pbrShader.use();
+            //glm::mat4 view = camera.GetViewMatrix();
+            //pbrShader.setMat4("view", view);
+            //pbrShader.setVec3("camPos", camera.Position);
+            pbrShader.Use();
+            var view = mCamera.GetViewMatrix();
+            GL.UniformMatrix4(pbrShader.GetUniformLocation("view"), false, ref view);
+			GL.Uniform3(pbrShader.GetUniformLocation("camPos"), mCamera.Position);
+
+			// bind pre-computed IBL data
+			//glActiveTexture(GL_TEXTURE0);
+            GL.ActiveTexture(TextureUnit.Texture0);
+			//glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+            GL.BindTexture(TextureTarget.TextureCubeMap, irradianceMap);
+
+
 
 			const int nrRows = 7;
 			const int nrColumns = 7;
             const float spacing = 2.5f;
 
-            /*
+			// render rows*column number of spheres with material properties defined by textures (they all have the same material properties)
+			//glm::mat4 model;
+            var model = Matrix4.CreateTranslation(0, 0, 0);
+			for (int row = 0; row < nrRows; ++row)
+			{
+				//pbrShader.setFloat("metallic", (float)row / (float)nrRows);
+				GL.Uniform1(pbrShader.GetUniformLocation("metallic"), (float)row / (float)nrRows);
+
+				for (int col = 0; col < nrColumns; ++col)
+				{
+					// we clamp the roughness to 0.025 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
+					// on direct lighting.
+					//pbrShader.setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+					float v = (float)col / (float)nrColumns;
+					v = (v < 0.05f) ? 0.05f : ((v > 1.0f) ? 1.0f : v);
+					GL.Uniform1(pbrShader.GetUniformLocation("roughness"), v);
+					//model = glm::mat4();
+					//model = glm::translate(model, glm::vec3(
+					//	(float)(col - (nrColumns / 2)) * spacing,
+					//	(float)(row - (nrRows / 2)) * spacing,
+					//	-2.0f
+					//));
+					//pbrShader.setMat4("model", model);
+					model = Matrix4.CreateTranslation(
+						(float)(col - (nrColumns / 2)) * spacing,
+						(float)(row - (nrRows / 2)) * spacing,
+						-2.0f);
+
+					GL.UniformMatrix4(pbrShader.GetUniformLocation("model"), false, ref model);
+
+					//renderSphere();
+                    RenderSphere();
+				}
+			}
+
+			// render light source (simply re-render sphere at light positions)
+			// this looks a bit off as we use the same shader, but it'll make their positions obvious and 
+			// keeps the codeprint small.
+            Vector3 newPos = new Vector3();
+			//for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+            for (int i = 0; i < lightPositions.Length; ++i)
+			{
+				//glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+				//newPos = lightPositions[i];
+				//pbrShader.setVec3("lightPositions[" + std::to_string(i) + "]", newPos);
+				//pbrShader.setVec3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
+
+				//model = glm::mat4();
+				//model = glm::translate(model, newPos);
+				//model = glm::scale(model, glm::vec3(0.5f));
+				//pbrShader.setMat4("model", model);
+				//renderSphere();
+
+				newPos.X = lightPositions[i].X + (float)Math.Sin((float)mTotalRuningTime) * 2.0f * 2.0f;
+				newPos.Y = (float)Math.Sin((float)mTotalRuningTime / 2.0f) * 1.0f * 2.0f + lightPositions[i].Y;
+				newPos.Z = (float)Math.Sin((float)mTotalRuningTime) * 5.0f;
+
+				GL.Uniform3(pbrShader.GetUniformLocation("lightPositions[" + i + "]"), newPos);
+				GL.Uniform3(pbrShader.GetUniformLocation("lightColors[" + i + "]"), lightColors[i]);
+
+				model = Matrix4.CreateTranslation(newPos);
+				model = Matrix4.CreateScale(0.5f) * model;
+				GL.UniformMatrix4(pbrShader.GetUniformLocation("model"), false, ref model);
+
+				RenderSphere();
+			}
+
+            // render skybox (render as last to prevent overdraw)
+            //backgroundShader.use();
+            //backgroundShader.setMat4("view", view);
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+            ////glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap); // display irradiance map
+            //renderCube();
+            backgroundShader.Use();
+			GL.UniformMatrix4(backgroundShader.GetUniformLocation("view"), false, ref view);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.TextureCubeMap, envCubemap);
+            RenderCube();
+
+
+
+
+			/*
 			const int nrRows = 7;
 			const int nrColumns = 7;
 			const float spacing = 2.5f;
@@ -582,5 +760,7 @@ namespace YH
         private int envCubemap = 0;
 
         private Matrix4 projection = new Matrix4();
+
+        private int irradianceMap = 0;
 	}
 }
