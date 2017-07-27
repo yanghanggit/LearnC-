@@ -71,7 +71,7 @@ namespace YH
             //glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, captureRBO);
 			//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, 512, 512);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, viewPortSize512, viewPortSize512);
             //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, captureRBO);
 
@@ -112,7 +112,7 @@ namespace YH
 				//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
                 GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
                               0, PixelInternalFormat.Rgb16f,
-                              512, 512, 0,
+                              viewPortSize512, viewPortSize512, 0,
                               PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			}
 
@@ -162,7 +162,7 @@ namespace YH
 			
 
             //glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
-            GL.Viewport(0, 0, 512, 512);
+            GL.Viewport(0, 0, viewPortSize512, viewPortSize512);
 			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
 			for (int i = 0; i < 6; ++i)
@@ -192,7 +192,7 @@ namespace YH
 				//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
 				GL.TexImage2D(TextureTarget.TextureCubeMapPositiveX + i,
 							  0, PixelInternalFormat.Rgb16f,
-							  32, 32, 0,
+							  viewPortSize32, viewPortSize32, 0,
 							  PixelFormat.Rgb, PixelType.Float, IntPtr.Zero);
 			}
 
@@ -213,7 +213,7 @@ namespace YH
 			//glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, captureRBO);
             //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
-            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, 32, 32);
+            GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferStorage.DepthComponent24, viewPortSize32, viewPortSize32);
 
 			// pbr: solve diffuse integral by convolution to create an irradiance (cube)map.
 			// -----------------------------------------------------------------------------
@@ -230,7 +230,7 @@ namespace YH
 
             //
             //glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
-            GL.Viewport(0, 0, 32, 32);
+            GL.Viewport(0, 0, viewPortSize32, viewPortSize32);
 			//glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, captureFBO);
 			for (int i = 0; i < 6; ++i)
@@ -742,10 +742,9 @@ namespace YH
 			new Vector3(300.0f, 300.0f, 300.0f)
 		};
 
-		//private Matrix4 mProjection = new Matrix4();
+        //
 		private int mSphereVAO = 0;
 		private int mIndexCount = 0;
-
 
 		////
         private GLProgram pbrShader = null;
@@ -762,5 +761,9 @@ namespace YH
         private Matrix4 projection = new Matrix4();
 
         private int irradianceMap = 0;
+
+        private int viewPortSize512 = 512;
+		private int viewPortSize32 = 32;
+
 	}
 }
