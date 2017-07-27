@@ -20,6 +20,9 @@ namespace YH
 		{
 			base.Start(wnd);
 
+			//viewPortSize512 = wnd.Width;
+			//viewPortSize32 = wnd.Width;
+
 			// configure global opengl state
 			// -----------------------------
 			//glEnable(GL_DEPTH_TEST);
@@ -75,30 +78,32 @@ namespace YH
             //glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
             GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, captureRBO);
 
-            // pbr: load the HDR environment map
-            // ---------------------------------
-            //stbi_set_flip_vertically_on_load(true);
-            //int width, height, nrComponents;
-            //float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
-            //unsigned int hdrTexture;
-            //if (data)
-            //{
-            //	glGenTextures(1, &hdrTexture);
-            //	glBindTexture(GL_TEXTURE_2D, hdrTexture);
-            //	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
+			// pbr: load the HDR environment map
+			// ---------------------------------
+			//stbi_set_flip_vertically_on_load(true);
+			//int width, height, nrComponents;
+			//float* data = stbi_loadf(FileSystem::getPath("resources/textures/hdr/newport_loft.hdr").c_str(), &width, &height, &nrComponents, 0);
+			//unsigned int hdrTexture;
+			//if (data)
+			//{
+			//	glGenTextures(1, &hdrTexture);
+			//	glBindTexture(GL_TEXTURE_2D, hdrTexture);
+			//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data); // note how we specify the texture's data value to be float
 
-            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            //	stbi_image_free(data);
-            //}
-            //else
-            //{
-            //	std::cout << "Failed to load HDR image." << std::endl;
-            //}
-            hdrTexture = LoadTexture(@"Resources/Texture/Lobby-Center_8k_TMap.jpg");
+			//	stbi_image_free(data);
+			//}
+			//else
+			//{
+			//	std::cout << "Failed to load HDR image." << std::endl;
+			//}
+			//Newport_Loft_8k
+			//Lobby-Center_8k_TMap.jpg
+			hdrTexture = LoadTexture(@"Resources/Texture/Newport_Loft_8k.jpg");
 
 			// pbr: setup cubemap to render to and attach to framebuffer
 			// ---------------------------------------------------------
@@ -386,10 +391,11 @@ namespace YH
 			GL.UniformMatrix4(backgroundShader.GetUniformLocation("view"), false, ref view);
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.TextureCubeMap, envCubemap);
+            if (useIrradianceMap)
+            {
+                GL.BindTexture(TextureTarget.TextureCubeMap, irradianceMap);
+            }
             RenderCube();
-
-
-
 
 			/*
 			const int nrRows = 7;
@@ -561,6 +567,10 @@ namespace YH
 		public override void OnKeyUp(OpenTK.Input.KeyboardKeyEventArgs e)
 		{
 			base.OnKeyUp(e);
+			if (e.Key == OpenTK.Input.Key.C)
+			{
+				useIrradianceMap = !useIrradianceMap;
+			}
 		}
 
 		public override void OnKeyDown(OpenTK.Input.KeyboardKeyEventArgs e)
@@ -764,6 +774,7 @@ namespace YH
 
         private int viewPortSize512 = 512;
 		private int viewPortSize32 = 32;
+        private bool useIrradianceMap = false;
 
 	}
 }
