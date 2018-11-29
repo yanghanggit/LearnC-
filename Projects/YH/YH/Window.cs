@@ -51,14 +51,14 @@ namespace YH
 			//mCurrentApplication = new HelloNormalMapping();
 			//mCurrentApplication = new HelloParallaxMapping();
 			//mCurrentApplication = new HelloHDR();
-			//mCurrentApplication = new HelloBloom();
+			mCurrentApplication = new HelloBloom();
 			//mCurrentApplication = new HelloDeferredShading();
 			//mCurrentApplication = new HelloSSAO();
 			//mCurrentApplication = new HelloFont();
 			//mCurrentApplication = new HelloAssimp();
 			//mCurrentApplication = new HelloPBRLighting();
 			//mCurrentApplication = new HelloPBRTexture();
-			mCurrentApplication = new HelloPBRDiffuseIrradiance();
+			//mCurrentApplication = new HelloPBRDiffuseIrradiance();
 
 			Title = mCurrentApplication.mAppName;
 		}

@@ -3,7 +3,7 @@ out vec4 FragColor;
 in vec2 TexCoords;
 in vec3 WorldPos;
 in vec3 Normal;
-in mat3 TBN;
+//in mat3 TBN;
 
 // material parameters
 uniform sampler2D albedoMap;
@@ -17,7 +17,7 @@ uniform vec3 lightPositions[4];
 uniform vec3 lightColors[4];
 
 uniform vec3 camPos;
-uniform float exposure;
+//uniform float exposure;
 
 const float PI = 3.14159265359;
 // ----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ vec3 getNormalFromMap()
     vec2 st2 = dFdy(TexCoords);
 
     vec3 N   = normalize(Normal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 T  = normalize(Q1*st2.s - Q2*st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
 

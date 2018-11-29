@@ -42,6 +42,18 @@ namespace YH
 			GL.Uniform1(mShader.GetUniformLocation("roughnessMap"), 3);
 			GL.Uniform1(mShader.GetUniformLocation("aoMap"), 4);
 
+            // set material
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, mAlbedo.getTextureId());
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, mNormal.getTextureId());
+            GL.ActiveTexture(TextureUnit.Texture2);
+            GL.BindTexture(TextureTarget.Texture2D, mMetallic.getTextureId());
+            GL.ActiveTexture(TextureUnit.Texture3);
+            GL.BindTexture(TextureTarget.Texture2D, mRoughness.getTextureId());
+            GL.ActiveTexture(TextureUnit.Texture4);
+            GL.BindTexture(TextureTarget.Texture2D, mAO.getTextureId());
+
 
 			// projection setup
 			mProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(mCamera.Zoom),
@@ -71,20 +83,6 @@ namespace YH
 
 			// setup relevant shader uniforms
 			GL.Uniform3(mShader.GetUniformLocation("camPos"), mCamera.Position);
-
-            // set material
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, mAlbedo.getTextureId());
-			GL.ActiveTexture(TextureUnit.Texture1);
-			GL.BindTexture(TextureTarget.Texture2D, mNormal.getTextureId());
-			GL.ActiveTexture(TextureUnit.Texture2);
-			GL.BindTexture(TextureTarget.Texture2D, mMetallic.getTextureId());
-			GL.ActiveTexture(TextureUnit.Texture3);
-			GL.BindTexture(TextureTarget.Texture2D, mRoughness.getTextureId());
-			GL.ActiveTexture(TextureUnit.Texture4);
-			GL.BindTexture(TextureTarget.Texture2D, mAO.getTextureId());
-
-
 
 			// render rows*column number of spheres with material properties defined by textures (they all have the same material properties)
             var model = Matrix4.CreateTranslation(0, 0, 0);

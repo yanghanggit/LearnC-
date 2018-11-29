@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{03203597-EE1B-471A-8181-D328595EF890}|Default">
+  <MonoDevelop.Ide.ItemProperties.YH PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="YH/Window.cs">
+    <Files>
+      <File FileName="YH/demo/HelloPBRTexture.cs" Line="8" Column="13" />
+      <File FileName="YH/bin/Debug/Resources/pbr.vs" Line="8" Column="16" />
+      <File FileName="YH/bin/Debug/Resources/pbr.frag" Line="104" Column="6" />
+      <File FileName="YH/Window.cs" Line="44" Column="50" />
+      <File FileName="YH/Program.cs" Line="11" Column="11" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/yanghang/LearnMono/Projects/YH/YH/demo/HelloAssimp.cs" relfile="YH/demo/HelloAssimp.cs" line="54" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
