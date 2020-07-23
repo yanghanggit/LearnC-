@@ -44,7 +44,7 @@ namespace YH
             GL.Uniform1(mShaderBloomFinal.GetUniformLocation("bloomBlur"), 1);
 
 			//
-			mLightPositions.Add(new Vector3(0.0f, 0.5f, 1.5f)); // back light
+			mLightPositions.Add(new Vector3(0.0f, 0.8f, 1.5f)); // back light
 			mLightPositions.Add(new Vector3(-4.0f, 0.5f, -3.0f));
 			mLightPositions.Add(new Vector3(3.0f, 0.5f, 1.0f));
 			mLightPositions.Add(new Vector3(-.8f, 2.4f, -1.0f));

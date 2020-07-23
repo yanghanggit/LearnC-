@@ -47,11 +47,11 @@ namespace YH
 			//mCurrentApplication = new HelloBlinnPhong();
 			//mCurrentApplication = new HelloGammaCorrection();
 			//mCurrentApplication = new HelloShadowMapping();
-			//mCurrentApplication = new HelloPointShadows();
+			mCurrentApplication = new HelloPointShadows();
 			//mCurrentApplication = new HelloNormalMapping();
 			//mCurrentApplication = new HelloParallaxMapping();
 			//mCurrentApplication = new HelloHDR();
-			mCurrentApplication = new HelloBloom();
+			//mCurrentApplication = new HelloBloom();
 			//mCurrentApplication = new HelloDeferredShading();
 			//mCurrentApplication = new HelloSSAO();
 			//mCurrentApplication = new HelloFont();
